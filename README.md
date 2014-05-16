@@ -14,6 +14,8 @@ fs.createReadStream('some-csv-file.csv')
 	})
 ```
 
+The data emitted is a normalized JSON object
+
 ## License
 
 MIT
