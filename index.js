@@ -2,15 +2,31 @@ var stream = require('stream');
 var util = require('util');
 var gen = require('generate-object-property');
 
-var Parser = function(raw) {
+var quote = new Buffer('"')[0];
+var comma = new Buffer(',')[0];
+
+var Parser = function(opts) {
+	if (!opts) opts = {};
+	if (Array.isArray(opts)) opts = {headers:opts};
+
 	stream.Transform.call(this, {objectMode:true});
-	this.headers = null;
+
+	this.seperator = opts.seperator ? new Buffer(opts.seperator)[0] : comma;
+	this.headers = opts.headers || null;
+
+	this._raw = !!opts.raw;
 	this._prev = null;
 	this._prevEnd = 0;
 	this._nlbyte = 10;
 	this._first = true;
-	this._raw = !!raw;
+	this._quoting = false;
+	this._empty = this._raw ? new Buffer(0) : '';
 	this._Row = null;
+
+	if (this.headers) {
+		this._first = false;
+		this._compile(this.headers);
+	}
 };
 
 util.inherits(Parser, stream.Transform);
@@ -26,13 +42,16 @@ Parser.prototype._write = function(data, enc, cb) {
 	}
 
 	for (var i = start; i < buf.length; i++) {
-		if (buf[i] === this._nlbyte) {
+		if (buf[i] === quote) this._quoting = !this._quoting;
+
+		if (!this._quoting && buf[i] === this._nlbyte) {
 			this._online(buf, this._prevEnd, i+1);
 			this._prevEnd = i+1;
 		}
 	}
 
 	if (this._prevEnd === buf.length) {
+		this._prevEnd = 0;
 		return cb();
 	}
 
@@ -46,12 +65,17 @@ Parser.prototype._write = function(data, enc, cb) {
 	cb();
 };
 
-var quote = new Buffer('"')[0] // 22
-var comma = new Buffer(',')[0] // 22
+Parser.prototype._flush = function(cb) {
+	if (this._quoting || !this._prev) return cb();
+	this._online(this._prev, this._prevEnd, this._prev.length+1); // plus since online -1s
+	cb();
+};
 
 Parser.prototype._online = function(buf, start, end) {
-	end -= 1; // trim newline
+	end --; // trim newline
+	if (buf.length && buf[end-1] === 13) end--;
 
+	var comma = this.seperator;
 	var cells = []
 	var inQuotes = false
 	var offset = start
@@ -71,7 +95,7 @@ Parser.prototype._online = function(buf, start, end) {
 		}
 	}
 	if (offset < end) cells.push(this._oncell(buf, offset, end))
-	if (buf[end-1] === comma) cells.push(new Buffer(0))
+	if (buf[end-1] === comma) cells.push(this._empty)
 
 	if (this._first) {
 		this._first = false;
@@ -118,19 +142,6 @@ Parser.prototype._onvalue = function(buf, start, end) {
 	return buf.toString('utf-8', start, end);
 };
 
-module.exports = function() {
-	return new Parser();
+module.exports = function(opts) {
+	return new Parser(opts);
 };
-
-if (require.main !== module) return;
-
-var now = Date.now();
-var fs = require('fs');
-fs.createReadStream('/tmp/tmp.csv')
-	.pipe(new Parser())
-	.on('data', function(line) {
-		console.log(line)
-	})
-	.on('end', function() {
-		console.log(Date.now() - now);
-	})
