@@ -4,6 +4,8 @@ var gen = require('generate-object-property')
 
 var quote = new Buffer('"')[0]
 var comma = new Buffer(',')[0]
+var lf = new Buffer('\n')[0]
+var cr = new Buffer('\r')[0]
 
 var Parser = function(opts) {
   if (!opts) opts = {}
@@ -17,7 +19,6 @@ var Parser = function(opts) {
   this._raw = !!opts.raw
   this._prev = null
   this._prevEnd = 0
-  this._nlbyte = 10
   this._first = true
   this._quoting = false
   this._empty = this._raw ? new Buffer(0) : ''
@@ -44,7 +45,7 @@ Parser.prototype._write = function(data, enc, cb) {
   for (var i = start; i < buf.length; i++) {
     if (buf[i] === quote) this._quoting = !this._quoting
 
-    if (!this._quoting && buf[i] === this._nlbyte) {
+    if (!this._quoting && buf[i] === lf) {
       this._online(buf, this._prevEnd, i+1)
       this._prevEnd = i+1
     }
@@ -73,7 +74,7 @@ Parser.prototype._flush = function(cb) {
 
 Parser.prototype._online = function(buf, start, end) {
   end -- // trim newline
-  if (buf.length && buf[end-1] === 13) end--
+  if (buf.length && buf[end-1] === cr) end--
 
   var comma = this.seperator
   var cells = []
