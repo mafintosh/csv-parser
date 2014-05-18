@@ -4,12 +4,19 @@
   "description": "Streaming csv parser inspired by binary-csv that aims to be faster than everyone else",
   "repository": "mafintosh/csv-parser",
   "dependencies": {
-    "generate-object-property": "^1.0.0"
+    "bops": "^0.1.1",
+    "concat-stream": "^1.4.5",
+    "csv-spectrum": "^0.2.0",
+    "generate-object-property": "^1.0.0",
+    "tape": "^2.13.1"
+  },
+  "scripts": {
+    "test": "tape test/test.js"
   },
   "keywords": [
-  	"csv",
-  	"parser",
-  	"fast",
-  	"json"
+    "csv",
+    "parser",
+    "fast",
+    "json"
   ]
 }
