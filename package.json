@@ -5,5 +5,11 @@
   "repository": "mafintosh/csv-parser",
   "dependencies": {
     "generate-object-property": "^1.0.0"
-  }
+  },
+  "keywords": [
+  	"csv",
+  	"parser",
+  	"fast",
+  	"json"
+  ]
 }
