@@ -13,7 +13,7 @@ var Parser = function(opts) {
 
   stream.Transform.call(this, {objectMode:true})
 
-  this.seperator = opts.seperator ? new Buffer(opts.seperator)[0] : comma
+  this.sepatator = opts.sepatator ? new Buffer(opts.sepatator)[0] : comma
   this.headers = opts.headers || null
 
   this._raw = !!opts.raw
@@ -76,7 +76,7 @@ Parser.prototype._online = function(buf, start, end) {
   end -- // trim newline
   if (buf.length && buf[end-1] === cr) end--
 
-  var comma = this.seperator
+  var comma = this.sepatator
   var cells = []
   var inQuotes = false
   var offset = start
