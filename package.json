@@ -1,6 +1,6 @@
 {
   "name": "csv-parser",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Streaming csv parser inspired by binary-csv that aims to be faster than everyone else",
   "repository": "mafintosh/csv-parser",
   "dependencies": {
