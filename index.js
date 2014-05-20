@@ -118,6 +118,13 @@ Parser.prototype._compile = function() {
   }).join('\n')+'\n'
 
   this._Row = new Function('return function Row(cells) {\n'+props+'}')()
+
+  if (Object.defineProperty) {
+    Object.defineProperty(this._Row.prototype, 'headers', {
+      enumerable: false,
+      value: this.headers
+    })
+  } else this._Row.prototype.headers = this.headers
 }
 
 Parser.prototype._emit = function(Row, cells) {
