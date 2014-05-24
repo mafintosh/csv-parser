@@ -11,7 +11,7 @@ var Parser = function(opts) {
   if (!opts) opts = {}
   if (Array.isArray(opts)) opts = {headers:opts}
 
-  stream.Transform.call(this, {objectMode:true})
+  stream.Transform.call(this, {objectMode:true, highWaterMark:16})
 
   this.separator = opts.separator ? new Buffer(opts.separator)[0] : comma
   this.headers = opts.headers || null
