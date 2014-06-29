@@ -8,7 +8,12 @@
     "concat-stream": "^1.4.5",
     "csv-spectrum": "^0.2.0",
     "generate-object-property": "^1.0.0",
+    "ldjson-stream": "^1.1.0",
+    "minimist": "^0.2.0",
     "tape": "^2.13.1"
+  },
+  "bin": {
+    "csv-parser": "./bin.js"
   },
   "scripts": {
     "test": "tape test/test.js"
