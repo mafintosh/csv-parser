@@ -45,15 +45,9 @@ npm install -g csv-parser
 Open a shell and run
 
 ```
-$ csv-parser
+$ csv-parser --help # prints all options
+$ printf "a,b\nc,d\n" | csv-parser # parses input
 ```
-
-To parse a stdin to stdout do
-
-```
-printf "a,b\nc,d\n" | csv-parser -
-```
-
 
 ## License
 
