@@ -34,6 +34,27 @@ var stream = csv({
 })
 ```
 
+## Command line tool
+
+There is also a command line tool available. It will convert csv to line delimited JSON.
+
+```
+npm install -g csv-parser
+```
+
+Open a shell and run
+
+```
+$ csv-parser
+```
+
+To parse a stdin to stdout do
+
+```
+printf "a,b\nc,d\n" | csv-parser -
+```
+
+
 ## License
 
 MIT
