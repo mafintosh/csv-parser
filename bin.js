@@ -22,13 +22,13 @@ if (argv.version) {
   process.exit(0)
 }
 
-if (!filename) {
+if (argv.help || (process.stdin.isTTY && !filename)) {
   console.error(
-    'Usage: csv-parser filename [options]\n\n'+
-    '  Set filename to - to read from stdin\n\n'+
+    'Usage: csv-parser [filename?] [options]\n\n'+
     '  --headers,-h   Explicitly specify csv headers as a comma separated list\n'+
     '  --output ,-o   Set output file. Defaults to stdout\n'+
-    '  --version,-v   Print out the installed version\n'
+    '  --version,-v   Print out the installed version\n'+
+    '  --help         Show this help\n'
   )
   process.exit(1)
 }
@@ -36,7 +36,7 @@ if (!filename) {
 var input
 var output = (argv.output && argv.output !== '-') ? fs.createWriteStream(argv.output) : process.stdout
 
-if (filename === '-') input = process.stdin
+if (filename === '-' || !filename) input = process.stdin
 else if (fs.existsSync(filename)) input = fs.createReadStream(filename)
 else {
   console.error('File: %s does not exist', filename)
