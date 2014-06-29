@@ -32,7 +32,7 @@ var Parser = function(opts) {
 
 util.inherits(Parser, stream.Transform)
 
-Parser.prototype._write = function(data, enc, cb) {
+Parser.prototype._transform = function(data, enc, cb) {
   var start = 0
   var buf = data
 
