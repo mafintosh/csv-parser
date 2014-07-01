@@ -11,7 +11,7 @@ var argv = minimist(process.argv, {
     v: 'version',
     o: 'output'
   },
-  boolean: ['version']
+  boolean: ['version', 'help']
 })
 
 var headers = argv.headers && argv.headers.toString().split(',')
