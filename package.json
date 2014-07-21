@@ -6,7 +6,8 @@
   "dependencies": {
     "generate-object-property": "^1.0.0",
     "ldjson-stream": "^1.1.0",
-    "minimist": "^0.2.0"
+    "minimist": "^0.2.0",
+    "inherits": "^2.0.1"
   },
   "devDependencies": {
     "bops": "^0.1.1",

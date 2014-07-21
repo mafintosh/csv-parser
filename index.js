@@ -1,5 +1,5 @@
 var stream = require('stream')
-var util = require('util')
+var inherits = require('inherits')
 var gen = require('generate-object-property')
 
 var quote = new Buffer('"')[0]
@@ -30,7 +30,7 @@ var Parser = function(opts) {
   }
 }
 
-util.inherits(Parser, stream.Transform)
+inherits(Parser, stream.Transform)
 
 Parser.prototype._transform = function(data, enc, cb) {
   var start = 0
