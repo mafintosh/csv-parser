@@ -1,6 +1,6 @@
 # csv-parser
 
-Streaming csv parser inspired by binary-csv that aims to be faster than everyone else
+Streaming csv parser inspired by binary-csv that aims to be faster than everyone else.
 
 ```
 npm install csv-parser
@@ -9,9 +9,13 @@ npm install csv-parser
 [![build status](http://img.shields.io/travis/mafintosh/csv-parser.svg?style=flat)](http://travis-ci.org/mafintosh/csv-parser)
 ![dat](http://img.shields.io/badge/Development%20sponsored%20by-dat-green.svg?style=flat)
 
+`csv-parser` can convert CSV into JSON at at rate of around 90,000 rows per second (perf varies with data, try `bench.js` with your data).
+
 ## Usage
 
 Simply instantiate `csv` and pump a csv file to it and get the rows out as objects
+
+You can use `csv-parser` in the browser with [browserify](http://browserify.org/)
 
 ``` js
 var csv = require('csv-parser')

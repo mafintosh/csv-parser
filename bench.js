@@ -4,7 +4,7 @@ var csv = require('./');
 var now = Date.now();
 var rows = 0;
 
-fs.createReadStream('/tmp/tmp.csv')
+fs.createReadStream(process.argv[2] || '/tmp/tmp.csv')
 	.pipe(csv())
 	.on('data', function(line) {
 		rows++;
