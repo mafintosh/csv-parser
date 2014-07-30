@@ -1,6 +1,7 @@
 var stream = require('stream')
 var inherits = require('inherits')
-var gen = require('generate-object-property')
+var genobj = require('generate-object-property')
+var genfun = require('generate-function')
 
 var quote = new Buffer('"')[0]
 var comma = new Buffer(',')[0]
@@ -113,11 +114,16 @@ Parser.prototype._online = function(buf, start, end) {
 Parser.prototype._compile = function() {
   if (this._Row) return
 
-  var props = this.headers.map(function(cell, i) {
-    return '\t'+gen('this', cell)+' = cells['+i+']'
-  }).join('\n')+'\n'
+  var Row = genfun()
+    ('function Row(cells) {')
 
-  this._Row = new Function('return function Row(cells) {\n'+props+'}')()
+  this.headers.forEach(function(cell, i) {
+    Row('%s = cells[%d]', genobj('this', cell), i)
+  })
+
+  Row('}')
+
+  this._Row = Row.toFunction()
 
   if (Object.defineProperty) {
     Object.defineProperty(this._Row.prototype, 'headers', {
