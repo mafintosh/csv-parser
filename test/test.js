@@ -18,6 +18,19 @@ test('simple csv', function(t) {
   }
 })
 
+test('supports strings', function(t) {
+  var parser = csv()
+
+  parser.on('data', function(data) {
+    t.same(data, {hello:'world'})
+    t.end()
+  })
+
+  parser.write('hello\n')
+  parser.write('world\n')
+  parser.end()
+})
+
 test('newlines in a cell', function(t) {
   collect('newlines.csv', verify)
   function verify(err, lines) {

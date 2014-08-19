@@ -34,6 +34,8 @@ var Parser = function(opts) {
 inherits(Parser, stream.Transform)
 
 Parser.prototype._transform = function(data, enc, cb) {
+  if (typeof data === 'string') data = new Buffer(data)
+
   var start = 0
   var buf = data
 
