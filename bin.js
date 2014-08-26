@@ -9,12 +9,16 @@ var argv = minimist(process.argv, {
   alias: {
     h: 'headers',
     v: 'version',
-    o: 'output'
+    o: 'output',
+    s: 'separator'
+  },
+  default: {
+    s: ','
   },
   boolean: ['version', 'help']
 })
 
-var headers = argv.headers && argv.headers.toString().split(',')
+var headers = argv.headers && argv.headers.toString().split(argv.separator)
 var filename = argv._[2]
 
 if (argv.version) {
@@ -26,7 +30,8 @@ if (argv.help || (process.stdin.isTTY && !filename)) {
   console.error(
     'Usage: csv-parser [filename?] [options]\n\n'+
     '  --headers,-h   Explicitly specify csv headers as a comma separated list\n'+
-    '  --output ,-o   Set output file. Defaults to stdout\n'+
+    '  --output,-o    Set output file. Defaults to stdout\n'+
+    '  --separator,-s Set the separator character ("," by default)\n'+
     '  --version,-v   Print out the installed version\n'+
     '  --help         Show this help\n'
   )
@@ -43,4 +48,4 @@ else {
   process.exit(2)
 }
 
-input.pipe(csv({headers:headers})).pipe(ldjson.serialize()).pipe(output)
+input.pipe(csv({headers:headers, separator:argv.separator})).pipe(ldjson.serialize()).pipe(output)
