@@ -217,6 +217,18 @@ test('csv-spectrum', function(t) {
   })
 })
 
+test('custom newline', function(t) {
+  collect('custom-newlines.csv', {newline: 'X'},verify)
+  function verify(err, lines) {
+    t.false(err, 'no err')
+    t.same(lines[0], {a:'1', b:'2', c:'3'}, 'first row')
+    t.same(lines[1], {a:'X-Men', b:'5', c:'6'}, 'second row')
+    t.same(lines[2], {a:'7', b:'8', c:'9'}, 'third row')
+    t.equal(lines.length, 3, '3 rows')
+    t.end()
+  }
+})
+
 // helpers
 
 function fixture(name) {

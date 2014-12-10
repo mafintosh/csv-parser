@@ -34,7 +34,8 @@ The csv constructor accepts the following options as well
 ``` js
 var stream = csv({
   raw: false,    // do not decode to utf-8 strings
-  separator: ',' // specify optional cell separator
+  separator: ',', // specify optional cell separator
+  newline: '\n' // specify a newline character
 })
 ```
 

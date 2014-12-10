@@ -5,7 +5,6 @@ var genfun = require('generate-function')
 
 var quote = new Buffer('"')[0]
 var comma = new Buffer(',')[0]
-var lf = new Buffer('\n')[0]
 var cr = new Buffer('\r')[0]
 
 var Parser = function(opts) {
@@ -15,6 +14,14 @@ var Parser = function(opts) {
   stream.Transform.call(this, {objectMode:true, highWaterMark:16})
 
   this.separator = opts.separator ? new Buffer(opts.separator)[0] : comma
+  if(opts.newline) {
+    this.newline = new Buffer(opts.newline)[0]
+    this.customNewline = true
+  } else {
+    this.newline = new Buffer('\n')[0]
+    this.customNewline = false
+  }
+
   this.headers = opts.headers || null
 
   this._raw = !!opts.raw
@@ -48,7 +55,7 @@ Parser.prototype._transform = function(data, enc, cb) {
   for (var i = start; i < buf.length; i++) {
     if (buf[i] === quote) this._quoting = !this._quoting
 
-    if (!this._quoting && buf[i] === lf) {
+    if (!this._quoting && buf[i] === this.newline) {
       this._online(buf, this._prevEnd, i+1)
       this._prevEnd = i+1
     }
@@ -77,7 +84,7 @@ Parser.prototype._flush = function(cb) {
 
 Parser.prototype._online = function(buf, start, end) {
   end -- // trim newline
-  if (buf.length && buf[end-1] === cr) end--
+  if (!this.customNewline && buf.length && buf[end-1] === cr) end--
 
   var comma = this.separator
   var cells = []
