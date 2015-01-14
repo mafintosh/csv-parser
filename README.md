@@ -24,7 +24,7 @@ fs.createReadStream('some-csv-file.csv')
   .pipe(csv())
   .on('data', function(data) {
     console.log('row', data)
-  })
+  });
 ```
 
 The data emitted is a normalized JSON object
@@ -36,8 +36,32 @@ var stream = csv({
   raw: false,    // do not decode to utf-8 strings
   separator: ',', // specify optional cell separator
   newline: '\n' // specify a newline character
-})
+});
 ```
+It accepts too an array, that specifies the headers for the object returned:
+
+``` js
+var stream = csv(['index', 'message']);
+
+// Source from somewere with format 12312,Hello World
+origin.pipe(stream)
+  .on('data', function(data) {
+    console.log(data); // Should output { "index": 12312, "message": "Hello World" }
+  });
+```
+
+or in the option object as well
+
+``` js
+var stream = csv({
+  raw: false,    // do not decode to utf-8 strings
+  separator: ',', // specify optional cell separator
+  newline: '\n' // specify a newline character
+  headers: ['index', 'message'] // Specifing the headers
+});
+```
+
+If you do not specify the headers, csv-parser will take the first line of the csv and treat it like the headers
 
 ## Command line tool
 
