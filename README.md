@@ -56,7 +56,7 @@ or in the option object as well
 var stream = csv({
   raw: false,    // do not decode to utf-8 strings
   separator: ',', // specify optional cell separator
-  newline: '\n' // specify a newline character
+  newline: '\n', // specify a newline character
   headers: ['index', 'message'] // Specifing the headers
 })
 ```
