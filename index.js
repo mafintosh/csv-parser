@@ -24,6 +24,7 @@ var Parser = function (opts) {
   }
 
   this.headers = opts.headers || null
+  this.strict = opts.strict || null
 
   this._raw = !!opts.raw
   this._prev = null
@@ -129,7 +130,11 @@ Parser.prototype._online = function (buf, start, end) {
     return
   }
 
-  this._emit(this._Row, cells)
+  if (this.strict && cells.length !== this.headers.length) {
+    this.emit('error', new Error('Row length does not match headers'))
+  } else {
+    this._emit(this._Row, cells)
+  }
 }
 
 Parser.prototype._compile = function () {

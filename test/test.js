@@ -230,6 +230,17 @@ test('custom newline', function (t) {
   }
 })
 
+test('optional strict', function (t) {
+  collect('test_strict.csv', {strict: true}, verify)
+  function verify (err, lines) {
+    t.equal(err.message, 'Row length does not match headers', 'strict row length')
+    t.same(lines[0], {a: '1', b: '2', c: '3'}, 'first row')
+    t.same(lines[1], {a: '4', b: '5', c: '6'}, 'second row')
+    t.equal(lines.length, 2, '2 rows before error')
+    t.end()
+  }
+})
+
 // helpers
 
 function fixture (name) {
@@ -245,7 +256,7 @@ function collect (file, opts, cb) {
     .on('data', function (line) {
       lines.push(line)
     })
-    .on('error', function (err) { cb(err) })
+    .on('error', function (err) { cb(err, lines) })
     .on('end', function () { cb(false, lines) })
   return parser
 }
