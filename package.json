@@ -14,13 +14,14 @@
     "bops": "^0.1.1",
     "concat-stream": "^1.4.5",
     "csv-spectrum": "^0.2.0",
+    "standard": "^3.3.0",
     "tape": "^2.13.1"
   },
   "bin": {
     "csv-parser": "./bin.js"
   },
   "scripts": {
-    "test": "tape test/test.js"
+    "test": "standard && tape test/test.js"
   },
   "keywords": [
     "csv",

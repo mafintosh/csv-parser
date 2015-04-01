@@ -28,11 +28,11 @@ if (argv.version) {
 
 if (argv.help || (process.stdin.isTTY && !filename)) {
   console.error(
-    'Usage: csv-parser [filename?] [options]\n\n'+
-    '  --headers,-h   Explicitly specify csv headers as a comma separated list\n'+
-    '  --output,-o    Set output file. Defaults to stdout\n'+
-    '  --separator,-s Set the separator character ("," by default)\n'+
-    '  --version,-v   Print out the installed version\n'+
+    'Usage: csv-parser [filename?] [options]\n\n' +
+    '  --headers,-h   Explicitly specify csv headers as a comma separated list\n' +
+    '  --output,-o    Set output file. Defaults to stdout\n' +
+    '  --separator,-s Set the separator character ("," by default)\n' +
+    '  --version,-v   Print out the installed version\n' +
     '  --help         Show this help\n'
   )
   process.exit(1)
@@ -41,11 +41,13 @@ if (argv.help || (process.stdin.isTTY && !filename)) {
 var input
 var output = (argv.output && argv.output !== '-') ? fs.createWriteStream(argv.output) : process.stdout
 
-if (filename === '-' || !filename) input = process.stdin
-else if (fs.existsSync(filename)) input = fs.createReadStream(filename)
-else {
+if (filename === '-' || !filename) {
+  input = process.stdin
+} else if (fs.existsSync(filename)) {
+  input = fs.createReadStream(filename)
+} else {
   console.error('File: %s does not exist', filename)
   process.exit(2)
 }
 
-input.pipe(csv({headers:headers, separator:argv.separator})).pipe(ldjson.serialize()).pipe(output)
+input.pipe(csv({headers: headers, separator: argv.separator})).pipe(ldjson.serialize()).pipe(output)
