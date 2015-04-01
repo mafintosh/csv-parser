@@ -6,6 +6,7 @@ var genfun = require('generate-function')
 var quote = new Buffer('"')[0]
 var comma = new Buffer(',')[0]
 var cr = new Buffer('\r')[0]
+var nl = new Buffer('\n')[0]
 
 var Parser = function(opts) {
   if (!opts) opts = {}
@@ -18,7 +19,7 @@ var Parser = function(opts) {
     this.newline = new Buffer(opts.newline)[0]
     this.customNewline = true
   } else {
-    this.newline = new Buffer('\n')[0]
+    this.newline = nl
     this.customNewline = false
   }
 
@@ -54,10 +55,21 @@ Parser.prototype._transform = function(data, enc, cb) {
 
   for (var i = start; i < buf.length; i++) {
     if (buf[i] === quote) this._quoting = !this._quoting
+    if (!this._quoting) {
+      if (this._first && !this.customNewline) {
+        if (buf[i] === nl) {
+          this.newline = nl;
+        } else if (buf[i] === cr) {
+          if (buf[i+1] !== nl) {
+            this.newline = cr;
+          }
+        }
+      }
 
-    if (!this._quoting && buf[i] === this.newline) {
-      this._online(buf, this._prevEnd, i+1)
-      this._prevEnd = i+1
+      if (buf[i] === this.newline) {
+        this._online(buf, this._prevEnd, i+1)
+        this._prevEnd = i+1
+      }
     }
   }
 
