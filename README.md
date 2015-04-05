@@ -1,6 +1,6 @@
 # csv-parser
 
-Streaming csv parser inspired by binary-csv that aims to be faster than everyone else.
+Streaming CSV parser that aims for maximum speed as well as compatibility with the [csv-spectrum](https://npmjs.org/csv-spectrum) CSV acid test suite
 
 ```
 npm install csv-parser

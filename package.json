@@ -1,8 +1,11 @@
 {
   "name": "csv-parser",
   "version": "1.5.1",
-  "description": "Streaming csv parser inspired by binary-csv that aims to be faster than everyone else",
-  "repository": "mafintosh/csv-parser",
+  "description": "Streaming CSV parser that aims for maximum speed as well as compatibility with the csv-spectrum test suite",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mafintosh/csv-parser"
+  },
   "dependencies": {
     "generate-function": "^1.0.1",
     "generate-object-property": "^1.0.0",
@@ -28,5 +31,16 @@
     "parser",
     "fast",
     "json"
-  ]
+  ],
+  "bugs": {
+    "url": "https://github.com/mafintosh/csv-parser/issues"
+  },
+  "homepage": "https://github.com/mafintosh/csv-parser",
+  "main": "index.js",
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "author": "mafintosh",
+  "license": "BSD"
 }
