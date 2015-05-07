@@ -32,6 +32,7 @@ if (argv.help || (process.stdin.isTTY && !filename)) {
     '  --headers,-h   Explicitly specify csv headers as a comma separated list\n' +
     '  --output,-o    Set output file. Defaults to stdout\n' +
     '  --separator,-s Set the separator character ("," by default)\n' +
+    '  --strict       Require column length match headers length\n' +
     '  --version,-v   Print out the installed version\n' +
     '  --help         Show this help\n'
   )
@@ -50,4 +51,11 @@ if (filename === '-' || !filename) {
   process.exit(2)
 }
 
-input.pipe(csv({headers: headers, separator: argv.separator})).pipe(ldjson.serialize()).pipe(output)
+input
+  .pipe(csv({
+    headers: headers,
+    separator: argv.separator,
+    strict: argv.strict
+  }))
+  .pipe(ldjson.serialize())
+  .pipe(output)

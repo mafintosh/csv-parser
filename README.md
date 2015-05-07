@@ -33,9 +33,10 @@ The csv constructor accepts the following options as well
 
 ``` js
 var stream = csv({
-  raw: false,    // do not decode to utf-8 strings
+  raw: false,     // do not decode to utf-8 strings
   separator: ',', // specify optional cell separator
-  newline: '\n' // specify a newline character
+  newline: '\n',  // specify a newline character
+  strict: true    // require column length match headers length
 })
 ```
 It accepts too an array, that specifies the headers for the object returned:
