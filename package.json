@@ -4,7 +4,7 @@
   "description": "Streaming CSV parser that aims for maximum speed as well as compatibility with the csv-spectrum test suite",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mafintosh/csv-parser"
+    "url": "git+https://github.com/mafintosh/csv-parser.git"
   },
   "dependencies": {
     "generate-function": "^1.0.1",
@@ -42,5 +42,5 @@
     "test": "test"
   },
   "author": "mafintosh",
-  "license": "BSD"
+  "license": "BSD-3-Clause"
 }
