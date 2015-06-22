@@ -79,6 +79,14 @@ $ csv-parser --help # prints all options
 $ printf "a,b\nc,d\n" | csv-parser # parses input
 ```
 
+### Options
+
+You can specify these CLI flags to control the JSON serialization output format
+
+- `outputSeparator` - default `\n`, what to put between JSON items in the output
+- 'beforeOutput` - default empty, what to put at beginning of output
+- `afterOutput` - default `\n`, what to put at end of output
+
 ## License
 
 MIT

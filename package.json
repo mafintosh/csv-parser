@@ -10,8 +10,8 @@
     "generate-function": "^1.0.1",
     "generate-object-property": "^1.0.0",
     "inherits": "^2.0.1",
-    "ldjson-stream": "^1.1.0",
-    "minimist": "^0.2.0"
+    "minimist": "^0.2.0",
+    "ndjson": "^1.4.0"
   },
   "devDependencies": {
     "bops": "^0.1.1",

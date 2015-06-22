@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var minimist = require('minimist')
-var ldjson = require('ldjson-stream')
+var ndjson = require('ndjson')
 var fs = require('fs')
 var csv = require('./')
 
@@ -29,12 +29,15 @@ if (argv.version) {
 if (argv.help || (process.stdin.isTTY && !filename)) {
   console.error(
     'Usage: csv-parser [filename?] [options]\n\n' +
-    '  --headers,-h   Explicitly specify csv headers as a comma separated list\n' +
-    '  --output,-o    Set output file. Defaults to stdout\n' +
-    '  --separator,-s Set the separator character ("," by default)\n' +
-    '  --strict       Require column length match headers length\n' +
-    '  --version,-v   Print out the installed version\n' +
-    '  --help         Show this help\n'
+    '  --headers,-h        Explicitly specify csv headers as a comma separated list\n' +
+    '  --output,-o         Set output file. Defaults to stdout\n' +
+    '  --separator,-s      Set the separator character ("," by default)\n' +
+    '  --strict            Require column length match headers length\n' +
+    '  --version,-v        Print out the installed version\n' +
+    '  --outputSeparator   Put between JSON items in the output (default \\n)\n' +
+    '  --beforeOutput      Put at beginning of output (default nothing)\n' +
+    '  --afterOutput       Put at end of output (default \\n)\n' +
+    '  --help              Show this help\n'
   )
   process.exit(1)
 }
@@ -51,11 +54,17 @@ if (filename === '-' || !filename) {
   process.exit(2)
 }
 
+var serializeOpts = {
+  separator: argv.outputSeparator,
+  before: argv.beforeOutput,
+  after: argv.afterOutput
+}
+
 input
   .pipe(csv({
     headers: headers,
     separator: argv.separator,
     strict: argv.strict
   }))
-  .pipe(ldjson.serialize())
+  .pipe(ndjson.serialize(serializeOpts))
   .pipe(output)
