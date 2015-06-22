@@ -87,6 +87,13 @@ You can specify these CLI flags to control the JSON serialization output format
 - 'beforeOutput` - default empty, what to put at beginning of output
 - `afterOutput` - default `\n`, what to put at end of output
 
+
+For example, to produce an object with a JSON array of items as output:
+
+```
+--beforeOutput='{"items":[' --afterOutput=]} --outputSeparator=,
+```
+
 ## License
 
 MIT
