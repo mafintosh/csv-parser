@@ -124,7 +124,7 @@ Parser.prototype._online = function (buf, start, end) {
 
   if (this._first) {
     this._first = false
-    this.headers = cells
+    this.headers = cells.map(function (c) { return c.trim() })
     this._compile(cells)
     this.emit('headers', this.headers)
     return
