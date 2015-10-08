@@ -10,10 +10,12 @@ var argv = minimist(process.argv, {
     h: 'headers',
     v: 'version',
     o: 'output',
-    s: 'separator'
+    s: 'separator',
+    e: 'escape'
   },
   default: {
-    s: ','
+    s: ',',
+    e: '"'
   },
   boolean: ['version', 'help']
 })
@@ -32,6 +34,7 @@ if (argv.help || (process.stdin.isTTY && !filename)) {
     '  --headers,-h        Explicitly specify csv headers as a comma separated list\n' +
     '  --output,-o         Set output file. Defaults to stdout\n' +
     '  --separator,-s      Set the separator character ("," by default)\n' +
+    '  --escape,-e         Set the escape character (\'"\' by default)\n' +
     '  --strict            Require column length match headers length\n' +
     '  --version,-v        Print out the installed version\n' +
     '  --outputSeparator   Put between JSON items in the output (default \\n)\n' +
