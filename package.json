@@ -1,6 +1,6 @@
 {
   "name": "csv-parser",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "description": "Streaming CSV parser that aims for maximum speed as well as compatibility with the csv-spectrum test suite",
   "repository": {
     "type": "git",
