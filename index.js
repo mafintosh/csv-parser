@@ -3,7 +3,7 @@ var inherits = require('inherits')
 var genobj = require('generate-object-property')
 var genfun = require('generate-function')
 
-var escape = new Buffer('"')[0]
+var quote = new Buffer('"')[0]
 var comma = new Buffer(',')[0]
 var cr = new Buffer('\r')[0]
 var nl = new Buffer('\n')[0]
@@ -15,7 +15,8 @@ var Parser = function (opts) {
   stream.Transform.call(this, {objectMode: true, highWaterMark: 16})
 
   this.separator = opts.separator ? new Buffer(opts.separator)[0] : comma
-  this.escape = opts.escape ? new Buffer(opts.escape)[0] : escape
+  this.quote = opts.quote ? new Buffer(opts.quote)[0] : quote
+  this.escape = opts.escape ? new Buffer(opts.escape)[0] : this.quote
   if (opts.newline) {
     this.newline = new Buffer(opts.newline)[0]
     this.customNewline = true
@@ -31,7 +32,6 @@ var Parser = function (opts) {
   this._prev = null
   this._prevEnd = 0
   this._first = true
-  this._escaped = false
   this._empty = this._raw ? new Buffer(0) : ''
   this._Row = null
 
@@ -48,6 +48,7 @@ Parser.prototype._transform = function (data, enc, cb) {
 
   var start = 0
   var buf = data
+  var quotedCell = false
 
   if (this._prev) {
     start = this._prev.length
@@ -56,8 +57,13 @@ Parser.prototype._transform = function (data, enc, cb) {
   }
 
   for (var i = start; i < buf.length; i++) {
-    if (buf[i] === this.escape) this._escaped = !this._escaped
-    if (!this._escaped) {
+    // non-escaped quote (quoting the cell)
+    if (buf[i] === this.quote && buf[i - 1] !== this.escape) {
+      quotedCell = !quotedCell
+      continue
+    }
+
+    if (!quotedCell) {
       if (this._first && !this.customNewline) {
         if (buf[i] === nl) {
           this.newline = nl
@@ -102,19 +108,19 @@ Parser.prototype._online = function (buf, start, end) {
 
   var comma = this.separator
   var cells = []
-  var isEscaped = false
+  var isQuoted = false
   var offset = start
 
   for (var i = start; i < end; i++) {
-    if (buf[i] === this.escape) { // "
-      if (i < end - 1 && buf[i + 1] === this.escape) { // ""
-        i++
-      } else {
-        isEscaped = !isEscaped
-      }
+    if (buf[i] === this.escape && buf[i + 1] === this.quote) {
+      i++
+      continue
+    } else if (buf[i] === this.quote && buf[i - 1] !== this.escape) {
+      isQuoted = !isQuoted
       continue
     }
-    if (buf[i] === comma && !isEscaped) {
+
+    if (buf[i] === comma && !isQuoted) {
       cells.push(this._oncell(buf, offset, i))
       offset = i + 1
     }
@@ -166,13 +172,15 @@ Parser.prototype._emit = function (Row, cells) {
 }
 
 Parser.prototype._oncell = function (buf, start, end) {
-  if (buf[start] === this.escape && buf[end - 1] === this.escape) {
+  // remove quotes from quoted cells
+  if (buf[start] === this.quote && buf[end - 1] === this.quote) {
     start++
     end--
   }
 
   for (var i = start, y = start; i < end; i++) {
-    if (buf[i] === this.escape && buf[i + 1] === this.escape) i++
+    // check for escape characters and skip them
+    if (buf[i] === this.escape && buf[i + 1] === this.quote) i++
     if (y !== i) buf[y] = buf[i]
     y++
   }

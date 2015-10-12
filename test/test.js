@@ -54,17 +54,6 @@ test('raw escaped quotes', function (t) {
   }
 })
 
-test('custom escaped character', function (t) {
-  collect('custom_escaped_character.csv', {escape: '`'}, verify)
-  function verify (err, lines) {
-    t.false(err, 'no err')
-    t.same(lines[0], {a: '1', b: 'ha `ha` ha'}, 'first row')
-    t.same(lines[1], {a: '3', b: '4'}, 'second row')
-    t.equal(lines.length, 2, '2 rows')
-    t.end()
-  }
-})
-
 test('raw escaped quotes and newlines', function (t) {
   collect('quotes_and_newlines.csv', verify)
   function verify (err, lines) {
@@ -248,6 +237,50 @@ test('optional strict', function (t) {
     t.same(lines[0], {a: '1', b: '2', c: '3'}, 'first row')
     t.same(lines[1], {a: '4', b: '5', c: '6'}, 'second row')
     t.equal(lines.length, 2, '2 rows before error')
+    t.end()
+  }
+})
+
+test('custom quote character', function (t) {
+  collect('custom_quote_character.csv', {quote: '\''}, verify)
+  function verify (err, lines) {
+    t.false(err, 'no err')
+    t.same(lines[0], {a: '1', b: 'some value', c: '2'}, 'first row')
+    t.same(lines[1], {a: '3', b: '4', c: '5'}, 'second row')
+    t.equal(lines.length, 2, '2 rows')
+    t.end()
+  }
+})
+
+test('custom escape character', function (t) {
+  collect('custom_escape_character.csv', {escape: '\\'}, verify)
+  function verify (err, lines) {
+    t.false(err, 'no err')
+    t.same(lines[0], {a: '1', b: 'some "escaped" value', c: '2'}, 'first row')
+    t.same(lines[1], {a: '3', b: '4', c: '5'}, 'second row')
+    t.equal(lines.length, 2, '2 rows')
+    t.end()
+  }
+})
+
+test('custom quote and escape character', function (t) {
+  collect('custom_quote_and_escape_character.csv', {quote: "'", escape: '\\'}, verify)
+  function verify (err, lines) {
+    t.false(err, 'no err')
+    t.same(lines[0], {a: '1', b: "some 'escaped' value", c: '2'}, 'first row')
+    t.same(lines[1], {a: '3', b: '4', c: '5'}, 'second row')
+    t.equal(lines.length, 2, '2 rows')
+    t.end()
+  }
+})
+
+test('custom quote character with default escaped value', function (t) {
+  collect('custom_quote_character_default_escape.csv', {quote: '\''}, verify)
+  function verify (err, lines) {
+    t.false(err, 'no err')
+    t.same(lines[0], {a: '1', b: "some 'escaped' value", c: '2'}, 'first row')
+    t.same(lines[1], {a: '3', b: '4', c: '5'}, 'second row')
+    t.equal(lines.length, 2, '2 rows')
     t.end()
   }
 })
