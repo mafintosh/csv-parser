@@ -58,7 +58,7 @@ Parser.prototype._transform = function (data, enc, cb) {
 
   for (var i = start; i < buf.length; i++) {
     // non-escaped quote (quoting the cell)
-    if (buf[i] === this.quote && buf[i - 1] !== this.escape) {
+    if (buf[i] === this.quote && (i === start || (i > start && buf[i - 1] !== this.escape))) {
       quotedCell = !quotedCell
       continue
     }
@@ -112,11 +112,15 @@ Parser.prototype._online = function (buf, start, end) {
   var offset = start
 
   for (var i = start; i < end; i++) {
-    if (buf[i] === this.escape && buf[i + 1] === this.quote) {
-      i++
-      continue
-    } else if (buf[i] === this.quote && buf[i - 1] !== this.escape) {
+    var checkForStartingQuote = !isQuoted && buf[i] === this.quote
+    var checkForEndingQuote = isQuoted && buf[i] === this.quote && i + 1 <= end && buf[i + 1] === comma
+    var checkForEscape = isQuoted && buf[i] === this.escape && i + 1 < end && buf[i + 1] === this.quote
+
+    if (checkForStartingQuote || checkForEndingQuote) {
       isQuoted = !isQuoted
+      continue
+    } else if (checkForEscape) {
+      i++
       continue
     }
 
@@ -180,7 +184,7 @@ Parser.prototype._oncell = function (buf, start, end) {
 
   for (var i = start, y = start; i < end; i++) {
     // check for escape characters and skip them
-    if (buf[i] === this.escape && buf[i + 1] === this.quote) i++
+    if (buf[i] === this.escape && i + 1 < end && buf[i + 1] === this.quote) i++
     if (y !== i) buf[y] = buf[i]
     y++
   }
