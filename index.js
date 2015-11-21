@@ -166,9 +166,11 @@ Parser.prototype._emit = function (Row, cells) {
 }
 
 Parser.prototype._oncell = function (buf, start, end) {
+  var unquoted = true
   if (buf[start] === this.escape && buf[end - 1] === this.escape) {
     start++
     end--
+    unquoted = false
   }
 
   for (var i = start, y = start; i < end; i++) {
@@ -177,12 +179,14 @@ Parser.prototype._oncell = function (buf, start, end) {
     y++
   }
 
-  return this._onvalue(buf, start, y)
+  return this._onvalue(buf, start, y, unquoted)
 }
 
-Parser.prototype._onvalue = function (buf, start, end) {
+Parser.prototype._onvalue = function (buf, start, end, unquoted) {
   if (this._raw) return buf.slice(start, end)
-  return buf.toString('utf-8', start, end)
+  var out = buf.toString('utf-8', start, end)
+  if (unquoted && out === 'NULL') return this._empty
+  return out
 }
 
 module.exports = function (opts) {
