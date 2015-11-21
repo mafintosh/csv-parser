@@ -112,14 +112,14 @@ Parser.prototype._online = function (buf, start, end) {
   var offset = start
 
   for (var i = start; i < end; i++) {
-    var checkForStartingQuote = !isQuoted && buf[i] === this.quote
-    var checkForEndingQuote = isQuoted && buf[i] === this.quote && i + 1 <= end && buf[i + 1] === comma
-    var checkForEscape = isQuoted && buf[i] === this.escape && i + 1 < end && buf[i + 1] === this.quote
+    var isStartingQuote = !isQuoted && buf[i] === this.quote
+    var isEndingQuote = isQuoted && buf[i] === this.quote && i + 1 <= end && buf[i + 1] === comma
+    var isEscape = isQuoted && buf[i] === this.escape && i + 1 < end && buf[i + 1] === this.quote
 
-    if (checkForStartingQuote || checkForEndingQuote) {
+    if (isStartingQuote || isEndingQuote) {
       isQuoted = !isQuoted
       continue
-    } else if (checkForEscape) {
+    } else if (isEscape) {
       i++
       continue
     }
