@@ -252,6 +252,16 @@ test('optional strict', function (t) {
   }
 })
 
+test('trim headers', function (t) {
+  collect('trim-headers.csv', verify)
+  function verify (err, lines) {
+    t.false(err, 'no err')
+    t.same(lines[0], {a: '1', b: '2', c: '3'}, 'first row')
+    t.equal(lines.length, 1, '1 row')
+    t.end()
+  }
+})
+
 // helpers
 
 function fixture (name) {
