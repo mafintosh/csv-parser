@@ -19,6 +19,7 @@ You can use `csv-parser` in the browser with [browserify](http://browserify.org/
 
 ``` js
 var csv = require('csv-parser')
+var fs = require('fs')
 
 fs.createReadStream('some-csv-file.csv')
   .pipe(csv())
