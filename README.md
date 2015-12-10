@@ -36,7 +36,8 @@ The csv constructor accepts the following options as well
 var stream = csv({
   raw: false,     // do not decode to utf-8 strings
   separator: ',', // specify optional cell separator
-  escape: '"',    // specify optional escape character
+  quote: '"',     // specify optional quote character
+  escape: '"',    // specify optional escape character (defaults to quote value)
   newline: '\n',  // specify a newline character
   strict: true    // require column length match headers length
 })
@@ -59,7 +60,8 @@ or in the option object as well
 var stream = csv({
   raw: false,     // do not decode to utf-8 strings
   separator: ',', // specify optional cell separator
-  escape: '"',    // specify optional escape character
+  quote: '"',     // specify optional quote character
+  escape: '"',    // specify optional escape character (defaults to quote value)
   newline: '\n',  // specify a newline character
   headers: ['index', 'message'] // Specifing the headers
 })
