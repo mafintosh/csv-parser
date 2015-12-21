@@ -10,15 +10,15 @@
     "generate-function": "^1.0.1",
     "generate-object-property": "^1.0.0",
     "inherits": "^2.0.1",
-    "minimist": "^0.2.0",
+    "minimist": "^1.2.0",
     "ndjson": "^1.4.0"
   },
   "devDependencies": {
     "bops": "^0.1.1",
     "concat-stream": "^1.4.5",
-    "csv-spectrum": "^0.2.0",
-    "standard": "^3.3.0",
-    "tape": "^2.13.1"
+    "csv-spectrum": "^1.0.0",
+    "standard": "^5.4.1",
+    "tape": "^4.2.2"
   },
   "bin": {
     "csv-parser": "./bin.js"
