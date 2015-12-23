@@ -285,6 +285,15 @@ test('custom quote character with default escaped value', function (t) {
   }
 })
 
+test('process all rows', function (t) {
+  collect('process_all_rows.csv', {}, verify)
+  function verify (err, lines) {
+    t.false(err, 'no err')
+    t.equal(lines.length, 7268, '7268 rows')
+    t.end()
+  }
+})
+
 // helpers
 
 function fixture (name) {
