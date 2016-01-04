@@ -57,11 +57,16 @@ Parser.prototype._transform = function (data, enc, cb) {
     this._prev = null
   }
 
-  for (var i = start; i < buf.length; i++) {
-    if (!this._escaped && buf[i] === this.escape && buf[i + 1] === this.quote && i !== start) {
+  var bufLen = buf.length
+
+  for (var i = start; i < bufLen; i++) {
+    var chr = buf[i]
+    var nextChr = i + 1 < bufLen ? buf[i + 1] : null
+
+    if (!this._escaped && chr === this.escape && nextChr === this.quote && i !== start) {
       this._escaped = true
       continue
-    } else if (buf[i] === this.quote) {
+    } else if (chr === this.quote) {
       if (this._escaped) {
         this._escaped = false
       // non-escaped quote (quoting the cell)
@@ -73,30 +78,30 @@ Parser.prototype._transform = function (data, enc, cb) {
 
     if (!this._quoted) {
       if (this._first && !this.customNewline) {
-        if (buf[i] === nl) {
+        if (chr === nl) {
           this.newline = nl
-        } else if (buf[i] === cr) {
-          if (buf[i + 1] !== nl) {
+        } else if (chr === cr) {
+          if (nextChr !== nl) {
             this.newline = cr
           }
         }
       }
 
-      if (buf[i] === this.newline) {
+      if (chr === this.newline) {
         this._online(buf, this._prevEnd, i + 1)
         this._prevEnd = i + 1
       }
     }
   }
 
-  if (this._prevEnd === buf.length) {
+  if (this._prevEnd === bufLen) {
     this._prevEnd = 0
     return cb()
   }
 
-  if (buf.length - this._prevEnd < data.length) {
+  if (bufLen - this._prevEnd < data.length) {
     this._prev = data
-    this._prevEnd -= (buf.length - data.length)
+    this._prevEnd -= (bufLen - data.length)
     return cb()
   }
 
