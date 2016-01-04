@@ -33,6 +33,7 @@ var Parser = function (opts) {
   this._prevEnd = 0
   this._first = true
   this._quoted = false
+  this._escaped = false
   this._empty = this._raw ? new Buffer(0) : ''
   this._Row = null
 
@@ -57,9 +58,16 @@ Parser.prototype._transform = function (data, enc, cb) {
   }
 
   for (var i = start; i < buf.length; i++) {
-    // non-escaped quote (quoting the cell)
-    if (buf[i] === this.quote && (i === start || (i > start && buf[i - 1] !== this.escape))) {
-      this._quoted = !this._quoted
+    if (!this._escaped && buf[i] === this.escape && buf[i + 1] === this.quote && i !== start) {
+      this._escaped = true
+      continue
+    } else if (buf[i] === this.quote) {
+      if (this._escaped) {
+        this._escaped = false
+      // non-escaped quote (quoting the cell)
+      } else {
+        this._quoted = !this._quoted
+      }
       continue
     }
 
