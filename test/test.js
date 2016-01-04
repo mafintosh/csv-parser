@@ -48,8 +48,9 @@ test('raw escaped quotes', function (t) {
   function verify (err, lines) {
     t.false(err, 'no err')
     t.same(lines[0], {a: '1', b: 'ha "ha" ha'}, 'first row')
-    t.same(lines[1], {a: '3', b: '4'}, 'second row')
-    t.equal(lines.length, 2, '2 rows')
+    t.same(lines[1], {a: '2', b: '""'}, 'second row')
+    t.same(lines[2], {a: '3', b: '4'}, 'third row')
+    t.equal(lines.length, 3, '3 rows')
     t.end()
   }
 })
@@ -59,8 +60,9 @@ test('raw escaped quotes and newlines', function (t) {
   function verify (err, lines) {
     t.false(err, 'no err')
     t.same(lines[0], {a: '1', b: 'ha ' + eol + '"ha" ' + eol + 'ha'}, 'first row')
-    t.same(lines[1], {a: '3', b: '4'}, 'second row')
-    t.equal(lines.length, 2, '2 rows')
+    t.same(lines[1], {a: '2', b: ' ' + eol + '"" ' + eol}, 'second row')
+    t.same(lines[2], {a: '3', b: '4'}, 'third row')
+    t.equal(lines.length, 3, '3 rows')
     t.end()
   }
 })
@@ -257,8 +259,9 @@ test('custom escape character', function (t) {
   function verify (err, lines) {
     t.false(err, 'no err')
     t.same(lines[0], {a: '1', b: 'some "escaped" value', c: '2'}, 'first row')
-    t.same(lines[1], {a: '3', b: '4', c: '5'}, 'second row')
-    t.equal(lines.length, 2, '2 rows')
+    t.same(lines[1], {a: '3', b: '""', c: '4'}, 'second row')
+    t.same(lines[2], {a: '5', b: '6', c: '7'}, 'third row')
+    t.equal(lines.length, 3, '3 rows')
     t.end()
   }
 })
@@ -268,8 +271,9 @@ test('custom quote and escape character', function (t) {
   function verify (err, lines) {
     t.false(err, 'no err')
     t.same(lines[0], {a: '1', b: "some 'escaped' value", c: '2'}, 'first row')
-    t.same(lines[1], {a: '3', b: '4', c: '5'}, 'second row')
-    t.equal(lines.length, 2, '2 rows')
+    t.same(lines[1], {a: '3', b: "''", c: '4'}, 'second row')
+    t.same(lines[2], {a: '5', b: '6', c: '7'}, 'third row')
+    t.equal(lines.length, 3, '3 rows')
     t.end()
   }
 })
@@ -279,8 +283,9 @@ test('custom quote character with default escaped value', function (t) {
   function verify (err, lines) {
     t.false(err, 'no err')
     t.same(lines[0], {a: '1', b: "some 'escaped' value", c: '2'}, 'first row')
-    t.same(lines[1], {a: '3', b: '4', c: '5'}, 'second row')
-    t.equal(lines.length, 2, '2 rows')
+    t.same(lines[1], {a: '3', b: "''", c: '4'}, 'second row')
+    t.same(lines[2], {a: '5', b: '6', c: '7'}, 'third row')
+    t.equal(lines.length, 3, '3 rows')
     t.end()
   }
 })
