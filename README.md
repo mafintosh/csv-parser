@@ -33,9 +33,8 @@ var fs = require('fs')
 
 fs.createReadStream('some-csv-file.csv')
   .pipe(csv())
-  .on('data', function(data) {
-    console.log("Name: %s Age: %s", 
-      data["NAME"], data["AGE"])
+  .on('data', function (data) {
+    console.log('Name: %s Age: %s', data.NAME, data.AGE)
   })
 ```
 
@@ -60,7 +59,7 @@ var stream = csv(['index', 'message'])
 
 // Source from somewere with format 12312,Hello World
 origin.pipe(stream)
-  .on('data', function(data) {
+  .on('data', function (data) {
     console.log(data) // Should output { "index": 12312, "message": "Hello World" }
   })
 ```
@@ -81,19 +80,22 @@ var stream = csv({
 If you do not specify the headers, csv-parser will take the first line of the csv and treat it like the headers
 
 ## Events
+
 The following events are emitted during parsing.
 
 ### data
+
 For each row parsed (except the header), this event is emitted. This is already discussed above.
 
 ### headers
+
 After the header row is parsed this event is emitted. An array of header names is supplied as the payload.
 
 ```
 fs.createReadStream('some-csv-file.csv')
   .pipe(csv())
-  .on('headers', function(headerList) {
-    console.log("First header: %s", headerList[0])
+  .on('headers', function (headerList) {
+    console.log('First header: %s', headerList[0])
   })
 ```
 
@@ -103,11 +105,11 @@ The usual [Readable stream](https://nodejs.org/api/stream.html#stream_class_stre
 ```
 fs.createReadStream('some-csv-file.csv')
   .pipe(csv())
-  .on('data', function(data) {
-    //Process row
+  .on('data', function (data) {
+    // Process row
   })
-  .on('end', function() {
-    //We are done
+  .on('end', function () {
+    // We are done
 })
 ```
 
@@ -133,7 +135,6 @@ You can specify these CLI flags to control the JSON serialization output format
 - `outputSeparator` - default `\n`, what to put between JSON items in the output
 - `beforeOutput` - default empty, what to put at beginning of output
 - `afterOutput` - default `\n`, what to put at end of output
-
 
 For example, to produce an object with a JSON array of items as output:
 
