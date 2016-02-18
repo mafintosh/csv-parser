@@ -17,6 +17,16 @@ Simply instantiate `csv` and pump a csv file to it and get the rows out as objec
 
 You can use `csv-parser` in the browser with [browserify](http://browserify.org/)
 
+Let's say that you have a CSV file ``some-csv-file.csv`` like this:
+
+```
+NAME, AGE
+Daffy Duck, 24
+Bugs Bunny, 22
+```
+
+You can parse it like this:
+
 ``` js
 var csv = require('csv-parser')
 var fs = require('fs')
@@ -24,11 +34,12 @@ var fs = require('fs')
 fs.createReadStream('some-csv-file.csv')
   .pipe(csv())
   .on('data', function(data) {
-    console.log('row', data)
+    console.log("Name: %s Age: %s", 
+      data["NAME"], data["AGE"])
   })
 ```
 
-The data emitted is a normalized JSON object
+The data emitted is a normalized JSON object. Each header is used as the property name of the object.
 
 The csv constructor accepts the following options as well
 
@@ -68,6 +79,37 @@ var stream = csv({
 ```
 
 If you do not specify the headers, csv-parser will take the first line of the csv and treat it like the headers
+
+## Events
+The following events are emitted during parsing.
+
+### data
+For each row parsed (except the header), this event is emitted. This is already discussed above.
+
+### headers
+After the header row is parsed this event is emitted. An array of header names is supplied as the payload.
+
+```
+fs.createReadStream('some-csv-file.csv')
+  .pipe(csv())
+  .on('headers', function(headerList) {
+    console.log("First header: %s", headerList[0])
+  })
+```
+
+### Other Readable Stream Events
+The usual [Readable stream](https://nodejs.org/api/stream.html#stream_class_stream_readable) events are also emitted. Use the ``close`` event to detect the end of parsing.
+
+```
+fs.createReadStream('some-csv-file.csv')
+  .pipe(csv())
+  .on('data', function(data) {
+    //Process row
+  })
+  .on('end', function() {
+    //We are done
+})
+```
 
 ## Command line tool
 
