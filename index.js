@@ -7,6 +7,8 @@ var quote = new Buffer('"')[0]
 var comma = new Buffer(',')[0]
 var cr = new Buffer('\r')[0]
 var nl = new Buffer('\n')[0]
+var utf8 = 'utf-8'
+var latin1 = 'ISO-8859-1'
 
 var Parser = function (opts) {
   if (!opts) opts = {}
@@ -25,6 +27,11 @@ var Parser = function (opts) {
     this.customNewline = false
   }
 
+  if (opts.decode === latin1) {
+    this.decode = latin1
+  } else {
+    this.decode = utf8
+  }
   this.headers = opts.headers || null
   this.strict = opts.strict || null
 
@@ -207,7 +214,18 @@ Parser.prototype._oncell = function (buf, start, end) {
 
 Parser.prototype._onvalue = function (buf, start, end) {
   if (this._raw) return buf.slice(start, end)
-  return buf.toString('utf-8', start, end)
+  if (this.decode === utf8) return buf.toString('utf-8', start, end)
+  if (this.decode === latin1) {
+    var binary = ''
+    var chunk = buf.slice(start, end)
+    var len = chunk.byteLength
+
+    for (var i = 0; i < len; i++) {
+      binary += String.fromCharCode(chunk[i])
+    }
+
+    return binary
+  }
 }
 
 module.exports = function (opts) {
