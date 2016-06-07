@@ -130,10 +130,25 @@ $ printf "a,b\nc,d\n" | csv-parser # parses input
 
 ### Options
 
-
-
+You can specify these CLI flags to control how the input is parsed:
 
 ```
+Usage: csv-parser [filename?] [options]
+
+  --headers,-h        Explicitly specify csv headers as a comma separated list
+  --output,-o         Set output file. Defaults to stdout
+  --separator,-s      Set the separator character ("," by default)
+  --quote,-q          Set the quote character ('"' by default)
+  --escape,-e         Set the escape character (defaults to quote value)
+  --strict            Require column length match headers length
+  --version,-v        Print out the installed version
+  --help              Show this help
+```
+
+For example, to parse a TSV file:
+
+```
+cat data.tsv | csv-parser -s $'\t'
 ```
 
 ## License
