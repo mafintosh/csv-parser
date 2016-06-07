@@ -43,18 +43,6 @@ test('newlines in a cell', function (t) {
   }
 })
 
-test('newlines in a cell', function (t) {
-  collect('newlines.csv', {separator: '\t'}, verify)
-  function verify (err, lines) {
-    t.false(err, 'no err')
-    t.same(lines[0], {a: '1', b: '2', c: '3'}, 'first row')
-    t.same(lines[1], {a: 'Once upon ' + eol + 'a time', b: '5', c: '6'}, 'second row')
-    t.same(lines[2], {a: '7', b: '8', c: '9'}, 'fourth row')
-    t.equal(lines.length, 3, '3 rows')
-    t.end()
-  }
-})
-
 test('raw escaped quotes', function (t) {
   collect('escaped_quotes.csv', verify)
   function verify (err, lines) {
