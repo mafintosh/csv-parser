@@ -40,9 +40,6 @@ if (argv.help || (process.stdin.isTTY && !filename)) {
     '  --escape,-e         Set the escape character (defaults to quote value)\n' +
     '  --strict            Require column length match headers length\n' +
     '  --version,-v        Print out the installed version\n' +
-    '  --outputSeparator   Put between JSON items in the output (default \\n)\n' +
-    '  --beforeOutput      Put at beginning of output (default nothing)\n' +
-    '  --afterOutput       Put at end of output (default \\n)\n' +
     '  --help              Show this help\n'
   )
   process.exit(1)
@@ -60,17 +57,11 @@ if (filename === '-' || !filename) {
   process.exit(2)
 }
 
-var serializeOpts = {
-  separator: argv.outputSeparator,
-  before: argv.beforeOutput,
-  after: argv.afterOutput
-}
-
 input
   .pipe(csv({
     headers: headers,
     separator: argv.separator,
     strict: argv.strict
   }))
-  .pipe(ndjson.serialize(serializeOpts))
+  .pipe(ndjson.serialize())
   .pipe(output)
