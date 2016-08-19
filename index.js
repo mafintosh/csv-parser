@@ -27,7 +27,12 @@ var Parser = function (opts) {
 
   this.headers = opts.headers || null
   this.strict = opts.strict || null
-  this.transformHeaders = opts.transformHeaders || function (id) { return id }
+
+  function defaultMapHeaders (id) {
+    return id
+  }
+
+  this.mapHeaders = opts.mapHeaders || defaultMapHeaders
 
   this._raw = !!opts.raw
   this._prev = null
@@ -169,7 +174,7 @@ Parser.prototype._compile = function () {
 
   var self = this
   this.headers.forEach(function (cell, i) {
-    var newHeader = self.transformHeaders(cell, i)
+    var newHeader = self.mapHeaders(cell, i)
     if (newHeader) {
       Row('%s = cells[%d]', genobj('this', newHeader), i)
     }

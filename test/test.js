@@ -300,9 +300,9 @@ test('process all rows', function (t) {
 })
 
 test('skip columns a and c', function (t) {
-  collect('dummy.csv', {transformHeaders: transformHeaders}, verify)
-  function transformHeaders (name, i) {
-    if (['a', 'c'].includes(name)) {
+  collect('dummy.csv', {mapHeaders: mapHeaders}, verify)
+  function mapHeaders (name, i) {
+    if (['a', 'c'].indexOf(name) > -1) {
       return null
     }
     return name
@@ -316,8 +316,8 @@ test('skip columns a and c', function (t) {
 })
 
 test('rename columns', function (t) {
-  collect('dummy.csv', {transformHeaders: transformHeaders}, verify)
-  function transformHeaders (name, i) {
+  collect('dummy.csv', {mapHeaders: mapHeaders}, verify)
+  function mapHeaders (name, i) {
     var headers = {a: 'x', b: 'y', c: 'z'}
     return headers[name]
   }
