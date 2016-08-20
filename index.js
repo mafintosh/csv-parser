@@ -28,6 +28,12 @@ var Parser = function (opts) {
   this.headers = opts.headers || null
   this.strict = opts.strict || null
 
+  function defaultMapHeaders (id) {
+    return id
+  }
+
+  this.mapHeaders = opts.mapHeaders || defaultMapHeaders
+
   this._raw = !!opts.raw
   this._prev = null
   this._prevEnd = 0
@@ -166,8 +172,12 @@ Parser.prototype._compile = function () {
 
   var Row = genfun()('function Row (cells) {')
 
+  var self = this
   this.headers.forEach(function (cell, i) {
-    Row('%s = cells[%d]', genobj('this', cell), i)
+    var newHeader = self.mapHeaders(cell, i)
+    if (newHeader) {
+      Row('%s = cells[%d]', genobj('this', newHeader), i)
+    }
   })
 
   Row('}')

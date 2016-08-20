@@ -299,6 +299,36 @@ test('process all rows', function (t) {
   }
 })
 
+test('skip columns a and c', function (t) {
+  collect('dummy.csv', {mapHeaders: mapHeaders}, verify)
+  function mapHeaders (name, i) {
+    if (['a', 'c'].indexOf(name) > -1) {
+      return null
+    }
+    return name
+  }
+  function verify (err, lines) {
+    t.false(err, 'no err')
+    t.same(lines[0], {b: '2'}, 'first row')
+    t.equal(lines.length, 1, '1 row')
+    t.end()
+  }
+})
+
+test('rename columns', function (t) {
+  collect('dummy.csv', {mapHeaders: mapHeaders}, verify)
+  function mapHeaders (name, i) {
+    var headers = {a: 'x', b: 'y', c: 'z'}
+    return headers[name]
+  }
+  function verify (err, lines) {
+    t.false(err, 'no err')
+    t.same(lines[0], {x: '1', y: '2', z: '3'}, 'first row')
+    t.equal(lines.length, 1, '1 row')
+    t.end()
+  }
+})
+
 // helpers
 
 function fixture (name) {
