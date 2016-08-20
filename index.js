@@ -27,11 +27,6 @@ var Parser = function (opts) {
 
   this.headers = opts.headers || null
   this.strict = opts.strict || null
-
-  function defaultMapHeaders (id) {
-    return id
-  }
-
   this.mapHeaders = opts.mapHeaders || defaultMapHeaders
 
   this._raw = !!opts.raw
@@ -218,6 +213,10 @@ Parser.prototype._oncell = function (buf, start, end) {
 Parser.prototype._onvalue = function (buf, start, end) {
   if (this._raw) return buf.slice(start, end)
   return buf.toString('utf-8', start, end)
+}
+
+function defaultMapHeaders (id) {
+  return id
 }
 
 module.exports = function (opts) {
