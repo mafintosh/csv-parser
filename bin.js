@@ -40,6 +40,7 @@ if (argv.help || (process.stdin.isTTY && !filename)) {
     '  --escape,-e         Set the escape character (defaults to quote value)\n' +
     '  --strict            Require column length match headers length\n' +
     '  --version,-v        Print out the installed version\n' +
+    '  --remove            Remove headers from output\n' +
     '  --help              Show this help\n'
   )
   process.exit(1)
@@ -47,6 +48,11 @@ if (argv.help || (process.stdin.isTTY && !filename)) {
 
 var input
 var output = (argv.output && argv.output !== '-') ? fs.createWriteStream(argv.output) : process.stdout
+var removedHeaders = argv.remove && argv.remove.split(',')
+
+function mapHeaders (name, i) {
+  return removedHeaders.indexOf(name) === -1 ? name : null
+}
 
 if (filename === '-' || !filename) {
   input = process.stdin
@@ -61,7 +67,8 @@ input
   .pipe(csv({
     headers: headers,
     separator: argv.separator,
-    strict: argv.strict
+    strict: argv.strict,
+    mapHeaders: argv.remove ? mapHeaders : null
   }))
   .pipe(ndjson.serialize())
   .pipe(output)
