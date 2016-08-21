@@ -28,6 +28,7 @@ var Parser = function (opts) {
   this.headers = opts.headers || null
   this.strict = opts.strict || null
   this.mapHeaders = opts.mapHeaders || defaultMapHeaders
+  this.max = opts.max || NaN
 
   this._raw = !!opts.raw
   this._prev = null
@@ -37,6 +38,8 @@ var Parser = function (opts) {
   this._escaped = false
   this._empty = this._raw ? new Buffer(0) : ''
   this._Row = null
+  this._devnull = false
+  this._count = 0
 
   if (this.headers) {
     this._first = false
@@ -47,6 +50,7 @@ var Parser = function (opts) {
 inherits(Parser, stream.Transform)
 
 Parser.prototype._transform = function (data, enc, cb) {
+  if (this._devnull) return cb()
   if (typeof data === 'string') data = new Buffer(data)
 
   var start = 0
@@ -190,7 +194,13 @@ Parser.prototype._compile = function () {
 }
 
 Parser.prototype._emit = function (Row, cells) {
+  if (this._devnull) return
+  this._count++
   this.push(new Row(cells))
+  if (this._count >= this.max) {
+    this._devnull = true
+    this.push(null)
+  }
 }
 
 Parser.prototype._oncell = function (buf, start, end) {
