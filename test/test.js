@@ -299,6 +299,15 @@ test('process all rows', function (t) {
   }
 })
 
+test('process only 250 rows', function (t) {
+  collect('process_all_rows.csv', { max: 250 }, verify)
+  function verify (err, lines) {
+    t.false(err, 'no err')
+    t.equal(lines.length, 250, '250 rows')
+    t.end()
+  }
+})
+
 test('skip columns a and c', function (t) {
   collect('dummy.csv', {mapHeaders: mapHeaders}, verify)
   function mapHeaders (name, i) {

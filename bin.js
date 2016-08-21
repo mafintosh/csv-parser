@@ -39,6 +39,7 @@ if (argv.help || (process.stdin.isTTY && !filename)) {
     '  --quote,-q          Set the quote character (\'"\' by default)\n' +
     '  --escape,-e         Set the escape character (defaults to quote value)\n' +
     '  --strict            Require column length match headers length\n' +
+    '  --max,-m            Stop parsing after a number of rows\n' +
     '  --version,-v        Print out the installed version\n' +
     '  --help              Show this help\n'
   )
@@ -60,6 +61,7 @@ if (filename === '-' || !filename) {
 input
   .pipe(csv({
     headers: headers,
+    max: argv.maxrows,
     separator: argv.separator,
     strict: argv.strict
   }))
