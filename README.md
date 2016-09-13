@@ -135,22 +135,37 @@ $ printf "a,b\nc,d\n" | csv-parser # parses input
 You can specify these CLI flags to control how the input is parsed:
 
 ```
-Usage: csv-parser [filename?] [options]
+usage: csv-parser [-h] [-v] [-s SEPARATOR] [-q QUOTE] [-e ESCAPE]
+                  [--headers HEADERS [HEADERS ...]]
+                  [--remove REMOVE [REMOVE ...]] [--strict]
 
-  --headers,-h        Explicitly specify csv headers as a comma separated list
-  --output,-o         Set output file. Defaults to stdout
-  --separator,-s      Set the separator character ("," by default)
-  --quote,-q          Set the quote character ('"' by default)
-  --escape,-e         Set the escape character (defaults to quote value)
-  --strict            Require column length match headers length
-  --version,-v        Print out the installed version
-  --help              Show this help
+
+Streaming CSV parser that aims for maximum speed as well as compatibility
+with the csv-spectrum test suite. CSV is read from STDIN, formatted to JSON,
+and written to STDOUT.
+
+Optional arguments:
+  -h, --help            Show this help message and exit.
+  -v, --version         Show program's version number and exit.
+  -s SEPARATOR, --separator SEPARATOR
+                        The separator character to use. Defaults to ','.
+  -q QUOTE, --quote QUOTE
+                        The quote character to use. Defaults to '"'.
+  -e ESCAPE, --escape ESCAPE
+                        The escape character to use. Defaults to QUOTE.
+  --headers HEADERS [HEADERS ...]
+                        The list of headers to use. If omitted, the keys of
+                        the first row written to STDIN will be used
+  --remove REMOVE [REMOVE ...]
+                        The list of headers to remove from output. If omitted,
+                         all columnswill be parsed.
+  --strict              Require that column length matches headers length.
 ```
 
 For example, to parse a TSV file:
 
 ```
-cat data.tsv | csv-parser -s $'\t'
+csv-parser -s $'\t' < data.tsv
 ```
 
 ## Related
