@@ -1,16 +1,17 @@
 {
   "name": "csv-parser",
   "version": "1.11.0",
-  "description": "Streaming CSV parser that aims for maximum speed as well as compatibility with the csv-spectrum test suite",
+  "description": "Streaming CSV parser that aims for maximum speed as well as compatibility with the csv-spectrum test suite.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mafintosh/csv-parser.git"
   },
   "dependencies": {
+    "argparse": "^1.0.7",
+    "exit-on-epipe": "0.0.1",
     "generate-function": "^1.0.1",
     "generate-object-property": "^1.0.0",
     "inherits": "^2.0.1",
-    "minimist": "^1.2.0",
     "ndjson": "^1.4.0"
   },
   "devDependencies": {
