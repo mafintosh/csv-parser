@@ -329,6 +329,16 @@ test('rename columns', function (t) {
   }
 })
 
+test('no escape, no quote', function (t) {
+  collect('no_escape.csv', {quote: '', escape: '', separator: '|'}, verify)
+  function verify (err, lines) {
+    t.false(err, 'no err')
+    t.same(lines[0], {ID: '1', Title: 'Shirt "Blue" Great', Description: 'Blue "Shirt" Awsum!'}, 'first row')
+    t.equal(lines.length, 1, '1 row')
+    t.end()
+  }
+})
+
 // helpers
 
 function fixture (name) {

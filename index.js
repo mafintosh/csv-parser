@@ -14,9 +14,9 @@ var Parser = function (opts) {
 
   stream.Transform.call(this, {objectMode: true, highWaterMark: 16})
 
-  this.separator = opts.separator ? new Buffer(opts.separator)[0] : comma
-  this.quote = opts.quote ? new Buffer(opts.quote)[0] : quote
-  this.escape = opts.escape ? new Buffer(opts.escape)[0] : this.quote
+  this.separator = typeof opts.separator !== 'undefined' ? new Buffer(opts.separator)[0] : comma
+  this.quote = typeof opts.quote !== 'undefined' ? new Buffer(opts.quote)[0] : quote
+  this.escape = typeof opts.escape !== 'undefined' ? new Buffer(opts.escape)[0] : this.quote
   if (opts.newline) {
     this.newline = new Buffer(opts.newline)[0]
     this.customNewline = true
