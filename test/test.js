@@ -329,6 +329,38 @@ test('rename columns', function (t) {
   }
 })
 
+test('doesn\'t modify buffer', function (t) {
+  var inputBuffer = fs.readFileSync(fixture('escaped_quotes.csv'))
+  var parser1 = csv()
+  var parser2 = csv()
+
+  var lines = []
+  parser1.on('data', handleData)
+  parser2.on('data', handleData)
+
+  parser1.on('end', function () {
+    t.same(lines[0], {a: '1', b: 'ha "ha" ha'}, 'first parser, first row')
+    t.same(lines[1], {a: '2', b: '""'}, 'first parser, second row')
+
+    lines = []
+    parser2.write(inputBuffer)
+    parser2.end()
+  })
+
+  parser2.on('end', function () {
+    t.same(lines[0], {a: '1', b: 'ha "ha" ha'}, 'second parser, first row')
+    t.same(lines[1], {a: '2', b: '""'}, 'second parser, second row')
+    t.end()
+  })
+
+  parser1.write(inputBuffer)
+  parser1.end()
+
+  function handleData (line) {
+    lines.push(line)
+  }
+})
+
 // helpers
 
 function fixture (name) {
