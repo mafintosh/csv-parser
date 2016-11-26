@@ -212,7 +212,7 @@ Parser.prototype._oncell = function (buf, start, end) {
 
 Parser.prototype._onvalue = function (buf, start, end) {
   if (this._raw) return buf.slice(start, end)
-  return buf.toString('utf-8', start, end)
+  return buf.toString('utf-8', start, end).trim()
 }
 
 function defaultMapHeaders (id) {
