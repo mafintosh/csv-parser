@@ -28,6 +28,7 @@ var Parser = function (opts) {
   this.headers = opts.headers || null
   this.strict = opts.strict || null
   this.mapHeaders = opts.mapHeaders || defaultMapHeaders
+  this.skipUntil = opts.skipUntil || null
 
   this._raw = !!opts.raw
   this._prev = null
@@ -147,7 +148,9 @@ Parser.prototype._online = function (buf, start, end) {
   if (offset < end) cells.push(this._oncell(buf, offset, end))
   if (buf[end - 1] === comma) cells.push(this._empty)
 
-  if (this._first) {
+  var skip = this.skipUntil && cells.indexOf(this.skipUntil) === -1
+
+  if (this._first && !skip) {
     this._first = false
     this.headers = cells
     this._compile(cells)
@@ -158,7 +161,7 @@ Parser.prototype._online = function (buf, start, end) {
   if (this.strict && cells.length !== this.headers.length) {
     this.emit('error', new Error('Row length does not match headers'))
   } else {
-    this._emit(this._Row, cells)
+    if (!skip) this._emit(this._Row, cells)
   }
 }
 

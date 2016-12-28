@@ -329,6 +329,15 @@ test('rename columns', function (t) {
   }
 })
 
+test('skip rows until', function (t) {
+  collect('junk_rows.csv', {skipUntil: 'yeah'}, verify)
+  function verify (err, lines) {
+    t.false(err, 'no err')
+    t.same(lines[0], {yes: 'ok', yup: 'ok', yeah: 'ok!'})
+    t.end()
+  }
+})
+
 // helpers
 
 function fixture (name) {
