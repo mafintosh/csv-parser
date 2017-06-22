@@ -7,6 +7,7 @@ var quote = new Buffer('"')[0]
 var comma = new Buffer(',')[0]
 var cr = new Buffer('\r')[0]
 var nl = new Buffer('\n')[0]
+var bom = new Buffer('\uFEFF')
 
 var Parser = function (opts) {
   if (!opts) opts = {}
@@ -37,6 +38,7 @@ var Parser = function (opts) {
   this._escaped = false
   this._empty = this._raw ? new Buffer(0) : ''
   this._Row = null
+  this._started = false
 
   if (this.headers) {
     this._first = false
@@ -51,6 +53,12 @@ Parser.prototype._transform = function (data, enc, cb) {
 
   var start = 0
   var buf = data
+
+  // detect byte order mark at start of stream and skip it if present
+  if (!this._started && buf.length >= bom.length && buf.compare(bom, 0, bom.length, 0, bom.length) === 0) {
+    start = this._prevEnd = bom.length
+  }
+  this._started = true
 
   if (this._prev) {
     start = this._prev.length
