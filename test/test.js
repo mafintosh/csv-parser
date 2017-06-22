@@ -1,12 +1,12 @@
 var test = require('tape')
 var fs = require('fs')
 var path = require('path')
-var eol = require('os').EOL
 var bops = require('bops')
 var spectrum = require('csv-spectrum')
 var concat = require('concat-stream')
 var csv = require('..')
 var read = fs.createReadStream
+var eol = '\n'
 
 test('simple csv', function (t) {
   collect('dummy.csv', verify)
@@ -325,6 +325,17 @@ test('rename columns', function (t) {
     t.false(err, 'no err')
     t.same(lines[0], {x: '1', y: '2', z: '3'}, 'first row')
     t.equal(lines.length, 1, '1 row')
+    t.end()
+  }
+})
+
+test('utf-8 with byte order mark', function (t) {
+  collect('test_utf8_bom.csv', verify)
+  function verify (err, lines) {
+    t.false(err, 'no err')
+    t.same(lines[0], {a: '1', b: '2', c: '3'}, 'first row')
+    t.same(lines[1], {a: '4', b: '5', c: 'ʤ'}, 'second row')
+    t.equal(lines.length, 2, '2 rows')
     t.end()
   }
 })
