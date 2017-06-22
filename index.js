@@ -55,7 +55,7 @@ Parser.prototype._transform = function (data, enc, cb) {
   var buf = data
 
   // detect byte order mark at start of stream and skip it if present
-  if (!this._started && buf.length >= bom.length && buf.compare(bom, 0, bom.length, 0, bom.length) === 0) {
+  if (!this._started && startsWithBom(buf)) {
     start = this._prevEnd = bom.length
   }
   this._started = true
@@ -225,6 +225,20 @@ Parser.prototype._onvalue = function (buf, start, end) {
 
 function defaultMapHeaders (id) {
   return id
+}
+
+function startsWithBom (buf) {
+  if (buf.length < bom.length) {
+    return false
+  }
+
+  for (var i = 0; i < bom.length; i++) {
+    if (buf[i] !== bom[i]) {
+      return false
+    }
+  }
+
+  return true
 }
 
 module.exports = function (opts) {
