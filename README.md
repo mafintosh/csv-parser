@@ -153,10 +153,6 @@ For example, to parse a TSV file:
 cat data.tsv | csv-parser -s $'\t'
 ```
 
-## Related
-
-- [neat-csv](https://github.com/sindresorhus/neat-csv) - Promise convenience wrapper
-
 ## License
 
 MIT
