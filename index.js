@@ -27,7 +27,8 @@ var Parser = function (opts) {
 
   this.headers = opts.headers || null
   this.strict = opts.strict || null
-  this.mapHeaders = opts.mapHeaders || defaultMapHeaders
+  this.mapHeaders = opts.mapHeaders || identity
+  this.mapValues = opts.mapValues || identity
 
   this._raw = !!opts.raw
   this._prev = null
@@ -207,7 +208,8 @@ Parser.prototype._oncell = function (buf, start, end) {
     y++
   }
 
-  return this._onvalue(buf, start, y)
+  var value = this._onvalue(buf, start, y)
+  return this._first ? value : this.mapValues(value)
 }
 
 Parser.prototype._onvalue = function (buf, start, end) {
@@ -215,7 +217,7 @@ Parser.prototype._onvalue = function (buf, start, end) {
   return buf.toString('utf-8', start, end)
 }
 
-function defaultMapHeaders (id) {
+function identity (id) {
   return id
 }
 
