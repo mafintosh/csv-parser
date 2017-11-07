@@ -1,16 +1,14 @@
 var test = require('tape')
-var fs = require('fs')
-var path = require('path')
 var eol = require('os').EOL
 var bops = require('bops')
 var spectrum = require('csv-spectrum')
 var concat = require('concat-stream')
 var csv = require('..')
-var read = fs.createReadStream
+var collect = require('./collect')
 
 test('simple csv', function (t) {
   collect('dummy.csv', verify)
-  function verify (err, lines) {
+  function verify(err, lines) {
     t.false(err, 'no err')
     t.same(lines[0], {a: '1', b: '2', c: '3'}, 'first row')
     t.equal(lines.length, 1, '1 row')
@@ -33,7 +31,7 @@ test('supports strings', function (t) {
 
 test('newlines in a cell', function (t) {
   collect('newlines.csv', verify)
-  function verify (err, lines) {
+  function verify(err, lines) {
     t.false(err, 'no err')
     t.same(lines[0], {a: '1', b: '2', c: '3'}, 'first row')
     t.same(lines[1], {a: 'Once upon ' + eol + 'a time', b: '5', c: '6'}, 'second row')
@@ -45,7 +43,7 @@ test('newlines in a cell', function (t) {
 
 test('raw escaped quotes', function (t) {
   collect('escaped_quotes.csv', verify)
-  function verify (err, lines) {
+  function verify(err, lines) {
     t.false(err, 'no err')
     t.same(lines[0], {a: '1', b: 'ha "ha" ha'}, 'first row')
     t.same(lines[1], {a: '2', b: '""'}, 'second row')
@@ -57,7 +55,7 @@ test('raw escaped quotes', function (t) {
 
 test('raw escaped quotes and newlines', function (t) {
   collect('quotes_and_newlines.csv', verify)
-  function verify (err, lines) {
+  function verify(err, lines) {
     t.false(err, 'no err')
     t.same(lines[0], {a: '1', b: 'ha ' + eol + '"ha" ' + eol + 'ha'}, 'first row')
     t.same(lines[1], {a: '2', b: ' ' + eol + '"" ' + eol}, 'second row')
@@ -165,7 +163,7 @@ test('cell with multibyte character', function (t) {
 
 test('geojson', function (t) {
   collect('test_geojson.csv', verify)
-  function verify (err, lines) {
+  function verify(err, lines) {
     t.false(err, 'no err')
     var lineObj = {
       type: 'LineString',
@@ -183,9 +181,9 @@ test('geojson', function (t) {
 
 test('empty_columns', function (t) {
   collect('empty_columns.csv', ['a', 'b', 'c'], verify)
-  function verify (err, lines) {
+  function verify(err, lines) {
     t.false(err, 'no err')
-    function testLine (row) {
+    function testLine(row) {
       t.equal(Object.keys(row).length, 3, 'Split into three columns')
       t.ok(/^2007-01-0\d$/.test(row.a), 'First column is a date')
       t.ok(row.b !== undefined, 'Empty column is in line')
@@ -202,7 +200,7 @@ test('csv-spectrum', function (t) {
   spectrum(function (err, data) {
     if (err) throw err
     var pending = data.length
-    data.map(function (d) {
+    data.forEach(function (d) {
       var parser = csv()
       var collector = concat(function (objs) {
         var expected = JSON.parse(d.json)
@@ -213,7 +211,7 @@ test('csv-spectrum', function (t) {
       parser.write(d.csv)
       parser.end()
     })
-    function done () {
+    function done() {
       pending--
       if (pending === 0) t.end()
     }
@@ -222,7 +220,7 @@ test('csv-spectrum', function (t) {
 
 test('custom newline', function (t) {
   collect('custom-newlines.csv', {newline: 'X'}, verify)
-  function verify (err, lines) {
+  function verify(err, lines) {
     t.false(err, 'no err')
     t.same(lines[0], {a: '1', b: '2', c: '3'}, 'first row')
     t.same(lines[1], {a: 'X-Men', b: '5', c: '6'}, 'second row')
@@ -234,7 +232,7 @@ test('custom newline', function (t) {
 
 test('optional strict', function (t) {
   collect('test_strict.csv', {strict: true}, verify)
-  function verify (err, lines) {
+  function verify(err, lines) {
     t.equal(err.message, 'Row length does not match headers', 'strict row length')
     t.same(lines[0], {a: '1', b: '2', c: '3'}, 'first row')
     t.same(lines[1], {a: '4', b: '5', c: '6'}, 'second row')
@@ -245,7 +243,7 @@ test('optional strict', function (t) {
 
 test('custom quote character', function (t) {
   collect('custom_quote_character.csv', {quote: '\''}, verify)
-  function verify (err, lines) {
+  function verify(err, lines) {
     t.false(err, 'no err')
     t.same(lines[0], {a: '1', b: 'some value', c: '2'}, 'first row')
     t.same(lines[1], {a: '3', b: '4', c: '5'}, 'second row')
@@ -256,7 +254,7 @@ test('custom quote character', function (t) {
 
 test('custom escape character', function (t) {
   collect('custom_escape_character.csv', {escape: '\\'}, verify)
-  function verify (err, lines) {
+  function verify(err, lines) {
     t.false(err, 'no err')
     t.same(lines[0], {a: '1', b: 'some "escaped" value', c: '2'}, 'first row')
     t.same(lines[1], {a: '3', b: '""', c: '4'}, 'second row')
@@ -268,7 +266,7 @@ test('custom escape character', function (t) {
 
 test('custom quote and escape character', function (t) {
   collect('custom_quote_and_escape_character.csv', {quote: "'", escape: '\\'}, verify)
-  function verify (err, lines) {
+  function verify(err, lines) {
     t.false(err, 'no err')
     t.same(lines[0], {a: '1', b: "some 'escaped' value", c: '2'}, 'first row')
     t.same(lines[1], {a: '3', b: "''", c: '4'}, 'second row')
@@ -280,7 +278,7 @@ test('custom quote and escape character', function (t) {
 
 test('custom quote character with default escaped value', function (t) {
   collect('custom_quote_character_default_escape.csv', {quote: '\''}, verify)
-  function verify (err, lines) {
+  function verify(err, lines) {
     t.false(err, 'no err')
     t.same(lines[0], {a: '1', b: "some 'escaped' value", c: '2'}, 'first row')
     t.same(lines[1], {a: '3', b: "''", c: '4'}, 'second row')
@@ -292,7 +290,7 @@ test('custom quote character with default escaped value', function (t) {
 
 test('process all rows', function (t) {
   collect('process_all_rows.csv', {}, verify)
-  function verify (err, lines) {
+  function verify(err, lines) {
     t.false(err, 'no err')
     t.equal(lines.length, 7268, '7268 rows')
     t.end()
@@ -301,13 +299,13 @@ test('process all rows', function (t) {
 
 test('skip columns a and c', function (t) {
   collect('dummy.csv', {mapHeaders: mapHeaders}, verify)
-  function mapHeaders (name, i) {
+  function mapHeaders(name) {
     if (['a', 'c'].indexOf(name) > -1) {
       return null
     }
     return name
   }
-  function verify (err, lines) {
+  function verify(err, lines) {
     t.false(err, 'no err')
     t.same(lines[0], {b: '2'}, 'first row')
     t.equal(lines.length, 1, '1 row')
@@ -317,11 +315,11 @@ test('skip columns a and c', function (t) {
 
 test('rename columns', function (t) {
   collect('dummy.csv', {mapHeaders: mapHeaders}, verify)
-  function mapHeaders (name, i) {
+  function mapHeaders(name) {
     var headers = {a: 'x', b: 'y', c: 'z'}
     return headers[name]
   }
-  function verify (err, lines) {
+  function verify(err, lines) {
     t.false(err, 'no err')
     t.same(lines[0], {x: '1', y: '2', z: '3'}, 'first row')
     t.equal(lines.length, 1, '1 row')
@@ -331,33 +329,13 @@ test('rename columns', function (t) {
 
 test('format values', function (t) {
   collect('dummy.csv', {mapValues: mapValues}, verify)
-  function mapValues (v) {
+  function mapValues(v) {
     return parseInt(v, 10)
   }
-  function verify (err, lines) {
+  function verify(err, lines) {
     t.false(err, 'no err')
     t.same(lines[0], {a: 1, b: 2, c: 3}, 'first row')
     t.equal(lines.length, 1, '1 row')
     t.end()
   }
 })
-
-// helpers
-
-function fixture (name) {
-  return path.join(__dirname, 'data', name)
-}
-
-function collect (file, opts, cb) {
-  if (typeof opts === 'function') return collect(file, null, opts)
-  var data = read(fixture(file))
-  var lines = []
-  var parser = csv(opts)
-  data.pipe(parser)
-    .on('data', function (line) {
-      lines.push(line)
-    })
-    .on('error', function (err) { cb(err, lines) })
-    .on('end', function () { cb(false, lines) })
-  return parser
-}

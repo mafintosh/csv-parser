@@ -50,7 +50,7 @@ var input
 var output = (argv.output && argv.output !== '-') ? fs.createWriteStream(argv.output) : process.stdout
 var removedHeaders = argv.remove && argv.remove.split(',')
 
-function mapHeaders (name, i) {
+function mapHeaders(name) {
   return removedHeaders.indexOf(name) === -1 ? name : null
 }
 

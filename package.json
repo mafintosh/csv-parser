@@ -17,14 +17,20 @@
     "bops": "^0.1.1",
     "concat-stream": "^1.4.5",
     "csv-spectrum": "^1.0.0",
-    "standard": "^5.4.1",
+    "eslint": "^4.10.0",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
     "tape": "^4.2.2"
   },
   "bin": {
     "csv-parser": "./bin.js"
   },
   "scripts": {
-    "test": "standard && tape test/test.js"
+    "test": "tape test/test.js",
+    "lint": "eslint ."
   },
   "keywords": [
     "csv",
