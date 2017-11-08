@@ -153,9 +153,10 @@ For example, to parse a TSV file:
 cat data.tsv | csv-parser -s $'\t'
 ```
 
-## Related
+## Promise
 
 - [neat-csv](https://github.com/sindresorhus/neat-csv) - Promise convenience wrapper
+- `require('csv-parser/promise')` see [example](examples/promise.js)
 
 ## License
 
