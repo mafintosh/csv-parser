@@ -6,7 +6,6 @@ var bops = require('bops')
 var spectrum = require('csv-spectrum')
 var concat = require('concat-stream')
 var csv = require('..')
-var read = fs.createReadStream
 
 test('simple csv', function (t) {
   collect('dummy.csv', verify)
@@ -342,15 +341,11 @@ test('format values', function (t) {
   }
 })
 
-// helpers
-
-function fixture (name) {
-  return path.join(__dirname, 'data', name)
-}
+// helper
 
 function collect (file, opts, cb) {
   if (typeof opts === 'function') return collect(file, null, opts)
-  var data = read(fixture(file))
+  var data = fs.createReadStream(path.join(__dirname, 'data', file))
   var lines = []
   var parser = csv(opts)
   data.pipe(parser)

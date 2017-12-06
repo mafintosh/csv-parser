@@ -27,7 +27,8 @@
     "csv-parser": "./bin.js"
   },
   "scripts": {
-    "test": "standard && tape test/test.js"
+    "test": "standard && tape test/test.js",
+    "test:promise": "tape test/promise.test.js"
   },
   "keywords": [
     "csv",
