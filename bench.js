@@ -6,7 +6,7 @@ var rows = 0
 
 fs.createReadStream(process.argv[2] || '/tmp/tmp.csv')
   .pipe(csv())
-  .on('data', function (line) {
+  .on('data', function () {
     rows++
   })
   .on('end', function () {
