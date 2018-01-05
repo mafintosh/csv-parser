@@ -3,25 +3,30 @@ var inherits = require('inherits')
 var genobj = require('generate-object-property')
 var genfun = require('generate-function')
 
-var quote = new Buffer('"')[0]
-var comma = new Buffer(',')[0]
-var cr = new Buffer('\r')[0]
-var nl = new Buffer('\n')[0]
+if (!Buffer.from) Buffer.from = function (s) { return new Buffer(s) } // eslint-disable-line node/no-deprecated-api
 
-var Parser = function (opts) {
-  if (!opts) opts = {}
-  if (Array.isArray(opts)) opts = {headers: opts}
+var QUOTE = Buffer.from('"')[0]
+var COMMA = Buffer.from(',')[0]
+var CR = Buffer.from('\r')[0]
+var NL = Buffer.from('\n')[0]
+
+function identity(id) {
+  return id
+}
+
+function Parser(_opts) {
+  var opts = Array.isArray(_opts) ? {headers: _opts} : (_opts || {})
 
   stream.Transform.call(this, {objectMode: true, highWaterMark: 16})
 
-  this.separator = opts.separator ? new Buffer(opts.separator)[0] : comma
-  this.quote = opts.quote ? new Buffer(opts.quote)[0] : quote
-  this.escape = opts.escape ? new Buffer(opts.escape)[0] : this.quote
+  this.separator = opts.separator ? Buffer.from(opts.separator)[0] : COMMA
+  this.quote = opts.quote ? Buffer.from(opts.quote)[0] : QUOTE
+  this.escape = opts.escape ? Buffer.from(opts.escape)[0] : this.quote
   if (opts.newline) {
-    this.newline = new Buffer(opts.newline)[0]
+    this.newline = Buffer.from(opts.newline)[0]
     this.customNewline = true
   } else {
-    this.newline = nl
+    this.newline = NL
     this.customNewline = false
   }
 
@@ -36,7 +41,7 @@ var Parser = function (opts) {
   this._first = true
   this._quoted = false
   this._escaped = false
-  this._empty = this._raw ? new Buffer(0) : ''
+  this._empty = this._raw ? Buffer.from(0) : ''
   this._Row = null
 
   if (this.headers) {
@@ -47,8 +52,8 @@ var Parser = function (opts) {
 
 inherits(Parser, stream.Transform)
 
-Parser.prototype._transform = function (data, enc, cb) {
-  if (typeof data === 'string') data = new Buffer(data)
+Parser.prototype._transform = function (_data, enc, cb) {
+  var data = typeof _data === 'string' ? Buffer.from(_data) : _data
 
   var start = 0
   var buf = data
@@ -70,8 +75,7 @@ Parser.prototype._transform = function (data, enc, cb) {
       continue
     } else if (chr === this.quote) {
       if (this._escaped) {
-        this._escaped = false
-      // non-escaped quote (quoting the cell)
+        this._escaped = false // non-escaped quote (quoting the cell)
       } else {
         this._quoted = !this._quoted
       }
@@ -80,11 +84,11 @@ Parser.prototype._transform = function (data, enc, cb) {
 
     if (!this._quoted) {
       if (this._first && !this.customNewline) {
-        if (chr === nl) {
-          this.newline = nl
-        } else if (chr === cr) {
-          if (nextChr !== nl) {
-            this.newline = cr
+        if (chr === NL) {
+          this.newline = NL
+        } else if (chr === CR) {
+          if (nextChr !== NL) {
+            this.newline = CR
           }
         }
       }
@@ -117,9 +121,9 @@ Parser.prototype._flush = function (cb) {
   cb()
 }
 
-Parser.prototype._online = function (buf, start, end) {
-  end-- // trim newline
-  if (!this.customNewline && buf.length && buf[end - 1] === cr) end--
+Parser.prototype._online = function (buf, start, _end) {
+  var end = _end - 1 // trim newline
+  if (!this.customNewline && buf.length && buf[end - 1] === CR) end--
 
   var comma = this.separator
   var cells = []
@@ -200,8 +204,8 @@ Parser.prototype._oncell = function (buf, start, end) {
     start++
     end--
   }
-
-  for (var i = start, y = start; i < end; i++) {
+  var y = start
+  for (var i = start; i < end; i++) {
     // check for escape characters and skip them
     if (buf[i] === this.escape && i + 1 < end && buf[i + 1] === this.quote) i++
     if (y !== i) buf[y] = buf[i]
@@ -215,10 +219,6 @@ Parser.prototype._oncell = function (buf, start, end) {
 Parser.prototype._onvalue = function (buf, start, end) {
   if (this._raw) return buf.slice(start, end)
   return buf.toString('utf-8', start, end)
-}
-
-function identity (id) {
-  return id
 }
 
 module.exports = function (opts) {

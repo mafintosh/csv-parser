@@ -1,8 +1,13 @@
-var write = require('csv-write-stream')
-var through = require('through2')
 var parse = require('../')
 var path = require('path')
 var fs = require('fs')
+var {Transform} = require('stream')
+
+class Stringify extends Transform {
+  _transform(data, encoding, callback) {
+    callback(null, JSON.stringify(data))
+  }
+}
 
 // Read a file, transform it and send it
 // to stdout. Optionally could also write
@@ -10,18 +15,5 @@ var fs = require('fs')
 // .pipe(fs.createWriteStream('./file'))
 fs.createReadStream(path.join(__dirname, '../test/data/dummy.csv'))
   .pipe(parse())
-  .pipe(through.obj(transform))
-  .pipe(write())
+  .pipe(new Stringify({objectMode: true}))
   .pipe(process.stdout)
-
-// Prepend all chunks with `value: `.
-// @param {Object} chunk
-// @param {String} encoding
-// @param {Function} callback
-function transform (chunk, enc, cb) {
-  Object.keys(chunk).forEach(function (k) {
-    chunk[k] = 'value: ' + chunk[k]
-  })
-  this.push(chunk)
-  cb()
-}
