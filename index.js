@@ -29,10 +29,12 @@ var Parser = function (opts) {
   this.strict = opts.strict || null
   this.mapHeaders = opts.mapHeaders || identity
   this.mapValues = opts.mapValues || identity
-
+  this._maxBufferSize = opts.maxBufferSize
   this._raw = !!opts.raw
   this._prev = null
   this._prevEnd = 0
+  this._bufferedSize = 0
+  this._max
   this._first = true
   this._quoted = false
   this._escaped = false
@@ -54,12 +56,24 @@ Parser.prototype._transform = function (data, enc, cb) {
   var buf = data
 
   if (this._prev) {
-    start = this._prev.length
-    buf = Buffer.concat([this._prev, data])
+    start = this._bufferedSize
+    if (start + data.length >= this._prev.length) {
+      var newBufferSize = Math.max(this._prev.length, data.length) * 2
+      if (this._maxBufferSize && newBufferSize > this._maxBufferSize) {
+        return cb(new Error('Buffer size exceeded'))
+      }
+      buf = Buffer.alloc(newBufferSize, this._prev)
+    } else {
+      buf = this._prev
+    }
+    data.copy(buf, start)
+    this._bufferedSize = start + data.length
     this._prev = null
+  } else {
+    this._bufferedSize = buf.length
   }
 
-  var bufLen = buf.length
+  var bufLen = this._bufferedSize
 
   for (var i = start; i < bufLen; i++) {
     var chr = buf[i]
@@ -103,6 +117,7 @@ Parser.prototype._transform = function (data, enc, cb) {
 
   if (bufLen - this._prevEnd < data.length) {
     this._prev = data
+    this._bufferedSize = data.length
     this._prevEnd -= (bufLen - data.length)
     return cb()
   }
