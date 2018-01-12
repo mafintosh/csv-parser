@@ -34,7 +34,6 @@ var Parser = function (opts) {
   this._prev = null
   this._prevEnd = 0
   this._bufferedSize = 0
-  this._max
   this._first = true
   this._quoted = false
   this._escaped = false
