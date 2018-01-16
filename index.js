@@ -61,7 +61,7 @@ Parser.prototype._transform = function (data, enc, cb) {
       if (this._maxBufferSize && newBufferSize > this._maxBufferSize) {
         return cb(new Error('Buffer size exceeded'))
       }
-      buf = Buffer.concat([this._prev], newBufferSize)
+      buf = allocate(newBufferSize, this._prev)
     } else {
       buf = this._prev
     }
@@ -233,6 +233,16 @@ Parser.prototype._onvalue = function (buf, start, end) {
 
 function identity (id) {
   return id
+}
+
+function allocate (size, buffer) {
+  if (Buffer.alloc) {
+    return Buffer.alloc(size, buffer)
+  } else {
+    var result = new Buffer(size)
+    buffer.copy(result, 0)
+    return result
+  }
 }
 
 module.exports = function (opts) {
