@@ -61,7 +61,7 @@ Parser.prototype._transform = function (data, enc, cb) {
       if (this._maxBufferSize && newBufferSize > this._maxBufferSize) {
         return cb(new Error('Buffer size exceeded'))
       }
-      buf = Buffer.alloc(newBufferSize, this._prev)
+      buf = Buffer.concat([this._prev], newBufferSize)
     } else {
       buf = this._prev
     }
