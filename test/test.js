@@ -5,6 +5,7 @@ var eol = require('os').EOL
 var bops = require('bops')
 var spectrum = require('csv-spectrum')
 var concat = require('concat-stream')
+var stream = require('stream')
 var csv = require('..')
 var read = fs.createReadStream
 
@@ -340,6 +341,43 @@ test('format values', function (t) {
     t.equal(lines.length, 1, '1 row')
     t.end()
   }
+})
+
+test('lots of 1000 byte pices', function (t) {
+  var headers = bops.from('a,b,c\n')
+  var parser = csv()
+  var startTime = new Date().getTime()
+
+  parser.write(headers)
+  for (var i = 0; i < 100000; i++) {
+    parser.write(bops.from('one thing,two thing,three thing,test'))
+  }
+  parser.end()
+
+  parser.once('data', function (data) {
+    t.equal(JSON.stringify(data), '{"a":"one thing","b":"two thing","c":"three thing"}')
+    t.ok(new Date().getTime() - startTime < 5000, 'Took less than 5 seconds')
+    t.end()
+  })
+})
+
+test('max buffer size', function (t) {
+  var headers = bops.from('a,b,c\n')
+  var parser = csv({ maxBufferSize: 1000 })
+
+  var p = new stream.PassThrough()
+  p.pipe(parser)
+
+  parser.on('error', function (err) {
+    t.equal(err.message, 'Buffer size exceeded')
+    t.end()
+  })
+
+  p.write(headers)
+  for (var i = 0; i < 100000; i++) {
+    p.write(bops.from('one thing,two thing,three thing,test'))
+  }
+  p.end()
 })
 
 // helpers
