@@ -1,17 +1,9 @@
 language: node_js
 node_js:
+  - "0.10"
   - "0.12"
   - "4"
   - "6"
   - "8"
 
-jobs:
-  include:
-    - script: npm test
-      node_js:
-        - "0.10"
-    - script: npm run test:promise
-      node_js:
-        - lts/argon
-        - lts/boron
-        - lts/carbon
+script: npm test && npm run test:promise
