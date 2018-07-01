@@ -7,6 +7,7 @@
     "url": "git+https://github.com/mafintosh/csv-parser.git"
   },
   "dependencies": {
+    "as-buffer": "^1.6.0",
     "buffer-alloc": "^1.1.0",
     "buffer-from": "^1.0.0",
     "generate-function": "^1.0.1",
@@ -26,7 +27,8 @@
     "csv-parser": "./bin.js"
   },
   "scripts": {
-    "test": "standard && tape test/test.js"
+    "test": "standard && tape test/test.js",
+    "test:promise": "tape test/promise.test.js"
   },
   "keywords": [
     "csv",
