@@ -7,7 +7,7 @@ var concat = require('concat-stream')
 var csv = require('..')
 var read = fs.createReadStream
 
-var eol = fs.readFileSync(path.join(__dirname, 'data', 'dummy.csv')).includes('\r\n')
+var eol = fs.readFileSync(path.join(__dirname, 'data', 'dummy.csv')).indexOf('\r\n') !== -1
         ? '\r\n'
         : '\n'
 
