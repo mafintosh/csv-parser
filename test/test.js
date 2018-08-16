@@ -1,12 +1,15 @@
 var test = require('tape')
 var fs = require('fs')
 var path = require('path')
-var eol = require('os').EOL
 var bops = require('bops')
 var spectrum = require('csv-spectrum')
 var concat = require('concat-stream')
 var csv = require('..')
 var read = fs.createReadStream
+
+var eol = fs.readFileSync(path.join(__dirname, 'data', 'dummy.csv')).indexOf('\r\n') !== -1
+        ? '\r\n'
+        : '\n'
 
 test('simple csv', function (t) {
   collect('dummy.csv', verify)
