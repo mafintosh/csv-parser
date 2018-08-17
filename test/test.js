@@ -329,7 +329,6 @@ test('rename columns', function (t) {
   }
 })
 
-
 test('format values', function (t) {
   collect('dummy.csv', {mapValues: mapValues}, verify)
   function mapValues (v) {
