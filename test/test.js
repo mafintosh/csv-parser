@@ -329,6 +329,20 @@ test('rename columns', function (t) {
   }
 })
 
+
+test('format values', function (t) {
+  collect('dummy.csv', {mapValues: mapValues}, verify)
+  function mapValues (v) {
+    return parseInt(v, 10)
+  }
+  function verify (err, lines) {
+    t.false(err, 'no err')
+    t.same(lines[0], {a: 1, b: 2, c: 3}, 'first row')
+    t.equal(lines.length, 1, '1 row')
+    t.end()
+  }
+})
+
 test('skip rows until', function (t) {
   collect('junk_rows.csv', {skipUntil: 'yeah'}, verify)
   function verify (err, lines) {

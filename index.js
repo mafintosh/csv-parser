@@ -2,11 +2,13 @@ var stream = require('stream')
 var inherits = require('inherits')
 var genobj = require('generate-object-property')
 var genfun = require('generate-function')
+var bufferFrom = require('buffer-from')
+var bufferAlloc = require('buffer-alloc')
 
-var quote = new Buffer('"')[0]
-var comma = new Buffer(',')[0]
-var cr = new Buffer('\r')[0]
-var nl = new Buffer('\n')[0]
+var quote = bufferFrom('"')[0]
+var comma = bufferFrom(',')[0]
+var cr = bufferFrom('\r')[0]
+var nl = bufferFrom('\n')[0]
 
 var Parser = function (opts) {
   if (!opts) opts = {}
@@ -14,11 +16,11 @@ var Parser = function (opts) {
 
   stream.Transform.call(this, {objectMode: true, highWaterMark: 16})
 
-  this.separator = opts.separator ? new Buffer(opts.separator)[0] : comma
-  this.quote = opts.quote ? new Buffer(opts.quote)[0] : quote
-  this.escape = opts.escape ? new Buffer(opts.escape)[0] : this.quote
+  this.separator = opts.separator ? bufferFrom(opts.separator)[0] : comma
+  this.quote = opts.quote ? bufferFrom(opts.quote)[0] : quote
+  this.escape = opts.escape ? bufferFrom(opts.escape)[0] : this.quote
   if (opts.newline) {
-    this.newline = new Buffer(opts.newline)[0]
+    this.newline = bufferFrom(opts.newline)[0]
     this.customNewline = true
   } else {
     this.newline = nl
@@ -27,7 +29,9 @@ var Parser = function (opts) {
 
   this.headers = opts.headers || null
   this.strict = opts.strict || null
-  this.mapHeaders = opts.mapHeaders || defaultMapHeaders
+
+  this.mapHeaders = opts.mapHeaders || identity
+  this.mapValues = opts.mapValues || identity
   this.skipUntil = opts.skipUntil || null
 
   this._raw = !!opts.raw
@@ -36,7 +40,7 @@ var Parser = function (opts) {
   this._first = true
   this._quoted = false
   this._escaped = false
-  this._empty = this._raw ? new Buffer(0) : ''
+  this._empty = this._raw ? bufferAlloc(0) : ''
   this._Row = null
 
   if (this.headers) {
@@ -48,7 +52,7 @@ var Parser = function (opts) {
 inherits(Parser, stream.Transform)
 
 Parser.prototype._transform = function (data, enc, cb) {
-  if (typeof data === 'string') data = new Buffer(data)
+  if (typeof data === 'string') data = bufferFrom(data)
 
   var start = 0
   var buf = data
@@ -210,7 +214,8 @@ Parser.prototype._oncell = function (buf, start, end) {
     y++
   }
 
-  return this._onvalue(buf, start, y)
+  var value = this._onvalue(buf, start, y)
+  return this._first ? value : this.mapValues(value)
 }
 
 Parser.prototype._onvalue = function (buf, start, end) {
@@ -218,7 +223,7 @@ Parser.prototype._onvalue = function (buf, start, end) {
   return buf.toString('utf-8', start, end)
 }
 
-function defaultMapHeaders (id) {
+function identity (id) {
   return id
 }
 
