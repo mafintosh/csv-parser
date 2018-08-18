@@ -174,7 +174,7 @@ Type: `Number`<br>
 Default: `0`
 
 Specifies the number of lines at the beginning of a data file that the parser should
-skip over.
+skip over, prior to parsing headers.
 
 ##### strict
 
@@ -227,9 +227,9 @@ Usage: csv-parser [filename?] [options]
   --quote,-q          Set the quote character ('"' by default)
   --remove            Remove columns from output by header name
   --separator,-s      Set the separator character ("," by default)
+  --skipLines,-l      Set the number of lines to skip to before parsing headers
   --strict            Require column length match headers length
   --version,-v        Print out the installed version
-  --skipLines,-l      Set the line number to skip to before setting headers
 ```
 
 For example; to parse a TSV file:
