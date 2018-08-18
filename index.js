@@ -31,7 +31,7 @@ const Parser = function (opts) {
   this.strict = opts.strict || null
   this.mapHeaders = opts.mapHeaders || identity
   this.mapValues = opts.mapValues || identity
-  this.skipUntil = opts.skipUntil || null
+  this.skipLines = opts.skipLines || null
 
   this._raw = !!opts.raw
   this._prev = null
@@ -152,7 +152,7 @@ Parser.prototype._online = function (buf, start, end) {
   if (offset < end) cells.push(this._oncell(buf, offset, end))
   if (buf[end - 1] === comma) cells.push(this._empty)
 
-  var skip = this.skipUntil && this.skipUntil !== this._line
+  var skip = this.skipLines && this.skipLines !== this._line
   this._line++
 
   if (this._first && !skip) {

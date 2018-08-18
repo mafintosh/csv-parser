@@ -346,7 +346,7 @@ test('format values', (t) => {
 })
 
 test('skip rows until', function (t) {
-  collect('junk_rows.csv', {skipUntil: 3}, verify)
+  collect('junk_rows.csv', {skipLines: 3}, verify)
   function verify (err, lines) {
     t.false(err, 'no err')
     t.same(lines[0], {yes: 'ok', yup: 'ok', yeah: 'ok!'})
