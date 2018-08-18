@@ -20,7 +20,7 @@ const Parser = function (opts) {
   this.quote = opts.quote ? bufferFrom(opts.quote)[0] : quote
   this.escape = opts.escape ? bufferFrom(opts.escape)[0] : this.quote
   if (opts.newline) {
-    [this.newline] = bufferFrom(opts.newline)
+    ([this.newline] = bufferFrom(opts.newline))
     this.customNewline = true
   } else {
     this.newline = nl
@@ -203,9 +203,9 @@ Parser.prototype._oncell = function (buf, start, end) {
     end--
   }
 
-  let y
+  let y = start
 
-  for (let i = start, y = start; i < end; i++) {
+  for (let i = start; i < end; i++) {
     // check for escape characters and skip them
     if (buf[i] === this.escape && i + 1 < end && buf[i + 1] === this.quote) i++
     if (y !== i) buf[y] = buf[i]
