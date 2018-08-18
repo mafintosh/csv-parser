@@ -10,11 +10,11 @@ const strip = require('strip-ansi')
 const csv = require('../')
 
 const run = async () => {
-  const paths = await globby(['test/data/*.csv'])
+  const paths = process.argv[2] || await globby(['test/data/*.csv'])
   const rows = []
   let rowsParsed = 0
 
-  for (const path of paths) {
+  for (const path of [].concat(paths)) {
     await new Promise((resolve) => {
       const now = Date.now()
       createReadStream(path)
