@@ -74,7 +74,7 @@ var stream = csv({
   escape: '"',    // specify optional escape character (defaults to quote value)
   newline: '\n',  // specify a newline character
   headers: ['index', 'message'], // Specifing the headers
-  skipUntil: 'string' // skip setting headers until row contains this string
+  skipUntil: Integer // skip setting headers until this line number is reached
 })
 ```
 
