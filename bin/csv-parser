@@ -43,7 +43,7 @@ if (argv.help || (process.stdin.isTTY && !filename)) {
     '  --version,-v        Print out the installed version\n' +
     '  --remove            Remove headers from output\n' +
     '  --help              Show this help\n',
-    '  --skipLines,-l      Set the line number to skip to before setting headers\n'
+    '  --skipLines,-l      Set the number of lines to skip to before parsing headers\n'
   )
   process.exit(1)
 }
