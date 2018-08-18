@@ -168,18 +168,20 @@ Default: `,`
 
 Specifies a single-character string to use as the column separator for each row.
 
+##### skipLines
+
+Type: `Number`<br>
+Default: `0`
+
+Specifies the number of lines at the beginning of a data file that the parser should
+skip over.
+
 ##### strict
 
 Type: `Boolean`<br>
 
 If `true`, instructs the parser that the number of columns in each row must match
 the number of `headers` specified.
-
-##### skipLines
-
-Type: `Integer`<br>
-
-If provided a line number (integer), skips setting headers until this line number is reached.
 
 ## Events
 
