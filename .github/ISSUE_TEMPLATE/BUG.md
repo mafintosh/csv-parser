@@ -13,7 +13,7 @@ about: Something went awry and you'd like to tell us about it.
 * Operating System:
 * Node Version:
 * NPM Version:
-* fwv Version:
+* csv-parser Version:
 
 ### Expected Behavior
 
