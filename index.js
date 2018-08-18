@@ -156,8 +156,7 @@ Parser.prototype._online = function (buf, start, end) {
   }
 
   if (this.strict && cells.length !== this.headers.length) {
-    var e = new Error('Row length does not match headers')
-    e.name = 'SyntaxError'
+    var e = new RangeError('Row length does not match headers')
     this.emit('error', e)
   } else {
     this._emit(this._Row, cells)
