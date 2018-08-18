@@ -12,7 +12,8 @@ const argv = minimist(process.argv, {
     o: 'output',
     s: 'separator',
     q: 'quote',
-    e: 'escape'
+    e: 'escape',
+    l: 'skipLines'
   },
   default: {
     s: ',',
@@ -41,7 +42,8 @@ if (argv.help || (process.stdin.isTTY && !filename)) {
     '  --strict            Require column length match headers length\n' +
     '  --version,-v        Print out the installed version\n' +
     '  --remove            Remove headers from output\n' +
-    '  --help              Show this help\n'
+    '  --help              Show this help\n',
+    '  --skipLines,-l      Set the line number to skip to before setting headers\n'
   )
   process.exit(1)
 }
@@ -68,7 +70,8 @@ input
     headers,
     separator: argv.separator,
     strict: argv.strict,
-    mapHeaders: argv.remove ? mapHeaders : null
+    mapHeaders: argv.remove ? mapHeaders : null,
+    skipLines: argv.skipLines
   }))
   .pipe(ndjson.serialize())
   .pipe(output)
