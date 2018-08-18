@@ -159,7 +159,8 @@ Parser.prototype._online = function (buf, start, end) {
   }
 
   if (this.strict && cells.length !== this.headers.length) {
-    this.emit('error', new Error('Row length does not match headers'))
+    const e = new RangeError('Row length does not match headers')
+    this.emit('error', e)
   } else {
     this._emit(this._Row, cells)
   }

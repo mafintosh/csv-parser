@@ -1,12 +1,13 @@
 const test = require('tape')
 const fs = require('fs')
 const path = require('path')
-const eol = require('os').EOL
 const bops = require('bops')
 const spectrum = require('csv-spectrum')
 const concat = require('concat-stream')
 const csv = require('..')
+
 const read = fs.createReadStream
+const eol = '\n'
 
 test('simple csv', (t) => {
   collect('dummy.csv', verify)
@@ -236,6 +237,7 @@ test('custom newline', (t) => {
 test('optional strict', (t) => {
   collect('test_strict.csv', { strict: true }, verify)
   function verify (err, lines) {
+    t.equal(err.name, 'RangeError', 'err name')
     t.equal(err.message, 'Row length does not match headers', 'strict row length')
     t.same(lines[0], { a: '1', b: '2', c: '3' }, 'first row')
     t.same(lines[1], { a: '4', b: '5', c: '6' }, 'second row')
