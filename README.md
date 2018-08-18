@@ -227,6 +227,7 @@ Usage: csv-parser [filename?] [options]
   --separator,-s      Set the separator character ("," by default)
   --strict            Require column length match headers length
   --version,-v        Print out the installed version
+  --skipLines,-l      Set the line number to skip to before setting headers
 ```
 
 For example; to parse a TSV file:
