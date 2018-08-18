@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-var minimist = require('minimist')
-var ndjson = require('ndjson')
-var fs = require('fs')
-var csv = require('./')
+const minimist = require('minimist')
+const ndjson = require('ndjson')
+const fs = require('fs')
+const csv = require('../')
 
-var argv = minimist(process.argv, {
+const argv = minimist(process.argv, {
   alias: {
     h: 'headers',
     v: 'version',
@@ -22,8 +22,8 @@ var argv = minimist(process.argv, {
   boolean: ['version', 'help']
 })
 
-var headers = argv.headers && argv.headers.toString().split(argv.separator)
-var filename = argv._[2]
+const headers = argv.headers && argv.headers.toString().split(argv.separator)
+const [,, filename] = argv._
 
 if (argv.version) {
   console.log(require('./package').version)
@@ -46,9 +46,9 @@ if (argv.help || (process.stdin.isTTY && !filename)) {
   process.exit(1)
 }
 
-var input
-var output = (argv.output && argv.output !== '-') ? fs.createWriteStream(argv.output) : process.stdout
-var removedHeaders = argv.remove && argv.remove.split(',')
+let input
+const output = (argv.output && argv.output !== '-') ? fs.createWriteStream(argv.output) : process.stdout
+const removedHeaders = argv.remove && argv.remove.split(',')
 
 function mapHeaders (name, i) {
   return removedHeaders.indexOf(name) === -1 ? name : null
@@ -65,7 +65,7 @@ if (filename === '-' || !filename) {
 
 input
   .pipe(csv({
-    headers: headers,
+    headers,
     separator: argv.separator,
     strict: argv.strict,
     mapHeaders: argv.remove ? mapHeaders : null
