@@ -29,7 +29,6 @@ var Parser = function (opts) {
 
   this.headers = opts.headers || null
   this.strict = opts.strict || null
-
   this.mapHeaders = opts.mapHeaders || identity
   this.mapValues = opts.mapValues || identity
   this.skipUntil = opts.skipUntil || null
