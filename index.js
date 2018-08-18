@@ -42,6 +42,7 @@ var Parser = function (opts) {
   this._escaped = false
   this._empty = this._raw ? bufferAlloc(0) : ''
   this._Row = null
+  this._line = 1
 
   if (this.headers) {
     this._first = false
@@ -152,7 +153,8 @@ Parser.prototype._online = function (buf, start, end) {
   if (offset < end) cells.push(this._oncell(buf, offset, end))
   if (buf[end - 1] === comma) cells.push(this._empty)
 
-  var skip = this.skipUntil && cells.indexOf(this.skipUntil) === -1
+  var skip = this.skipUntil && this.skipUntil !== this._line
+  this._line++
 
   if (this._first && !skip) {
     this._first = false
