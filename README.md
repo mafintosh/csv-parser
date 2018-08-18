@@ -120,7 +120,8 @@ line in a CSV file as the header specification.
 
 Type: `Function`
 
-A function that can be used to modify the values of each header.
+A function that can be used to modify the values of each header. Return `null`
+to remove the header, and it's column, from the results.
 
 ```js
 csv({
@@ -216,6 +217,7 @@ Usage: csv-parser [filename?] [options]
   --help              Show this help
   --output,-o         Set output file. Defaults to stdout
   --quote,-q          Set the quote character ('"' by default)
+  --remove            Remove columns from output by header name
   --separator,-s      Set the separator character ("," by default)
   --strict            Require column length match headers length
   --version,-v        Print out the installed version

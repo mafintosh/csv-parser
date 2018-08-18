@@ -3,7 +3,7 @@
 const minimist = require('minimist')
 const ndjson = require('ndjson')
 const fs = require('fs')
-const csv = require('./')
+const csv = require('../')
 
 const argv = minimist(process.argv, {
   alias: {
