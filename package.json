@@ -11,7 +11,7 @@
   "homepage": "https://github.com/mafintosh/csv-parser",
   "bugs": "https://github.com/mafintosh/csv-parser/issues",
   "bin": {
-    "csv-parser": "./bin/csv-parser.js"
+    "csv-parser": "./bin/csv-parser"
   },
   "main": "index.js",
   "engines": {
