@@ -4,8 +4,8 @@
 [cover]: https://codecov.io/gh/mafintosh/csv-parser/branch/master/graph/badge.svg
 [cover-url]: https://codecov.io/gh/mafintosh/csv-parser
 
-[size]: https://packagephobia.now.sh/badge?p=fwv
-[size-url]: https://packagephobia.now.sh/result?p=fwv
+[size]: https://packagephobia.now.sh/badge?p=csv-parser
+[size-url]: https://packagephobia.now.sh/result?p=csv-parser
 
 # csv-parser
 
