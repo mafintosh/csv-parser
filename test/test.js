@@ -235,7 +235,7 @@ test('custom newline', function (t) {
 test('optional strict', function (t) {
   collect('test_strict.csv', {strict: true}, verify)
   function verify (err, lines) {
-    t.equal(err.name, 'SyntaxError', 'err name')
+    t.equal(err.name, 'RangeError', 'err name')
     t.equal(err.message, 'Row length does not match headers', 'err message')
     t.same(lines[0], {a: '1', b: '2', c: '3'}, 'first row')
     t.same(lines[1], {a: '4', b: '5', c: '6'}, 'second row')
