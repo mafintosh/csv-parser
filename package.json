@@ -18,7 +18,7 @@
     "node": ">= 6.14.0"
   },
   "scripts": {
-    "bench": "find test/data -maxdepth 1 -type f -exec scripts/bench",
+    "bench": "bin/bench.js",
     "commitlint": "commitlint",
     "commitmsg": "commitlint -e $GIT_PARAMS",
     "lint": "eslint .",
@@ -39,6 +39,7 @@
     "@commitlint/config-conventional": "^7.0.1",
     "ava": "^0.25.0",
     "bops": "^0.1.1",
+    "chalk": "^2.4.1",
     "concat-stream": "^1.4.5",
     "csv-spectrum": "^1.0.0",
     "eslint": "^5.4.0",
@@ -47,11 +48,14 @@
     "eslint-plugin-node": "^7.0.1",
     "eslint-plugin-promise": "^4.0.0",
     "eslint-plugin-standard": "^3.1.0",
+    "globby": "^8.0.1",
     "husky": "^0.14.3",
     "lint-staged": "^7.2.0",
     "pre-commit": "^1.2.2",
     "standard-version": "^4.4.0",
-    "tape": "^4.2.2"
+    "strip-ansi": "^4.0.0",
+    "tape": "^4.2.2",
+    "text-table": "^0.2.0"
   },
   "directories": {
     "example": "examples",
