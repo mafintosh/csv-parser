@@ -1,16 +1,16 @@
-var stream = require('stream')
-var inherits = require('inherits')
-var genobj = require('generate-object-property')
-var genfun = require('generate-function')
-var bufferFrom = require('buffer-from')
-var bufferAlloc = require('buffer-alloc')
+const stream = require('stream')
+const inherits = require('inherits')
+const genobj = require('generate-object-property')
+const genfun = require('generate-function')
+const bufferFrom = require('buffer-from')
+const bufferAlloc = require('buffer-alloc')
 
-var quote = bufferFrom('"')[0]
-var comma = bufferFrom(',')[0]
-var cr = bufferFrom('\r')[0]
-var nl = bufferFrom('\n')[0]
+const [quote] = bufferFrom('"')
+const [comma] = bufferFrom(',')
+const [cr] = bufferFrom('\r')
+const [nl] = bufferFrom('\n')
 
-var Parser = function (opts) {
+const Parser = function (opts) {
   if (!opts) opts = {}
   if (Array.isArray(opts)) opts = {headers: opts}
 
@@ -20,7 +20,7 @@ var Parser = function (opts) {
   this.quote = opts.quote ? bufferFrom(opts.quote)[0] : quote
   this.escape = opts.escape ? bufferFrom(opts.escape)[0] : this.quote
   if (opts.newline) {
-    this.newline = bufferFrom(opts.newline)[0]
+    [this.newline] = bufferFrom(opts.newline)
     this.customNewline = true
   } else {
     this.newline = nl
@@ -52,8 +52,8 @@ inherits(Parser, stream.Transform)
 Parser.prototype._transform = function (data, enc, cb) {
   if (typeof data === 'string') data = bufferFrom(data)
 
-  var start = 0
-  var buf = data
+  let start = 0
+  let buf = data
 
   if (this._prev) {
     start = this._prev.length
@@ -61,11 +61,11 @@ Parser.prototype._transform = function (data, enc, cb) {
     this._prev = null
   }
 
-  var bufLen = buf.length
+  const bufLen = buf.length
 
-  for (var i = start; i < bufLen; i++) {
-    var chr = buf[i]
-    var nextChr = i + 1 < bufLen ? buf[i + 1] : null
+  for (let i = start; i < bufLen; i++) {
+    const chr = buf[i]
+    const nextChr = i + 1 < bufLen ? buf[i + 1] : null
 
     if (!this._escaped && chr === this.escape && nextChr === this.quote && i !== start) {
       this._escaped = true
@@ -123,15 +123,15 @@ Parser.prototype._online = function (buf, start, end) {
   end-- // trim newline
   if (!this.customNewline && buf.length && buf[end - 1] === cr) end--
 
-  var comma = this.separator
-  var cells = []
-  var isQuoted = false
-  var offset = start
+  const comma = this.separator
+  const cells = []
+  let isQuoted = false
+  let offset = start
 
-  for (var i = start; i < end; i++) {
-    var isStartingQuote = !isQuoted && buf[i] === this.quote
-    var isEndingQuote = isQuoted && buf[i] === this.quote && i + 1 <= end && buf[i + 1] === comma
-    var isEscape = isQuoted && buf[i] === this.escape && i + 1 < end && buf[i + 1] === this.quote
+  for (let i = start; i < end; i++) {
+    const isStartingQuote = !isQuoted && buf[i] === this.quote
+    const isEndingQuote = isQuoted && buf[i] === this.quote && i + 1 <= end && buf[i + 1] === comma
+    const isEscape = isQuoted && buf[i] === this.escape && i + 1 < end && buf[i + 1] === this.quote
 
     if (isStartingQuote || isEndingQuote) {
       isQuoted = !isQuoted
@@ -168,11 +168,11 @@ Parser.prototype._online = function (buf, start, end) {
 Parser.prototype._compile = function () {
   if (this._Row) return
 
-  var Row = genfun()('function Row (cells) {')
+  const Row = genfun()('function Row (cells) {')
 
-  var self = this
-  this.headers.forEach(function (cell, i) {
-    var newHeader = self.mapHeaders(cell, i)
+  const self = this
+  this.headers.forEach((cell, i) => {
+    const newHeader = self.mapHeaders(cell, i)
     if (newHeader) {
       Row('%s = cells[%d]', genobj('this', newHeader), i)
     }
@@ -203,14 +203,16 @@ Parser.prototype._oncell = function (buf, start, end) {
     end--
   }
 
-  for (var i = start, y = start; i < end; i++) {
+  let y
+
+  for (let i = start, y = start; i < end; i++) {
     // check for escape characters and skip them
     if (buf[i] === this.escape && i + 1 < end && buf[i + 1] === this.quote) i++
     if (y !== i) buf[y] = buf[i]
     y++
   }
 
-  var value = this._onvalue(buf, start, y)
+  const value = this._onvalue(buf, start, y)
   return this._first ? value : this.mapValues(value)
 }
 

@@ -1,14 +1,14 @@
-var fs = require('fs')
-var csv = require('./')
+const fs = require('fs')
+const csv = require('./')
 
-var now = Date.now()
-var rows = 0
+const now = Date.now()
+let rows = 0
 
 fs.createReadStream(process.argv[2] || '/tmp/tmp.csv')
   .pipe(csv())
-  .on('data', function (line) {
+  .on('data', (line) => {
     rows++
   })
-  .on('end', function () {
-    console.log('parsed ' + rows + ' rows in ' + (Date.now() - now) + ' ms')
+  .on('end', () => {
+    console.log(`parsed ${rows} rows in ${Date.now() - now} ms`)
   })
