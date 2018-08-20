@@ -344,11 +344,11 @@ test.cb('format values', (t) => {
   }
 })
 
-test('skip rows until', function (t) {
+test.cb('skip rows until', (t) => {
   collect('junk_rows.csv', {skipLines: 2}, verify)
   function verify (err, lines) {
     t.false(err, 'no err')
-    t.same(lines[0], {yes: 'ok', yup: 'ok', yeah: 'ok!'})
+    t.is(lines[0], {yes: 'ok', yup: 'ok', yeah: 'ok!'})
     t.end()
   }
 })
