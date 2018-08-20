@@ -183,6 +183,12 @@ Type: `Boolean`<br>
 If `true`, instructs the parser that the number of columns in each row must match
 the number of `headers` specified.
 
+##### skipLines
+
+Type: `Integer`<br>
+
+If provided a line number (integer), skips this number of lines before setting a header.
+
 ## Events
 
 The following events are emitted during parsing:
