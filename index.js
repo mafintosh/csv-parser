@@ -17,7 +17,7 @@ const defaults = {
   raw: false,
   separator: ',',
   strict: false,
-  skipLines: null,
+  skipLines: null
 }
 
 class CsvParser extends Transform {
@@ -142,8 +142,8 @@ class CsvParser extends Transform {
 
     if (offset < end) cells.push(this._oncell(buf, offset, end))
     if (buf[end - 1] === comma) cells.push(this._empty)
-  
-    var skip = this.skipLines && this.skipLines !== this._line
+
+    const skip = this.skipLines && this.skipLines !== this._line
     this._line++
 
     if (this._first && !skip) {
@@ -158,7 +158,7 @@ class CsvParser extends Transform {
       const e = new RangeError('Row length does not match headers')
       this.emit('error', e)
     } else {
-      this._emit(this._Row, cells)
+      if (!this._first) this._emit(this._Row, cells)
     }
   }
 

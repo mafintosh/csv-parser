@@ -348,7 +348,7 @@ test.cb('skip rows until', (t) => {
   collect('junk_rows.csv', {skipLines: 2}, verify)
   function verify (err, lines) {
     t.false(err, 'no err')
-    t.is(lines[0], {yes: 'ok', yup: 'ok', yeah: 'ok!'})
+    t.is(JSON.stringify(lines[0]), JSON.stringify({yes: 'ok', yup: 'ok', yeah: 'ok!'}))
     t.end()
   }
 })
