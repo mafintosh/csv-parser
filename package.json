@@ -18,19 +18,18 @@
     "node": ">= 6.14.0"
   },
   "scripts": {
-    "bench": "bin/bench.js",
+    "bench": "bin/bench",
     "commitlint": "commitlint",
     "commitmsg": "commitlint -e $GIT_PARAMS",
     "lint": "eslint .",
     "lint-staged": "lint-staged",
-    "test": "tape test/test.js"
+    "test": "ava test/test.js"
   },
   "dependencies": {
     "buffer-alloc": "^1.1.0",
     "buffer-from": "^1.0.0",
     "generate-function": "^1.0.1",
     "generate-object-property": "^1.0.0",
-    "inherits": "^2.0.1",
     "minimist": "^1.2.0",
     "ndjson": "^1.4.0"
   },
