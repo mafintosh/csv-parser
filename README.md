@@ -168,12 +168,26 @@ Default: `,`
 
 Specifies a single-character string to use as the column separator for each row.
 
+##### skipLines
+
+Type: `Number`<br>
+Default: `0`
+
+Specifies the number of lines at the beginning of a data file that the parser should
+skip over, prior to parsing headers.
+
 ##### strict
 
 Type: `Boolean`<br>
 
 If `true`, instructs the parser that the number of columns in each row must match
 the number of `headers` specified.
+
+##### skipLines
+
+Type: `Integer`<br>
+
+If provided a line number (integer), skips this number of lines before setting a header.
 
 ## Events
 
@@ -219,6 +233,7 @@ Usage: csv-parser [filename?] [options]
   --quote,-q          Set the quote character ('"' by default)
   --remove            Remove columns from output by header name
   --separator,-s      Set the separator character ("," by default)
+  --skipLines,-l      Set the number of lines to skip to before parsing headers
   --strict            Require column length match headers length
   --version,-v        Print out the installed version
 ```
