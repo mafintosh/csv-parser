@@ -40,6 +40,12 @@ class CsvParser extends Transform {
 
     // if escape is not defined on the passed options, use the end value of quote
     this.escape = (opts || {}).escape ? bufferFrom(options.escape)[0] : options.quote
+
+    if (this.headers === false) {
+      // enforce, as the column length check will fail if headers:false
+      this.strict = false
+    }
+
     this._prev = null
     this._prevEnd = 0
     this._first = true
@@ -49,9 +55,9 @@ class CsvParser extends Transform {
     this._Row = null
     this._line = 0
 
-    if (this.headers) {
+    if (this.headers || this.headers === false) {
       this._first = false
-      this._compile(this.headers)
+      this._compile()
     }
   }
 
@@ -60,26 +66,30 @@ class CsvParser extends Transform {
 
     const Row = genfun()('function Row (cells) {')
 
-    const self = this
-    this.headers.forEach((cell, i) => {
-      const newHeader = self.mapHeaders(cell, i)
-      if (newHeader) {
-        Row('%s = cells[%d]', genobj('this', newHeader), i)
-      }
-    })
+    if (this.headers) {
+      this.headers.forEach((cell, i) => {
+        const newHeader = this.mapHeaders(cell, i)
+        if (newHeader) {
+          Row('%s = cells[%d]', genobj('this', newHeader), i)
+        }
+      })
+    } else {
+      // -> false
+      Row(`
+        for (const [index, value] of cells.entries()) {
+          this[index] = value
+        }
+      `)
+    }
 
     Row('}')
 
     this._Row = Row.toFunction()
 
-    if (Object.defineProperty) {
-      Object.defineProperty(this._Row.prototype, 'headers', {
-        enumerable: false,
-        value: this.headers
-      })
-    } else {
-      this._Row.prototype.headers = this.headers
-    }
+    Object.defineProperty(this._Row.prototype, 'headers', {
+      enumerable: false,
+      value: this.headers
+    })
   }
 
   _emit (Row, cells) {

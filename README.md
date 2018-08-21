@@ -110,11 +110,14 @@ in a CSV row.
 
 ##### headers
 
-Type: `Array[String]`
+Type: `Array[String]|boolean`
 
 Specifies the headers to use. Headers define the property key for each value in
 a CSV row. If no `headers` option is provided, `csv-parser` will use the first
 line in a CSV file as the header specification.
+
+If `false`, specifies that the first row in a data file does _not_ contain
+headers, and instructs the parser to use the row index as the key for each row.
 
 ##### mapHeaders
 

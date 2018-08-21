@@ -9,6 +9,31 @@ const csv = require('..')
 const read = fs.createReadStream
 const eol = '\n'
 
+// helpers
+function fixture (name) {
+  return path.join(__dirname, 'data', name)
+}
+
+function collect (file, opts, cb) {
+  if (typeof opts === 'function') return collect(file, null, opts)
+  const data = read(fixture(file))
+  const lines = []
+  const parser = csv(opts)
+  data
+    .pipe(parser)
+    .on('data', (line) => {
+      lines.push(line)
+    })
+    .on('error', (err) => {
+      cb(err, lines)
+    })
+    .on('end', () => {
+      // eslint-disable-next-line standard/no-callback-literal
+      cb(false, lines)
+    })
+  return parser
+}
+
 test.cb('simple csv', (t) => {
   collect('dummy.csv', verify)
   function verify (err, lines) {
@@ -331,6 +356,17 @@ test.cb('rename columns', (t) => {
   }
 })
 
+test.cb('headers: false, numeric column names', (t) => {
+  function verify (err, lines) {
+    t.false(err, 'no err')
+    t.snapshot(lines, 'lines')
+    t.is(lines.length, 2, '2 rows')
+    t.end()
+  }
+
+  collect('dummy.csv', { headers: false }, verify)
+})
+
 test.cb('format values', (t) => {
   collect('dummy.csv', { mapValues }, verify)
   function mapValues (v) {
@@ -352,29 +388,3 @@ test.cb('skip rows until', (t) => {
     t.end()
   }
 })
-
-// helpers
-
-function fixture (name) {
-  return path.join(__dirname, 'data', name)
-}
-
-function collect (file, opts, cb) {
-  if (typeof opts === 'function') return collect(file, null, opts)
-  const data = read(fixture(file))
-  const lines = []
-  const parser = csv(opts)
-  data
-    .pipe(parser)
-    .on('data', (line) => {
-      lines.push(line)
-    })
-    .on('error', (err) => {
-      cb(err, lines)
-    })
-    .on('end', () => {
-      // eslint-disable-next-line standard/no-callback-literal
-      cb(false, lines)
-    })
-  return parser
-}
