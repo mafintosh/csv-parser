@@ -16,8 +16,8 @@ const defaults = {
   quote: '"',
   raw: false,
   separator: ',',
-  strict: false,
-  skipLines: null
+  skipLines: null,
+  strict: false
 }
 
 class CsvParser extends Transform {

@@ -7,18 +7,18 @@ const csv = require('../')
 
 const argv = minimist(process.argv, {
   alias: {
-    h: 'headers',
-    v: 'version',
-    o: 'output',
-    s: 'separator',
-    q: 'quote',
     e: 'escape',
-    l: 'skipLines'
+    h: 'headers',
+    o: 'output',
+    q: 'quote',
+    l: 'skipLines',
+    s: 'separator',
+    v: 'version'
   },
   default: {
-    s: ',',
+    e: '"',
     q: '"',
-    e: '"'
+    s: ','
   },
   boolean: ['version', 'help']
 })
@@ -32,19 +32,18 @@ if (argv.version) {
 }
 
 if (argv.help || (process.stdin.isTTY && !filename)) {
-  console.error(
-    'Usage: csv-parser [filename?] [options]\n\n' +
-    '  --headers,-h        Explicitly specify csv headers as a comma separated list\n' +
-    '  --output,-o         Set output file. Defaults to stdout\n' +
-    '  --separator,-s      Set the separator character ("," by default)\n' +
-    '  --quote,-q          Set the quote character (\'"\' by default)\n' +
-    '  --escape,-e         Set the escape character (defaults to quote value)\n' +
-    '  --strict            Require column length match headers length\n' +
-    '  --version,-v        Print out the installed version\n' +
-    '  --remove            Remove headers from output\n' +
-    '  --help              Show this help\n',
-    '  --skipLines,-l      Set the number of lines to skip to before parsing headers\n'
-  )
+  console.error(`Usage: csv-parser [filename?] [options]
+  --escape,-e         Set the escape character (defaults to quote value)
+  --headers,-h        Explicitly specify csv headers as a comma separated list
+  --help              Show this help
+  --output,-o         Set output file. Defaults to stdout
+  --quote,-q          Set the quote character ('"' by default)
+  --remove            Remove headers from output
+  --separator,-s      Set the separator character ("," by default)
+  --skipLines,-l      Set the number of lines to skip to before parsing headers
+  --strict            Require column length match headers length
+  --version,-v        Print out the installed version
+`)
   process.exit(1)
 }
 
@@ -61,7 +60,7 @@ if (filename === '-' || !filename) {
 } else if (fs.existsSync(filename)) {
   input = fs.createReadStream(filename)
 } else {
-  console.error('File: %s does not exist', filename)
+  console.error(`File: ${filename} does not exist`)
   process.exit(2)
 }
 
