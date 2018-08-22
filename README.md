@@ -68,7 +68,7 @@ fs.createReadStream('data.csv')
     console.log(results);
     // [
     //   { NAME: 'Daffy Duck', AGE: 24 },
-    //   { NAME: 'Bugs Bunny', AGE: 22 },
+    //   { NAME: 'Bugs Bunny', AGE: 22 }
     // ]
   });
 ```
@@ -118,6 +118,14 @@ line in a CSV file as the header specification.
 
 If `false`, specifies that the first row in a data file does _not_ contain
 headers, and instructs the parser to use the row index as the key for each row.
+Using `headers: false` with the same `data.csv` example from above would yield:
+
+``` js
+[
+  { '0': 'Daffy Duck', '1': 24 },
+  { '0': 'Bugs Bunny', '1': 22 }
+]
+```
 
 ##### mapHeaders
 
