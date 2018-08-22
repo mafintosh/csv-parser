@@ -27,6 +27,36 @@ based interface to `csv-parser` is needed.
 
 _Note: This module requires Node v6.14.0 or higher._
 
+## Benchmarks
+
+⚡️ `csv-parser` is greased-lightning fast
+
+```console
+→ npm run bench
+
+
+  Filename                                   Rows Parsed  Duration
+  comma_in_quotes.csv                                  1     4.8ms
+  custom_escape_character.csv                          3    0.69ms
+  custom_quote_and_escape_character.csv                3    0.85ms
+  custom_quote_character.csv                           2    0.71ms
+  custom_quote_character_default_escape.csv            3    0.78ms
+  dummy.csv                                            1    0.75ms
+  escaped_quotes.csv                                   3    0.77ms
+  empty_columns.csv                                    1    0.83ms
+  junk_rows.csv                                        3    0.83ms
+  mac_newlines.csv                                     2    0.67ms
+  newlines.csv                                         3    0.61ms
+  process_all_rows.csv                              7268      78ms
+  quotes_and_newlines.csv                              3     1.1ms
+  test_geojson.csv                                     3     2.6ms
+  test_latin1.csv                                      2    0.76ms
+  test_strict.csv                                      3    0.70ms
+  test_utf16_big.csv                                   2     1.0ms
+  test_utf16_little.csv                                2    0.59ms
+  test_utf8.csv                                        2    0.59ms
+```
+
 ## Install
 
 Using npm:
