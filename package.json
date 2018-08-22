@@ -17,6 +17,10 @@
     "csv-parser": "./bin/csv-parser"
   },
   "main": "index.js",
+  "files": [
+    "bin/csv-parser",
+    "index.js"
+  ],
   "engines": {
     "node": ">= 6.14.0"
   },
