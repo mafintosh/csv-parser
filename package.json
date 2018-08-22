@@ -53,10 +53,12 @@
     "globby": "^8.0.1",
     "husky": "^0.14.3",
     "lint-staged": "^7.2.0",
+    "loud-rejection": "^1.6.0",
     "pre-commit": "^1.2.2",
     "standard-version": "^4.4.0",
     "strip-ansi": "^4.0.0",
-    "text-table": "^0.2.0"
+    "text-table": "^0.2.0",
+    "time-span": "^2.0.0"
   },
   "directories": {
     "example": "examples",
