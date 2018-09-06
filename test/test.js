@@ -35,13 +35,14 @@ function collect (file, opts, cb) {
 }
 
 test.cb('simple csv', (t) => {
-  collect('dummy.csv', verify)
-  function verify (err, lines) {
+  const verify = (err, lines) => {
     t.false(err, 'no err')
     t.snapshot(lines[0], 'first row')
     t.is(lines.length, 1, '1 row')
     t.end()
   }
+
+  collect('dummy.csv', verify)
 })
 
 test.cb('supports strings', (t) => {
@@ -58,8 +59,7 @@ test.cb('supports strings', (t) => {
 })
 
 test.cb('newlines in a cell', (t) => {
-  collect('newlines.csv', verify)
-  function verify (err, lines) {
+  const verify = (err, lines) => {
     t.false(err, 'no err')
     t.snapshot(lines[0], 'first row')
     t.snapshot(lines[1], 'second row')
@@ -67,11 +67,12 @@ test.cb('newlines in a cell', (t) => {
     t.is(lines.length, 3, '3 rows')
     t.end()
   }
+
+  collect('newlines.csv', verify)
 })
 
 test.cb('raw escaped quotes', (t) => {
-  collect('escaped_quotes.csv', verify)
-  function verify (err, lines) {
+  const verify = (err, lines) => {
     t.false(err, 'no err')
     t.snapshot(lines[0], 'first row')
     t.snapshot(lines[1], 'second row')
@@ -79,11 +80,12 @@ test.cb('raw escaped quotes', (t) => {
     t.is(lines.length, 3, '3 rows')
     t.end()
   }
+
+  collect('escaped_quotes.csv', verify)
 })
 
 test.cb('raw escaped quotes and newlines', (t) => {
-  collect('quotes_and_newlines.csv', verify)
-  function verify (err, lines) {
+  const verify = (err, lines) => {
     t.false(err, 'no err')
     t.snapshot(lines[0], 'first row')
     t.snapshot(lines[1], 'second row')
@@ -91,6 +93,8 @@ test.cb('raw escaped quotes and newlines', (t) => {
     t.is(lines.length, 3, '3 rows')
     t.end()
   }
+
+  collect('quotes_and_newlines.csv', verify)
 })
 
 test.cb('line with comma in quotes', (t) => {
@@ -196,8 +200,7 @@ test.cb('cell with multibyte character', (t) => {
 })
 
 test.cb('geojson', (t) => {
-  collect('test_geojson.csv', verify)
-  function verify (err, lines) {
+  const verify = (err, lines) => {
     t.false(err, 'no err')
     const lineObj = {
       type: 'LineString',
@@ -206,11 +209,12 @@ test.cb('geojson', (t) => {
     t.deepEqual(JSON.parse(lines[1].geojson), lineObj, 'linestrings match')
     t.end()
   }
+
+  collect('test_geojson.csv', verify)
 })
 
 test.cb('empty_columns', (t) => {
-  collect('empty_columns.csv', ['a', 'b', 'c'], verify)
-  function verify (err, lines) {
+  const verify = (err, lines) => {
     t.false(err, 'no err')
     function testLine (row) {
       t.is(Object.keys(row).length, 3, 'Split into three columns')
@@ -223,6 +227,8 @@ test.cb('empty_columns', (t) => {
     lines.forEach(testLine)
     t.end()
   }
+
+  collect('empty_columns.csv', ['a', 'b', 'c'], verify)
 })
 
 test.cb('csv-spectrum', (t) => {
@@ -247,8 +253,7 @@ test.cb('csv-spectrum', (t) => {
 })
 
 test.cb('custom newline', (t) => {
-  collect('custom-newlines.csv', { newline: 'X' }, verify)
-  function verify (err, lines) {
+  const verify = (err, lines) => {
     t.false(err, 'no err')
     t.snapshot(lines[0], 'first row')
     t.snapshot(lines[1], 'second row')
@@ -256,11 +261,12 @@ test.cb('custom newline', (t) => {
     t.is(lines.length, 3, '3 rows')
     t.end()
   }
+
+  collect('custom-newlines.csv', { newline: 'X' }, verify)
 })
 
 test.cb('optional strict', (t) => {
-  collect('test_strict.csv', { strict: true }, verify)
-  function verify (err, lines) {
+  const verify = (err, lines) => {
     t.is(err.name, 'RangeError', 'err name')
     t.is(err.message, 'Row length does not match headers', 'strict row length')
     t.snapshot(lines[0], 'first row')
@@ -268,22 +274,24 @@ test.cb('optional strict', (t) => {
     t.is(lines.length, 2, '2 rows before error')
     t.end()
   }
+
+  collect('test_strict.csv', { strict: true }, verify)
 })
 
 test.cb('custom quote character', (t) => {
-  collect('custom_quote_character.csv', { quote: "'" }, verify)
-  function verify (err, lines) {
+  const verify = (err, lines) => {
     t.false(err, 'no err')
     t.snapshot(lines[0], 'first row')
     t.snapshot(lines[1], 'second row')
     t.is(lines.length, 2, '2 rows')
     t.end()
   }
+
+  collect('custom_quote_character.csv', { quote: "'" }, verify)
 })
 
 test.cb('custom escape character', (t) => {
-  collect('custom_escape_character.csv', { escape: '\\' }, verify)
-  function verify (err, lines) {
+  const verify = (err, lines) => {
     t.false(err, 'no err')
     t.snapshot(lines[0], 'first row')
     t.snapshot(lines[1], 'second row')
@@ -291,11 +299,12 @@ test.cb('custom escape character', (t) => {
     t.is(lines.length, 3, '3 rows')
     t.end()
   }
+
+  collect('custom_escape_character.csv', { escape: '\\' }, verify)
 })
 
 test.cb('custom quote and escape character', (t) => {
-  collect('custom_quote_and_escape_character.csv', { quote: "'", escape: '\\' }, verify)
-  function verify (err, lines) {
+  const verify = (err, lines) => {
     t.false(err, 'no err')
     t.snapshot(lines[0], 'first row')
     t.snapshot(lines[1], 'second row')
@@ -303,11 +312,12 @@ test.cb('custom quote and escape character', (t) => {
     t.is(lines.length, 3, '3 rows')
     t.end()
   }
+
+  collect('custom_quote_and_escape_character.csv', { quote: "'", escape: '\\' }, verify)
 })
 
 test.cb('custom quote character with default escaped value', (t) => {
-  collect('custom_quote_character_default_escape.csv', { quote: "'" }, verify)
-  function verify (err, lines) {
+  const verify = (err, lines) => {
     t.false(err, 'no err')
     t.snapshot(lines[0], 'first row')
     t.snapshot(lines[1], 'second row')
@@ -315,49 +325,55 @@ test.cb('custom quote character with default escaped value', (t) => {
     t.is(lines.length, 3, '3 rows')
     t.end()
   }
+
+  collect('custom_quote_character_default_escape.csv', { quote: "'" }, verify)
 })
 
 test.cb('process all rows', (t) => {
-  collect('process_all_rows.csv', {}, verify)
-  function verify (err, lines) {
+  const verify = (err, lines) => {
     t.false(err, 'no err')
     t.is(lines.length, 7268, '7268 rows')
     t.end()
   }
+
+  collect('process_all_rows.csv', {}, verify)
 })
 
 test.cb('skip columns a and c', (t) => {
-  collect('dummy.csv', { mapHeaders }, verify)
-  function mapHeaders (name, i) {
-    if (['a', 'c'].indexOf(name) > -1) {
+  const mapHeaders = ({ header, index }) => {
+    if (['a', 'c'].indexOf(header) > -1) {
       return null
     }
-    return name
+    return header
   }
-  function verify (err, lines) {
+
+  const verify = (err, lines) => {
     t.false(err, 'no err')
     t.snapshot(lines[0], 'first row')
     t.is(lines.length, 1, '1 row')
     t.end()
   }
+
+  collect('dummy.csv', { mapHeaders }, verify)
 })
 
 test.cb('rename columns', (t) => {
-  collect('dummy.csv', { mapHeaders }, verify)
-  function mapHeaders (name, i) {
+  const mapHeaders = ({ header, index }) => {
     const headers = { a: 'x', b: 'y', c: 'z' }
-    return headers[name]
+    return headers[header]
   }
-  function verify (err, lines) {
+  const verify = (err, lines) => {
     t.false(err, 'no err')
     t.snapshot(lines[0], 'first row')
     t.is(lines.length, 1, '1 row')
     t.end()
   }
+
+  collect('dummy.csv', { mapHeaders }, verify)
 })
 
 test.cb('headers: false, numeric column names', (t) => {
-  function verify (err, lines) {
+  const verify = (err, lines) => {
     t.false(err, 'no err')
     t.snapshot(lines, 'lines')
     t.is(lines.length, 2, '2 rows')
@@ -368,23 +384,32 @@ test.cb('headers: false, numeric column names', (t) => {
 })
 
 test.cb('format values', (t) => {
-  collect('dummy.csv', { mapValues }, verify)
-  function mapValues (v) {
-    return parseInt(v, 10)
+  const headers = []
+  const indexes = []
+  const mapValues = ({ header, index, value }) => {
+    headers.push(header)
+    indexes.push(index)
+    return parseInt(value, 10)
   }
-  function verify (err, lines) {
+
+  const verify = (err, lines) => {
     t.false(err, 'no err')
     t.snapshot(lines[0], 'first row')
     t.is(lines.length, 1, '1 row')
+    t.snapshot(headers, 'headers')
+    t.snapshot(indexes, 'indexes')
     t.end()
   }
+
+  collect('dummy.csv', { mapValues }, verify)
 })
 
 test.cb('skip rows until', (t) => {
-  collect('junk_rows.csv', {skipLines: 2}, verify)
-  function verify (err, lines) {
+  const verify = (err, lines) => {
     t.false(err, 'no err')
     t.is(JSON.stringify(lines[0]), JSON.stringify({yes: 'ok', yup: 'ok', yeah: 'ok!'}))
     t.end()
   }
+
+  collect('junk_rows.csv', {skipLines: 2}, verify)
 })

@@ -6,12 +6,11 @@ const bufferAlloc = require('buffer-alloc')
 
 const [cr] = bufferFrom('\r')
 const [nl] = bufferFrom('\n')
-const identity = (id) => id
 const defaults = {
   escape: '"',
   headers: null,
-  mapHeaders: identity,
-  mapValues: identity,
+  mapHeaders: ({ header }) => header,
+  mapValues: ({ value }) => value,
   newline: '\n',
   quote: '"',
   raw: false,
@@ -67,10 +66,10 @@ class CsvParser extends Transform {
     const Row = genfun()('function Row (cells) {')
 
     if (this.headers) {
-      this.headers.forEach((cell, i) => {
-        const newHeader = this.mapHeaders(cell, i)
+      this.headers.forEach((header, index) => {
+        const newHeader = this.mapHeaders({ header, index })
         if (newHeader) {
-          Row('%s = cells[%d]', genobj('this', newHeader), i)
+          Row('%s = cells[%d]', genobj('this', newHeader), index)
         }
       })
     } else {
@@ -119,7 +118,7 @@ class CsvParser extends Transform {
     }
 
     const value = this._onvalue(buf, start, y)
-    return this._first ? value : this.mapValues(value)
+    return value
   }
 
   _online (buf, start, end) {
@@ -130,6 +129,17 @@ class CsvParser extends Transform {
     const cells = []
     let isQuoted = false
     let offset = start
+
+    const mapValue = (value) => {
+      if (this._first) {
+        return value
+      }
+
+      const index = cells.length
+      const header = this.headers[index]
+
+      return this.mapValues({ header, index, value })
+    }
 
     for (let i = start; i < end; i++) {
       const isStartingQuote = !isQuoted && buf[i] === this.quote
@@ -145,13 +155,22 @@ class CsvParser extends Transform {
       }
 
       if (buf[i] === comma && !isQuoted) {
-        cells.push(this._oncell(buf, offset, i))
+        let value = this._oncell(buf, offset, i)
+        value = mapValue(value)
+        cells.push(value)
         offset = i + 1
       }
     }
 
-    if (offset < end) cells.push(this._oncell(buf, offset, end))
-    if (buf[end - 1] === comma) cells.push(this._empty)
+    if (offset < end) {
+      let value = this._oncell(buf, offset, end)
+      value = mapValue(value)
+      cells.push(value)
+    }
+
+    if (buf[end - 1] === comma) {
+      cells.push(this._empty)
+    }
 
     const skip = this.skipLines && this.skipLines !== this._line
     this._line++

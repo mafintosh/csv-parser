@@ -166,7 +166,7 @@ to remove the header, and it's column, from the results.
 
 ```js
 csv({
-  mapHeader: (header) => header.toLowerCase();
+  mapHeader: ({ header, index }) => header.toLowerCase();
 })
 ```
 
@@ -178,7 +178,7 @@ A function that can be used to modify the value of each column value.
 
 ```js
 csv({
-  mapHeader: (value) => value.toLowerCase();
+  mapHeader: ({ header, index, value }) => value.toLowerCase();
 })
 ```
 
