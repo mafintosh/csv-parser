@@ -1,6 +1,6 @@
 const write = require('csv-write-stream')
-const through = require('through2')
 const parse = require('../')
+const { Transform } = require('stream')
 const path = require('path')
 const fs = require('fs')
 
@@ -10,7 +10,7 @@ const fs = require('fs')
 // .pipe(fs.createWriteStream('./file'))
 fs.createReadStream(path.join(__dirname, '../test/data/dummy.csv'))
   .pipe(parse())
-  .pipe(through.obj(transform))
+  .pipe(new Transform({ transform, objectMode: true }))
   .pipe(write())
   .pipe(process.stdout)
 
@@ -22,6 +22,5 @@ function transform (chunk, enc, cb) {
   Object.keys(chunk).forEach((k) => {
     chunk[k] = `value: ${chunk[k]}`
   })
-  this.push(chunk)
-  cb()
+  cb(null, chunk)
 }

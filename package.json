@@ -46,6 +46,7 @@
     "chalk": "^2.4.1",
     "concat-stream": "^1.4.5",
     "csv-spectrum": "^1.0.0",
+    "csv-write-stream": "^2.0.0",
     "eslint": "^5.4.0",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.14.0",
