@@ -19,6 +19,7 @@
     "bops": "^0.1.1",
     "concat-stream": "^1.4.5",
     "csv-spectrum": "^1.0.0",
+    "csv-write-stream": "^2.0.0",
     "standard": "^5.4.1",
     "tape": "^4.2.2"
   },
