@@ -1,8 +1,8 @@
-var write = require('csv-write-stream')
-var through = require('through2')
-var parse = require('../')
-var path = require('path')
-var fs = require('fs')
+const write = require('csv-write-stream')
+const through = require('through2')
+const parse = require('../')
+const path = require('path')
+const fs = require('fs')
 
 // Read a file, transform it and send it
 // to stdout. Optionally could also write
@@ -19,8 +19,8 @@ fs.createReadStream(path.join(__dirname, '../test/data/dummy.csv'))
 // @param {String} encoding
 // @param {Function} callback
 function transform (chunk, enc, cb) {
-  Object.keys(chunk).forEach(function (k) {
-    chunk[k] = 'value: ' + chunk[k]
+  Object.keys(chunk).forEach((k) => {
+    chunk[k] = `value: ${chunk[k]}`
   })
   this.push(chunk)
   cb()

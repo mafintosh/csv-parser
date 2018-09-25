@@ -1,0 +1,76 @@
+#!/usr/bin/env node
+
+const minimist = require('minimist')
+const ndjson = require('ndjson')
+const fs = require('fs')
+const csv = require('../')
+
+const argv = minimist(process.argv, {
+  alias: {
+    e: 'escape',
+    h: 'headers',
+    o: 'output',
+    q: 'quote',
+    l: 'skipLines',
+    s: 'separator',
+    v: 'version'
+  },
+  default: {
+    e: '"',
+    q: '"',
+    s: ','
+  },
+  boolean: ['version', 'help']
+})
+
+const headers = argv.headers && argv.headers.toString().split(argv.separator)
+const [,, filename] = argv._
+
+if (argv.version) {
+  console.log(require('./package').version)
+  process.exit(0)
+}
+
+if (argv.help || (process.stdin.isTTY && !filename)) {
+  console.error(`Usage: csv-parser [filename?] [options]
+  --escape,-e         Set the escape character (defaults to quote value)
+  --headers,-h        Explicitly specify csv headers as a comma separated list
+  --help              Show this help
+  --output,-o         Set output file. Defaults to stdout
+  --quote,-q          Set the quote character ('"' by default)
+  --remove            Remove headers from output
+  --separator,-s      Set the separator character ("," by default)
+  --skipLines,-l      Set the number of lines to skip to before parsing headers
+  --strict            Require column length match headers length
+  --version,-v        Print out the installed version
+`)
+  process.exit(1)
+}
+
+let input
+const output = (argv.output && argv.output !== '-') ? fs.createWriteStream(argv.output) : process.stdout
+const removedHeaders = argv.remove && argv.remove.split(',')
+
+function mapHeaders (name, i) {
+  return removedHeaders.indexOf(name) === -1 ? name : null
+}
+
+if (filename === '-' || !filename) {
+  input = process.stdin
+} else if (fs.existsSync(filename)) {
+  input = fs.createReadStream(filename)
+} else {
+  console.error(`File: ${filename} does not exist`)
+  process.exit(2)
+}
+
+input
+  .pipe(csv({
+    headers,
+    separator: argv.separator,
+    strict: argv.strict,
+    mapHeaders: argv.remove ? mapHeaders : null,
+    skipLines: argv.skipLines
+  }))
+  .pipe(ndjson.serialize())
+  .pipe(output)

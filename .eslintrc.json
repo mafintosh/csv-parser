@@ -1,0 +1,25 @@
+{
+  "extends": "standard",
+  "plugins": ["import"],
+  "rules": {
+    "no-var": "error",
+    "object-shorthand": ["error", "always", { "ignoreConstructors": false, "avoidQuotes": true }],
+    "prefer-arrow-callback": ["warn", { "allowNamedFunctions": false, "allowUnboundThis": true }],
+    "prefer-const": ["error", { "destructuring": "any", "ignoreReadBeforeAssign": true }],
+    "prefer-destructuring": ["warn", { "array": true, "object": true }, { "enforceForRenamedProperties": false }],
+    "prefer-numeric-literals": "error",
+    "prefer-rest-params": "error",
+    "prefer-spread": "error",
+    "prefer-template": "error"
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".json"]
+      }
+    },
+    "import/extensions": [".js"],
+    "import/core-modules": [],
+    "import/ignore": ["node_modules", "\\.(coffee|scss|css|less|hbs|svg|json)$"]
+  }
+}

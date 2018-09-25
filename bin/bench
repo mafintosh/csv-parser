@@ -1,0 +1,51 @@
+#!/usr/bin/env node
+require('loud-rejection')()
+
+const { createReadStream } = require('fs')
+const { basename } = require('path')
+const globby = require('globby')
+const chalk = require('chalk')
+const table = require('text-table')
+const timeSpan = require('time-span')
+const strip = require('strip-ansi')
+
+const csv = require('../')
+
+const run = async () => {
+  const paths = process.argv[2] || await globby(['test/data/*.csv'])
+  const rows = []
+
+  for (const path of [].concat(paths)) {
+    await new Promise((resolve) => {
+      let rowsParsed = 0
+      const end = timeSpan()
+      const data = []
+      createReadStream(path)
+        .pipe(csv())
+        .on('data', (line) => {
+          rowsParsed++
+          data.push(line)
+        })
+        .on('finish', () => {
+          const duration = end().toPrecision(2)
+          const color = duration <= 10 ? 'green' : (duration > 100 ? 'red' : 'yellow')
+          const fileName = chalk.blue(basename(path))
+          rows.push(['', fileName, rowsParsed, chalk[color](`${duration}ms`)])
+          resolve()
+        })
+    })
+  }
+
+  rows.unshift(['', 'Filename', 'Rows Parsed', 'Duration'].map(h => chalk.dim.underline(h)))
+
+  const results = table(rows, {
+    align: [ 'l', 'l', 'r', 'r' ],
+    stringLength (str) {
+      return strip(str).length
+    }
+  })
+
+  console.log(`\n${results}`)
+}
+
+run()
