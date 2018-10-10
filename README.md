@@ -217,6 +217,13 @@ Default: `0`
 Specifies the number of lines at the beginning of a data file that the parser should
 skip over, prior to parsing headers.
 
+##### maxRowBytes
+
+Type: `Number`<br>
+Default: `Number.MAX_SAFE_INTEGER`
+
+Maximum number of bytes per row. An error is thrown if a line exeeds this value. The default value is on 8 peta byte.
+
 ##### strict
 
 Type: `Boolean`<br>
