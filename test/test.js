@@ -285,7 +285,7 @@ test.cb('optional row size limit', (t) => {
     t.end()
   }
 
-  collect('max_row_size.csv', { maxRowSize: 200 }, verify)
+  collect('max_row_size.csv', { maxRowBytes: 200 }, verify)
 })
 
 test.cb('custom quote character', (t) => {

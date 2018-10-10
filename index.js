@@ -16,7 +16,7 @@ const defaults = {
   raw: false,
   separator: ',',
   skipLines: null,
-  maxRowSize: 0,
+  maxRowBytes: Number.MAX_SAFE_INTEGER,
   strict: false
 }
 
@@ -53,7 +53,7 @@ class CsvParser extends Transform {
     this._escaped = false
     this._empty = this._raw ? bufferAlloc(0) : ''
     this._Row = null
-    this._currentRowSize = 0
+    this._currentRowBytes = 0
     this._line = 0
 
     if (this.headers || this.headers === false) {
@@ -216,8 +216,8 @@ class CsvParser extends Transform {
       const chr = buf[i]
       const nextChr = i + 1 < bufLen ? buf[i + 1] : null
 
-      this._currentRowSize++
-      if (this.maxRowSize && this._currentRowSize > this.maxRowSize) {
+      this._currentRowBytes++
+      if (this._currentRowBytes > this.maxRowBytes) {
         return cb(new Error('Row exceeds the maximum size'))
       }
 
@@ -248,7 +248,7 @@ class CsvParser extends Transform {
         if (chr === this.newline) {
           this._online(buf, this._prevEnd, i + 1)
           this._prevEnd = i + 1
-          this._currentRowSize = 0
+          this._currentRowBytes = 0
         }
       }
     }
