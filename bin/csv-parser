@@ -4,6 +4,7 @@ const minimist = require('minimist')
 const ndjson = require('ndjson')
 const fs = require('fs')
 const csv = require('../')
+const pkg = require('../package.json')
 
 const argv = minimist(process.argv, {
   alias: {
@@ -27,7 +28,7 @@ const headers = argv.headers && argv.headers.toString().split(argv.separator)
 const [,, filename] = argv._
 
 if (argv.version) {
-  console.log(require('./package').version)
+  console.log(pkg.version)
   process.exit(0)
 }
 
