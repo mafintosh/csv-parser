@@ -24,7 +24,6 @@ const argv = minimist(process.argv, {
   boolean: ['version', 'help']
 })
 
-const headers = argv.headers && argv.headers.toString().split(argv.separator)
 const [,, filename] = argv._
 
 if (argv.version) {
@@ -50,10 +49,21 @@ if (argv.help || (process.stdin.isTTY && !filename)) {
 
 let input
 const output = (argv.output && argv.output !== '-') ? fs.createWriteStream(argv.output) : process.stdout
-const removedHeaders = argv.remove && argv.remove.split(',')
+const options = {
+  separator: argv.separator,
+  strict: argv.strict,
+  skipLines: argv.skipLines
+}
 
-function mapHeaders (name, i) {
-  return removedHeaders.indexOf(name) === -1 ? name : null
+if (argv.headers) {
+  options.headers = argv.headers.toString().split(argv.separator)
+}
+
+if (argv.remove) {
+  const removeHeaders = argv.remove.split(',')
+  options.mapHeaders = (name, i) => {
+    return removeHeaders.indexOf(name) === -1 ? name : null
+  }
 }
 
 if (filename === '-' || !filename) {
@@ -66,12 +76,6 @@ if (filename === '-' || !filename) {
 }
 
 input
-  .pipe(csv({
-    headers,
-    separator: argv.separator,
-    strict: argv.strict,
-    mapHeaders: argv.remove ? mapHeaders : null,
-    skipLines: argv.skipLines
-  }))
+  .pipe(csv(options))
   .pipe(ndjson.serialize())
   .pipe(output)

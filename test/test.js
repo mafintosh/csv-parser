@@ -1,9 +1,12 @@
-const test = require('ava')
 const fs = require('fs')
 const path = require('path')
+
+const test = require('ava')
 const bops = require('bops')
 const spectrum = require('csv-spectrum')
 const concat = require('concat-stream')
+const execa = require('execa')
+
 const csv = require('..')
 
 const read = fs.createReadStream
@@ -422,4 +425,11 @@ test.cb('skip rows until', (t) => {
   }
 
   collect('junk_rows.csv', {skipLines: 2}, verify)
+})
+
+test('binary stanity', async (t) => {
+  const binPath = path.resolve(__dirname, '../bin/csv-parser')
+  const { stdout } = await execa.shell(`echo "a\n1" | node ${binPath}`)
+
+  t.snapshot(stdout)
 })
