@@ -79,9 +79,9 @@ To use the module, create a readable stream to a desired CSV file, instantiate
 Suppose you have a CSV file `data.csv` which contains the data:
 
 ```
-NAME, AGE
-Daffy Duck, 24
-Bugs Bunny, 22
+NAME,AGE
+Daffy Duck,24
+Bugs Bunny,22
 ```
 
 It could then be parsed, and results shown like so:
@@ -93,12 +93,12 @@ const results = [];
 
 fs.createReadStream('data.csv')
   .pipe(csv())
-  .on('data', results.push)
+  .on('data', (data) => results.push(data))
   .on('end', () => {
     console.log(results);
     // [
-    //   { NAME: 'Daffy Duck', AGE: 24 },
-    //   { NAME: 'Bugs Bunny', AGE: 22 }
+    //   { NAME: 'Daffy Duck', AGE: '24' },
+    //   { NAME: 'Bugs Bunny', AGE: '22' }
     // ]
   });
 ```
