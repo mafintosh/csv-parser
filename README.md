@@ -93,9 +93,7 @@ const results = [];
 
 fs.createReadStream('data.csv')
   .pipe(csv())
-  .on('data', (d) => {
-    results.push(d);
-  })
+  .on('data', (data) => results.push(data))
   .on('end', () => {
     console.log(results);
     // [
