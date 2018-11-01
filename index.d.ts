@@ -6,7 +6,7 @@ declare module 'csv-parser' {
     escape?: string;
     headers?: ReadonlyArray<string> | boolean;
     mapHeaders?: (args: { header: string; index: number }) => string | null;
-    mavValues?: (args: { header: string; index: number; value: any }) => any;
+    mapValues?: (args: { header: string; index: number; value: any }) => any;
     newline?: string;
     quote?: string;
     raw?: boolean;
