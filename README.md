@@ -178,7 +178,7 @@ A function that can be used to modify the value of each column value.
 
 ```js
 csv({
-  mapHeaders: ({ header, index, value }) => value.toLowerCase();
+  mapValues: ({ header, index, value }) => value.toLowerCase();
 })
 ```
 
