@@ -433,6 +433,7 @@ test.cb('skip rows until, with headers', (t) => {
     t.false(err, 'no err')
     t.is(lines.length, 2, '2 rows')
     t.is(JSON.stringify(lines[0]), JSON.stringify({s: 'yes', p: 'yup', h: 'yeah'}))
+    t.is(JSON.stringify(lines[1]), JSON.stringify({s: 'ok', p: 'ok', h: 'ok!'}))
     t.end()
   }
 
