@@ -3,6 +3,7 @@ const genobj = require('generate-object-property')
 const genfun = require('generate-function')
 const bufferFrom = require('buffer-from')
 const bufferAlloc = require('buffer-alloc')
+const isUtf8 = require('is-utf8')
 
 const [cr] = bufferFrom('\r')
 const [nl] = bufferFrom('\n')
@@ -199,6 +200,14 @@ class CsvParser extends Transform {
   }
 
   _transform (data, enc, cb) {
+    // is it UTF8?
+    if (isUtf8(data)) {
+      // is it encoded w/ BOM? (BOM or byte order mark = 0xFEFF)
+      if (data[0] === 0xef && data[1] === 0xbb && data[2] === 0xbf) {
+        // get rid of BOM
+        data = data.slice(3)
+      }
+    }
     if (typeof data === 'string') data = bufferFrom(data)
 
     let start = 0

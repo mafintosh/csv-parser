@@ -35,6 +35,7 @@
     "execa": "^1.0.0",
     "generate-function": "^1.0.1",
     "generate-object-property": "^1.0.0",
+    "is-utf8": "^0.2.1",
     "minimist": "^1.2.0",
     "ndjson": "^1.4.0"
   },
