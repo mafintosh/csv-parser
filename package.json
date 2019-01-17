@@ -16,7 +16,8 @@
   "main": "index.js",
   "files": [
     "bin/csv-parser",
-    "index.js"
+    "index.js",
+    "index.d.ts"
   ],
   "engines": {
     "node": ">= 6.14.0"
