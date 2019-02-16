@@ -183,7 +183,7 @@ class CsvParser extends Transform {
       cells.push(this._empty)
     }
 
-    const skip = this.skipLines && this.skipLines !== this._line
+    const skip = this.skipLines && this.skipLines > this._line
     this._line++
 
     if (this._first && !skip) {
@@ -198,7 +198,7 @@ class CsvParser extends Transform {
       const e = new RangeError('Row length does not match headers')
       this.emit('error', e)
     } else {
-      if (!this._first) this._emit(this._Row, cells)
+      if (!skip) this._emit(this._Row, cells)
     }
   }
 
