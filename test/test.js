@@ -1,4 +1,3 @@
-const fs = require('fs')
 const path = require('path')
 
 const test = require('ava')
@@ -9,33 +8,9 @@ const execa = require('execa')
 
 const csv = require('..')
 
-const read = fs.createReadStream
+const { collect } = require('./helpers/helper')
+
 const eol = '\n'
-
-// helpers
-function fixture (name) {
-  return path.join(__dirname, 'data', name)
-}
-
-function collect (file, opts, cb) {
-  if (typeof opts === 'function') return collect(file, null, opts)
-  const data = read(fixture(file))
-  const lines = []
-  const parser = csv(opts)
-  data
-    .pipe(parser)
-    .on('data', (line) => {
-      lines.push(line)
-    })
-    .on('error', (err) => {
-      cb(err, lines)
-    })
-    .on('end', () => {
-      // eslint-disable-next-line standard/no-callback-literal
-      cb(false, lines)
-    })
-  return parser
-}
 
 test.cb('simple csv', (t) => {
   const verify = (err, lines) => {

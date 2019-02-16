@@ -28,7 +28,7 @@
     "commitmsg": "commitlint -e $GIT_PARAMS",
     "lint": "eslint .",
     "lint-staged": "lint-staged",
-    "test": "ava test/test.js"
+    "test": "ava"
   },
   "dependencies": {
     "buffer-alloc": "^1.1.0",

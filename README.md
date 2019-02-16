@@ -209,6 +209,13 @@ Default: `,`
 
 Specifies a single-character string to use as the column separator for each row.
 
+##### skipComments
+
+Type: `Boolean | String`<br>
+Default: `false`
+
+Instructs the parser to ignore lines which represent comments in a CSV file. Since there is no specification that dictates what a CSV comment looks like, comments should be considered non-standard. The "most common" character used to signify a comment in a CSV file is `"#"`. If this option is set to `true`, lines which begin with `#` will be skipped. If a custom character is needed to denote a commented line, this option may be set to a string which represents the leading character(s) signifying a comment line.
+
 ##### skipLines
 
 Type: `Number`<br>
@@ -275,6 +282,7 @@ Usage: csv-parser [filename?] [options]
   --quote,-q          Set the quote character ('"' by default)
   --remove            Remove columns from output by header name
   --separator,-s      Set the separator character ("," by default)
+  --skipComments,-c   Skip CSV comments that begin with '#'. Set a value to change the comment character.
   --skipLines,-l      Set the number of lines to skip to before parsing headers
   --strict            Require column length match headers length
   --version,-v        Print out the installed version

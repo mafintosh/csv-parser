@@ -15,6 +15,7 @@ const defaults = {
   quote: '"',
   raw: false,
   separator: ',',
+  skipComments: false,
   skipLines: null,
   maxRowBytes: Number.MAX_SAFE_INTEGER,
   strict: false
@@ -141,6 +142,14 @@ class CsvParser extends Transform {
       const header = this.headers[index]
 
       return this.mapValues({ header, index, value })
+    }
+
+    const { skipComments } = this
+    if (skipComments) {
+      const char = typeof skipComments === 'string' ? skipComments : '#'
+      if (buf[0] === bufferFrom(char)) {
+        return
+      }
     }
 
     for (let i = start; i < end; i++) {

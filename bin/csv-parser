@@ -8,6 +8,7 @@ const pkg = require('../package.json')
 
 const argv = minimist(process.argv, {
   alias: {
+    c: 'skipComments',
     e: 'escape',
     h: 'headers',
     o: 'output',
@@ -40,6 +41,7 @@ if (argv.help || (process.stdin.isTTY && !filename)) {
   --quote,-q          Set the quote character ('"' by default)
   --remove            Remove headers from output
   --separator,-s      Set the separator character ("," by default)
+  --skipComments,-c   Skip CSV comments that begin with '#'. Set a value to change the comment character.
   --skipLines,-l      Set the number of lines to skip to before parsing headers
   --strict            Require column length match headers length
   --version,-v        Print out the installed version
@@ -52,6 +54,7 @@ const output = (argv.output && argv.output !== '-') ? fs.createWriteStream(argv.
 const options = {
   separator: argv.separator,
   strict: argv.strict,
+  skipComments: argv.skipComments,
   skipLines: argv.skipLines
 }
 

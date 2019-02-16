@@ -11,6 +11,7 @@ declare module 'csv-parser' {
     quote?: string;
     raw?: boolean;
     separator?: string;
+    skipComments?: number | string;
     skipLines?: number;
     maxRowBytes?: number;
     strict?: boolean;
