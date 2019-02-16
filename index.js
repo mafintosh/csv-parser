@@ -133,6 +133,14 @@ class CsvParser extends Transform {
     let isQuoted = false
     let offset = start
 
+    const { skipComments } = this
+    if (skipComments) {
+      const char = typeof skipComments === 'string' ? skipComments : '#'
+      if (buf[start] === bufferFrom(char)[0]) {
+        return
+      }
+    }
+
     const mapValue = (value) => {
       if (this._first) {
         return value
@@ -142,14 +150,6 @@ class CsvParser extends Transform {
       const header = this.headers[index]
 
       return this.mapValues({ header, index, value })
-    }
-
-    const { skipComments } = this
-    if (skipComments) {
-      const char = typeof skipComments === 'string' ? skipComments : '#'
-      if (buf[0] === bufferFrom(char)) {
-        return
-      }
     }
 
     for (let i = start; i < end; i++) {

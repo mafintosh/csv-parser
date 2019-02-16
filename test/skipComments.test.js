@@ -6,7 +6,7 @@ test.cb('comment', (t) => {
   const verify = (err, lines) => {
     t.false(err, 'no err')
     t.snapshot(lines)
-    t.is(lines.length, 2, '2 rowa')
+    t.is(lines.length, 1, '1 row')
     t.end()
   }
 
@@ -17,7 +17,7 @@ test.cb('custom comment', (t) => {
   const verify = (err, lines) => {
     t.false(err, 'no err')
     t.snapshot(lines)
-    t.is(lines.length, 2, '2 rows')
+    t.is(lines.length, 1, '1 row')
     t.end()
   }
 
