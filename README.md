@@ -296,6 +296,32 @@ source stream can be done neatly with a modules such as:
 Or native [`iconv`](http://man7.org/linux/man-pages/man1/iconv.1.html) if part
 of a pipeline.
 
+## Byte Order Marks
+
+Some CSV files may be generated with, or contain a leading [Byte Order Mark](https://en.wikipedia.org/wiki/Byte_order_mark#UTF-8). This may cause issues parsing headers and/or data from your file. From Wikipedia:
+
+>The Unicode Standard permits the BOM in UTF-8, but does not require nor recommend its use. Byte order has no meaning in UTF-8.
+
+To use this module with a file containing a BOM, please use a module like [strip-bom-stream](https://github.com/sindresorhus/strip-bom-stream) in your pipeline:
+
+```js
+const fs = require('fs');
+
+const csv = require('csv-parser');
+const stripBom = require('strip-bom-stream');
+
+fs.createReadStream('data.csv')
+  .pipe(stripBomStream())
+  .pipe(csv())
+  ...
+```
+
+When using the CLI, the BOM can be removed by first running:
+
+```console
+$ sed $'s/\xEF\xBB\xBF//g' data.csv
+```
+
 ## Meta
 
 [CONTRIBUTING](./.github/CONTRIBUTING)
