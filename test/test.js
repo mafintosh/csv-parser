@@ -145,6 +145,24 @@ test.cb('cell with newline', (t) => {
   })
 })
 
+test.cb('cell with unescaped quotes', (t) => {
+  const verify = (err, lines) => {
+    // console.log(lines);
+    t.false(err, 'no err')
+    t.snapshot(lines[0], 'first row')
+    t.snapshot(lines[1], 'second row')
+    t.snapshot(lines[2], 'third row')
+    t.snapshot(lines[3], 'fourth row')
+    t.snapshot(lines[4], 'fifth row')
+    t.snapshot(lines[5], 'sixth row')
+    t.snapshot(lines[6], 'seventh row')
+    t.is(lines.length, 7, '7 rows')
+    t.end()
+  }
+
+  collect('unescaped_quotes.csv', verify)
+})
+
 test.cb('cell with escaped quote in quotes', (t) => {
   const headers = bops.from('a\n')
   const cell = bops.from('"ha ""ha"" ha"\n')
