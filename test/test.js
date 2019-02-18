@@ -156,7 +156,9 @@ test.cb('cell with unescaped quotes', (t) => {
     t.snapshot(lines[4], 'fifth row')
     t.snapshot(lines[5], 'sixth row')
     t.snapshot(lines[6], 'seventh row')
-    t.is(lines.length, 7, '7 rows')
+    t.snapshot(lines[7], 'eighth row')
+    t.snapshot(lines[8], 'ninth row')
+    t.is(lines.length, 9, '9 rows')
     t.end()
   }
 

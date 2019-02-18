@@ -225,6 +225,7 @@ class CsvParser extends Transform {
       const prevChr = i > 0 ? buf[i - 1] : null
       const chr = buf[i]
       const nextChr = i + 1 < bufLen ? buf[i + 1] : null
+      const nextNextChr = i + 2 < bufLen ? buf[i + 2] : null
 
       this._currentRowBytes++
       if (this._currentRowBytes > this.maxRowBytes) {
@@ -246,7 +247,7 @@ class CsvParser extends Transform {
             continue
           }
           // in quote-mode but not escape-mode, next char is separator or linebreak -> leave quote mode
-          if (this._quoted && (nextChr === this.separator || nextChr === nl || nextChr === this.newline)) {
+          if (this._quoted && (nextChr === this.separator || (this.customNewline ? nextChr === this.newline : nextChr === nl || (nextChr === cr && nextNextChr === nl)))) {
             this._quoted = false
             continue
           }
