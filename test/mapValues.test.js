@@ -22,3 +22,19 @@ test.cb('map values', (t) => {
 
   collect('dummy.csv', { mapValues }, verify)
 })
+
+test.cb('map last empty value', (t) => {
+  const mapValues = ({ value }) => {
+    return value === '' ? null : value
+  }
+
+  const verify = (err, lines) => {
+    t.false(err, 'no err')
+    t.is(lines.length, 2, '2 rows')
+    t.is(lines[0]['name'], null, 'name is mapped')
+    t.is(lines[0]['location'], null, 'last value mapped')
+    t.end()
+  }
+
+  collect('empty_columns.csv', { mapValues, headers: ['date', 'name', 'location'] }, verify)
+})

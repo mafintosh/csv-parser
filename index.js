@@ -180,7 +180,7 @@ class CsvParser extends Transform {
     }
 
     if (buf[end - 1] === comma) {
-      cells.push(this._empty)
+      cells.push(mapValue(this._empty))
     }
 
     const skip = this.skipLines && this.skipLines > this._line
