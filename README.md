@@ -114,13 +114,13 @@ csv({ separator: '\t' });
 
 ### csv([options|headers])
 
-Returns: `Array[object]`
+Returns: `Array<object>`
 
 #### options
 
 Type: `object`
 
-As an alternative to passing an `options` object, you may pass an `Array[String]`
+As an alternative to passing an `options` object, you may pass an `Array<string>`
 which specifies the headers to use. For example:
 
 ```js
@@ -132,7 +132,7 @@ with the `headers` property as shown below.
 
 ##### escape
 
-Type: `String`<br>
+Type: `string`<br>
 Default: `"`
 
 A single-character string used to specify the character used to escape strings
@@ -140,7 +140,7 @@ in a CSV row.
 
 ##### headers
 
-Type: `Array[String]|boolean`
+Type: `Array<string> | boolean`
 
 Specifies the headers to use. Headers define the property key for each value in
 a CSV row. If no `headers` option is provided, `csv-parser` will use the first
@@ -184,41 +184,41 @@ csv({
 
 ##### newline
 
-Type: `String`<br>
+Type: `string`<br>
 Default: `\n`
 
 Specifies a single-character string to denote the end of a line in a CSV file.
 
 ##### quote
 
-Type: `String`<br>
+Type: `string`<br>
 Default: `"`
 
 Specifies a single-character string to denote a quoted string.
 
 ##### raw
 
-Type: `Boolean`<br>
+Type: `boolean`<br>
 
 If `true`, instructs the parser not to decode UTF-8 strings.
 
 ##### separator
 
-Type: `String`<br>
+Type: `string`<br>
 Default: `,`
 
 Specifies a single-character string to use as the column separator for each row.
 
 ##### skipComments
 
-Type: `Boolean | String`<br>
+Type: `boolean | string`<br>
 Default: `false`
 
 Instructs the parser to ignore lines which represent comments in a CSV file. Since there is no specification that dictates what a CSV comment looks like, comments should be considered non-standard. The "most common" character used to signify a comment in a CSV file is `"#"`. If this option is set to `true`, lines which begin with `#` will be skipped. If a custom character is needed to denote a commented line, this option may be set to a string which represents the leading character(s) signifying a comment line.
 
 ##### skipLines
 
-Type: `Number`<br>
+Type: `number`<br>
 Default: `0`
 
 Specifies the number of lines at the beginning of a data file that the parser should
@@ -226,14 +226,14 @@ skip over, prior to parsing headers.
 
 ##### maxRowBytes
 
-Type: `Number`<br>
+Type: `number`<br>
 Default: `Number.MAX_SAFE_INTEGER`
 
 Maximum number of bytes per row. An error is thrown if a line exeeds this value. The default value is on 8 peta byte.
 
 ##### strict
 
-Type: `Boolean`<br>
+Type: `boolean`<br>
 
 If `true`, instructs the parser that the number of columns in each row must match
 the number of `headers` specified.
@@ -250,7 +250,7 @@ row. Please see [Usage](#Usage) for an example.
 ### `headers`
 
 Emitted after the header row is parsed. The first parameter of the event
-callback is an `Array[String]` containing the header names.
+callback is an `Array<string>` containing the header names.
 
 ```js
 fs.createReadStream('data.csv')
