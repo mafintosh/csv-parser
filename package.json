@@ -28,7 +28,7 @@
     "commitmsg": "commitlint -e $GIT_PARAMS",
     "lint": "eslint .",
     "lint-staged": "lint-staged",
-    "test": "ava"
+    "test": "ava && tsd"
   },
   "dependencies": {
     "buffer-alloc": "^1.1.0",
@@ -42,6 +42,7 @@
   "devDependencies": {
     "@commitlint/cli": "^7.0.0",
     "@commitlint/config-conventional": "^7.0.1",
+    "@types/node": "^11.13.9",
     "ava": "^0.25.0",
     "bops": "^0.1.1",
     "chalk": "^2.4.1",
@@ -61,7 +62,8 @@
     "standard-version": "^4.4.0",
     "strip-ansi": "^4.0.0",
     "text-table": "^0.2.0",
-    "time-span": "^2.0.0"
+    "time-span": "^2.0.0",
+    "tsd": "^0.7.2"
   },
   "directories": {
     "example": "examples",

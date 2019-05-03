@@ -112,13 +112,13 @@ csv({ separator: '\t' });
 
 ## API
 
-### csv([options|headers])
+### csv([options | headers])
 
-Returns: `Array[object]`
+Returns: `Array[Object]`
 
 #### options
 
-Type: `object`
+Type: `Object`
 
 As an alternative to passing an `options` object, you may pass an `Array[String]`
 which specifies the headers to use. For example:
@@ -140,7 +140,7 @@ in a CSV row.
 
 ##### headers
 
-Type: `Array[String]|boolean`
+Type: `Array[String] | Boolean`
 
 Specifies the headers to use. Headers define the property key for each value in
 a CSV row. If no `headers` option is provided, `csv-parser` will use the first
