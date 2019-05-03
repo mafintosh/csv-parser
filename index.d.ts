@@ -1,3 +1,4 @@
+/// <reference types="node"/>
 import { Transform } from 'stream';
 
 declare namespace csvParser {

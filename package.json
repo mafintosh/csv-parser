@@ -42,6 +42,7 @@
   "devDependencies": {
     "@commitlint/cli": "^7.0.0",
     "@commitlint/config-conventional": "^7.0.1",
+    "@types/node": "^11.13.9",
     "ava": "^0.25.0",
     "bops": "^0.1.1",
     "chalk": "^2.4.1",
