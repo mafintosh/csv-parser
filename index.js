@@ -153,7 +153,7 @@ class CsvParser extends Transform {
     }
 
     for (let i = start; i < end; i++) {
-      const isStartingQuote = !isQuoted && buf[i] === this.quote
+      const isStartingQuote = !isQuoted && buf[i] === this.quote && (i === start || buf[i - 1] === comma)
       const isEndingQuote = isQuoted && buf[i] === this.quote && i + 1 <= end && buf[i + 1] === comma
       const isEscape = isQuoted && buf[i] === this.escape && i + 1 < end && buf[i + 1] === this.quote
 
@@ -222,8 +222,10 @@ class CsvParser extends Transform {
     const bufLen = buf.length
 
     for (let i = start; i < bufLen; i++) {
+      const prevChr = i > 0 ? buf[i - 1] : null
       const chr = buf[i]
       const nextChr = i + 1 < bufLen ? buf[i + 1] : null
+      const nextNextChr = i + 2 < bufLen ? buf[i + 2] : null
 
       this._currentRowBytes++
       if (this._currentRowBytes > this.maxRowBytes) {
@@ -237,10 +239,19 @@ class CsvParser extends Transform {
         if (this._escaped) {
           this._escaped = false
           // non-escaped quote (quoting the cell)
+          continue
         } else {
-          this._quoted = !this._quoted
+          // not in escape- or quote-mode, currently at start or previous char was separator or linebreak -> enter quote mode
+          if (!this._quoted && (prevChr === null || prevChr === this.separator || prevChr === nl || prevChr === this.newline)) {
+            this._quoted = true
+            continue
+          }
+          // in quote-mode but not escape-mode, next char is separator or linebreak -> leave quote mode
+          if (this._quoted && (nextChr === this.separator || (this.customNewline ? nextChr === this.newline : nextChr === nl || (nextChr === cr && nextNextChr === nl)))) {
+            this._quoted = false
+            continue
+          }
         }
-        continue
       }
 
       if (!this._quoted) {
