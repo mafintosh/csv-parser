@@ -25,7 +25,6 @@
   "scripts": {
     "bench": "bin/bench",
     "commitlint": "commitlint",
-    "commitmsg": "commitlint -e $GIT_PARAMS",
     "lint": "eslint .",
     "lint-staged": "lint-staged",
     "test": "ava && tsd"
@@ -81,5 +80,10 @@
       "eslint --fix",
       "git add"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS"
+    }
   }
 }
