@@ -25,8 +25,10 @@
   "scripts": {
     "bench": "bin/bench",
     "commitlint": "commitlint",
+    "coverage": "nyc npm run test && nyc report --reporter=text-lcov > coverage.lcov",
     "lint": "eslint .",
     "lint-staged": "lint-staged",
+    "security": "npm audit",
     "test": "ava && tsd"
   },
   "dependencies": {
@@ -57,6 +59,7 @@
     "husky": "^3.0.0",
     "lint-staged": "^9.0.2",
     "loud-rejection": "^2.1.0",
+    "nyc": "^14.1.1",
     "pre-commit": "^1.2.2",
     "standard-version": "^6.0.1",
     "strip-ansi": "^5.2.0",
