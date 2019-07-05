@@ -10,7 +10,7 @@ test.cb('comment', (t) => {
     t.end()
   }
 
-  collect('comment.csv', { skipComments: true }, verify)
+  collect('comment', { skipComments: true }, verify)
 })
 
 test.cb('custom comment', (t) => {
@@ -21,5 +21,5 @@ test.cb('custom comment', (t) => {
     t.end()
   }
 
-  collect('custom-comment.csv', { skipComments: '~' }, verify)
+  collect('option-comment', { skipComments: '~' }, verify)
 })

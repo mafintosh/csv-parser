@@ -20,7 +20,7 @@ test.cb('map values', (t) => {
     t.end()
   }
 
-  collect('dummy.csv', { mapValues }, verify)
+  collect('basic', { mapValues }, verify)
 })
 
 test.cb('map last empty value', (t) => {
@@ -36,5 +36,5 @@ test.cb('map last empty value', (t) => {
     t.end()
   }
 
-  collect('empty_columns.csv', { mapValues, headers: ['date', 'name', 'location'] }, verify)
+  collect('empty-columns', { mapValues, headers: ['date', 'name', 'location'] }, verify)
 })

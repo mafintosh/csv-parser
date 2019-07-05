@@ -12,7 +12,7 @@ test.cb('custom escape character', (t) => {
     t.end()
   }
 
-  collect('custom_escape_character.csv', { escape: '\\' }, verify)
+  collect('option-escape', { escape: '\\' }, verify)
 })
 
 test.cb('headers: false', (t) => {
@@ -22,5 +22,5 @@ test.cb('headers: false', (t) => {
     t.end()
   }
 
-  collect('no-headers.csv', { headers: false }, verify)
+  collect('no-headers', { headers: false }, verify)
 })

@@ -10,7 +10,7 @@ test.cb('skip lines', (t) => {
     t.end()
   }
 
-  collect('junk_rows.csv', { skipLines: 2 }, verify)
+  collect('bad-data', { skipLines: 2 }, verify)
 })
 
 test.cb('skip lines with headers', (t) => {
@@ -22,5 +22,5 @@ test.cb('skip lines with headers', (t) => {
     t.end()
   }
 
-  collect('junk_rows.csv', { headers: ['s', 'p', 'h'], skipLines: 2 }, verify)
+  collect('bad-data', { headers: ['s', 'p', 'h'], skipLines: 2 }, verify)
 })

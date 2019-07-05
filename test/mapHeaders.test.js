@@ -14,7 +14,7 @@ test.cb('rename columns', (t) => {
     t.end()
   }
 
-  collect('dummy.csv', { mapHeaders }, verify)
+  collect('basic', { mapHeaders }, verify)
 })
 
 test.cb('skip columns a and c', (t) => {
@@ -32,5 +32,5 @@ test.cb('skip columns a and c', (t) => {
     t.end()
   }
 
-  collect('dummy.csv', { mapHeaders }, verify)
+  collect('basic', { mapHeaders }, verify)
 })

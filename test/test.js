@@ -20,7 +20,7 @@ test.cb('simple csv', (t) => {
     t.end()
   }
 
-  collect('dummy.csv', verify)
+  collect('basic', verify)
 })
 
 test.cb('supports strings', (t) => {
@@ -46,7 +46,7 @@ test.cb('newlines in a cell', (t) => {
     t.end()
   }
 
-  collect('newlines.csv', verify)
+  collect('newlines', verify)
 })
 
 test.cb('raw escaped quotes', (t) => {
@@ -59,7 +59,7 @@ test.cb('raw escaped quotes', (t) => {
     t.end()
   }
 
-  collect('escaped_quotes.csv', verify)
+  collect('escape-quotes', verify)
 })
 
 test.cb('raw escaped quotes and newlines', (t) => {
@@ -72,7 +72,7 @@ test.cb('raw escaped quotes and newlines', (t) => {
     t.end()
   }
 
-  collect('quotes_and_newlines.csv', verify)
+  collect('quotes+newlines', verify)
 })
 
 test.cb('line with comma in quotes', (t) => {
@@ -188,10 +188,10 @@ test.cb('geojson', (t) => {
     t.end()
   }
 
-  collect('test_geojson.csv', verify)
+  collect('geojson', verify)
 })
 
-test.cb('empty_columns', (t) => {
+test.cb('empty columns', (t) => {
   const verify = (err, lines) => {
     t.false(err, 'no err')
     function testLine (row) {
@@ -206,7 +206,7 @@ test.cb('empty_columns', (t) => {
     t.end()
   }
 
-  collect('empty_columns.csv', ['a', 'b', 'c'], verify)
+  collect('empty-columns', ['a', 'b', 'c'], verify)
 })
 
 test.cb('csv-spectrum', (t) => {
@@ -237,7 +237,7 @@ test.cb('process all rows', (t) => {
     t.end()
   }
 
-  collect('process_all_rows.csv', {}, verify)
+  collect('large-dataset', {}, verify)
 })
 
 test('binary stanity', async (t) => {

@@ -11,7 +11,7 @@ test.cb('custom quote character', (t) => {
     t.end()
   }
 
-  collect('custom_quote_character.csv', { quote: "'" }, verify)
+  collect('option-quote', { quote: "'" }, verify)
 })
 
 test.cb('custom quote and escape character', (t) => {
@@ -24,10 +24,10 @@ test.cb('custom quote and escape character', (t) => {
     t.end()
   }
 
-  collect('custom_quote_and_escape_character.csv', { quote: "'", escape: '\\' }, verify)
+  collect('option-quote-escape', { quote: "'", escape: '\\' }, verify)
 })
 
-test.cb('custom quote character with default escaped value', (t) => {
+test.cb('quote many', (t) => {
   const verify = (err, lines) => {
     t.false(err, 'no err')
     t.snapshot(lines[0], 'first row')
@@ -37,5 +37,5 @@ test.cb('custom quote character with default escaped value', (t) => {
     t.end()
   }
 
-  collect('custom_quote_character_default_escape.csv', { quote: "'" }, verify)
+  collect('option-quote-many', { quote: "'" }, verify)
 })

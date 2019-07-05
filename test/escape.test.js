@@ -10,5 +10,5 @@ test.cb('headers: false, numeric column names', (t) => {
     t.end()
   }
 
-  collect('dummy.csv', { headers: false }, verify)
+  collect('basic', { headers: false }, verify)
 })

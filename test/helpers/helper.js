@@ -7,12 +7,14 @@ const read = fs.createReadStream
 
 // helpers
 function fixture (name) {
-  return path.join(__dirname, '../data', name)
+  return path.join(__dirname, '../fixtures', name)
 }
 
 function collect (file, opts, cb) {
-  if (typeof opts === 'function') return collect(file, null, opts)
-  const data = read(fixture(file))
+  if (typeof opts === 'function') {
+    return collect(file, null, opts)
+  }
+  const data = read(fixture(`${file}.csv`))
   const lines = []
   const parser = csv(opts)
   data

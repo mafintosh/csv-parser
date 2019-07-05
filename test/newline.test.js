@@ -2,7 +2,7 @@ const test = require('ava')
 
 const { collect } = require('./helpers/helper')
 
-test.cb('custom newline', (t) => {
+test.cb('newline', (t) => {
   const verify = (err, lines) => {
     t.false(err, 'no err')
     t.snapshot(lines[0], 'first row')
@@ -12,5 +12,5 @@ test.cb('custom newline', (t) => {
     t.end()
   }
 
-  collect('custom-newlines.csv', { newline: 'X' }, verify)
+  collect('option-newline', { newline: 'X' }, verify)
 })

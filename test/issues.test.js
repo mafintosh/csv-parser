@@ -10,5 +10,5 @@ test.cb('backtick separator (#105)', (t) => {
     t.end()
   }
 
-  collect('backtick.csv', { separator: '`' }, verify)
+  collect('backtick', { separator: '`' }, verify)
 })

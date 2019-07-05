@@ -12,7 +12,7 @@ const strip = require('strip-ansi')
 const csv = require('../')
 
 const run = async () => {
-  const paths = process.argv[2] || await globby(['test/data/*.csv'])
+  const paths = process.argv[2] || await globby(['test/fixtures/**/*.csv'])
   const rows = []
 
   for (const path of [].concat(paths)) {
