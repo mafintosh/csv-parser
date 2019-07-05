@@ -1,6 +1,6 @@
 const { Transform } = require('stream')
-const genobj = require('generate-object-property')
-const genfun = require('generate-function')
+// const genobj = require('generate-object-property')
+// const genfun = require('generate-function')
 const bufferFrom = require('buffer-from')
 const bufferAlloc = require('buffer-alloc')
 
@@ -42,11 +42,6 @@ class CsvParser extends Transform {
     // if escape is not defined on the passed options, use the end value of quote
     this.escape = (opts || {}).escape ? bufferFrom(options.escape)[0] : options.quote
 
-    if (this.headers === false) {
-      // enforce, as the column length check will fail if headers:false
-      this.strict = false
-    }
-
     this._prev = null
     this._prevEnd = 0
     this._first = true
@@ -57,45 +52,30 @@ class CsvParser extends Transform {
     this._currentRowBytes = 0
     this._line = 0
 
+    if (this.headers === false) {
+      // enforce, as the column length check will fail if headers:false
+      this.strict = false
+    }
+
     if (this.headers || this.headers === false) {
       this._first = false
-      this._compile()
     }
   }
 
-  _compile () {
-    if (this._Row) return
-
-    const Row = genfun()('function Row (cells) {')
-
-    if (this.headers) {
-      this.headers.forEach((header, index) => {
-        const newHeader = this.mapHeaders({ header, index })
-        if (newHeader) {
-          Row('%s = cells[%d]', genobj('this', newHeader), index)
-        }
-      })
-    } else {
-      // -> false
-      Row(`
-        for (const [index, value] of cells.entries()) {
-          this[index] = value
-        }
-      `)
+  _emit (cells) {
+    if (this.headers === false || cells.length > this.headers.length) {
+      this.headers = cells.map((value, index) => index)
     }
 
-    Row('}')
+    const row = cells.reduce((o, cell, index) => {
+      const header = this.headers[index]
+      if (header !== null) {
+        o[header] = cell
+      }
+      return o
+    }, {})
 
-    this._Row = Row.toFunction()
-
-    Object.defineProperty(this._Row.prototype, 'headers', {
-      enumerable: false,
-      value: this.headers
-    })
-  }
-
-  _emit (Row, cells) {
-    this.push(new Row(cells))
+    this.push(row)
   }
 
   _flush (cb) {
@@ -188,8 +168,8 @@ class CsvParser extends Transform {
 
     if (this._first && !skip) {
       this._first = false
-      this.headers = cells
-      this._compile(cells)
+      this.headers = cells.map((header, index) => this.mapHeaders({ header, index }))
+
       this.emit('headers', this.headers)
       return
     }
@@ -198,7 +178,7 @@ class CsvParser extends Transform {
       const e = new RangeError('Row length does not match headers')
       this.emit('error', e)
     } else {
-      if (!skip) this._emit(this._Row, cells)
+      if (!skip) this._emit(cells)
     }
   }
 

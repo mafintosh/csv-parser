@@ -3,8 +3,8 @@ const test = require('ava')
 const { collect } = require('./helpers/helper')
 
 test.cb('rename columns', (t) => {
+  const headers = { a: 'x', b: 'y', c: 'z' }
   const mapHeaders = ({ header, index }) => {
-    const headers = { a: 'x', b: 'y', c: 'z' }
     return headers[header]
   }
   const verify = (err, lines) => {
