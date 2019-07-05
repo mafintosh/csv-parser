@@ -147,7 +147,7 @@ a CSV row. If no `headers` option is provided, `csv-parser` will use the first
 line in a CSV file as the header specification.
 
 If `false`, specifies that the first row in a data file does _not_ contain
-headers, and instructs the parser to use the row index as the key for each row.
+headers, and instructs the parser to use the column index as the key for each column.
 Using `headers: false` with the same `data.csv` example from above would yield:
 
 ``` js
