@@ -32,30 +32,30 @@
   "dependencies": {
     "buffer-alloc": "^1.1.0",
     "buffer-from": "^1.0.0",
-    "execa": "^1.0.0",
     "generate-function": "^1.0.1",
     "generate-object-property": "^1.0.0",
     "minimist": "^1.2.0",
     "ndjson": "^1.4.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^7.6.1",
-    "@commitlint/config-conventional": "^7.6.0",
+    "@commitlint/cli": "^8.0.0",
+    "@commitlint/config-conventional": "^8.0.0",
     "@types/node": "^12.0.0",
-    "ava": "^1.4.1",
+    "ava": "^2.1.0",
     "bops": "^1.0.0",
     "chalk": "^2.4.2",
     "concat-stream": "^2.0.0",
     "csv-spectrum": "^1.0.0",
-    "eslint": "^5.16.0",
+    "eslint": "^6.0.1",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.17.2",
     "eslint-plugin-node": "^9.0.1",
     "eslint-plugin-promise": "^4.1.1",
     "eslint-plugin-standard": "^4.0.0",
-    "globby": "^9.2.0",
-    "husky": "^2.2.0",
-    "lint-staged": "^8.1.6",
+    "execa": "^1.0.0",
+    "globby": "^10.0.1",
+    "husky": "^3.0.0",
+    "lint-staged": "^9.0.2",
     "loud-rejection": "^2.1.0",
     "pre-commit": "^1.2.2",
     "standard-version": "^6.0.1",
@@ -74,16 +74,22 @@
     "fast",
     "json"
   ],
-  "pre-commit": "lint-staged",
-  "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
+  "ava": {
+    "files": [
+      "!**/fixtures/**",
+      "!**/helpers/**"
     ]
   },
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -e $HUSKY_GIT_PARAMS"
     }
-  }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "pre-commit": "lint-staged"
 }
