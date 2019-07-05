@@ -14,3 +14,13 @@ test.cb('custom escape character', (t) => {
 
   collect('custom_escape_character.csv', { escape: '\\' }, verify)
 })
+
+test.cb('headers: false', (t) => {
+  const verify = (err, lines) => {
+    t.false(err, 'no err')
+    t.snapshot(lines)
+    t.end()
+  }
+
+  collect('no-headers.csv', { headers: false }, verify)
+})
