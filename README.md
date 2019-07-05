@@ -35,31 +35,31 @@ _Note: This module requires Node v8.16.0 or higher._
 → npm run bench
 
   Filename                 Rows Parsed  Duration
-  backtick.csv                       2     4.8ms
-  bad-data.csv                       3     1.3ms
-  basic.csv                          1    0.60ms
-  comma-in-quote.csv                 1    0.49ms
-  comment.csv                        2    0.47ms
-  empty-columns.csv                  1    0.44ms
-  escape-quotes.csv                  3    0.40ms
-  geojson.csv                        3    0.48ms
-  newlines.csv                       3    0.39ms
-  no-headers.csv                     3    0.37ms
-  option-comment.csv                 2    0.41ms
-  option-escape.csv                  3    0.34ms
-  option-maxRowBytes.csv          4577      51ms
-  option-newline.csv                 0    0.65ms
-  option-quote-escape.csv            3    0.54ms
-  option-quote-many.csv              3    0.46ms
-  option-quote.csv                   2    0.31ms
-  quotes+newlines.csv                3    0.39ms
-  strict.csv                         3    0.32ms
-  large-dataset.csv               7268      60ms
-  latin.csv                          2    0.44ms
-  mac-newlines.csv                   2    0.38ms
-  utf16-big.csv                      2    0.80ms
-  utf16.csv                          2    0.42ms
-  utf8.csv                           2    0.30ms
+  backtick.csv                       2     3.5ms
+  bad-data.csv                       3    0.55ms
+  basic.csv                          1    0.26ms
+  comma-in-quote.csv                 1    0.29ms
+  comment.csv                        2    0.40ms
+  empty-columns.csv                  1    0.40ms
+  escape-quotes.csv                  3    0.38ms
+  geojson.csv                        3    0.46ms
+  large-dataset.csv               7268      73ms
+  newlines.csv                       3    0.35ms
+  no-headers.csv                     3    0.26ms
+  option-comment.csv                 2    0.24ms
+  option-escape.csv                  3    0.25ms
+  option-maxRowBytes.csv          4577      39ms
+  option-newline.csv                 0    0.47ms
+  option-quote-escape.csv            3    0.33ms
+  option-quote-many.csv              3    0.38ms
+  option-quote.csv                   2    0.22ms
+  quotes+newlines.csv                3    0.20ms
+  strict.csv                         3    0.22ms
+  latin.csv                          2    0.38ms
+  mac-newlines.csv                   2    0.28ms
+  utf16-big.csv                      2    0.33ms
+  utf16.csv                          2    0.26ms
+  utf8.csv                           2    0.24ms
 ```
 
 ## Install
