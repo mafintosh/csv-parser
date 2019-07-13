@@ -154,22 +154,22 @@ class CsvParser extends Transform {
 
     const skip = skipLines && skipLines > this.state.lineNumber
     this.state.lineNumber++
-    if(!skip) {
+    if (!skip) {
       if (this.state.first) {
         this.state.first = false
         this.headers = cells.map((header, index) => mapHeaders({ header, index }))
-  
+
         this.emit('headers', this.headers)
         return
       }
-  
+
       if (this.options.strict && cells.length !== this.headers.length) {
         const e = new RangeError('Row length does not match headers')
         this.emit('error', e)
       } else {
         if (!skip) this.writeRow(cells)
       }
-    }    
+    }
   }
 
   parseValue (buffer, start, end) {
