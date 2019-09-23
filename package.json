@@ -35,7 +35,6 @@
     "@hapi/joi": "^15.1.0",
     "buffer-alloc": "^1.1.0",
     "buffer-from": "^1.0.0",
-    "generate-function": "^1.0.1",
     "generate-object-property": "^1.0.0",
     "minimist": "^1.2.0",
     "ndjson": "^1.4.0"

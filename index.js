@@ -1,6 +1,4 @@
 const { Transform } = require('stream')
-// const genobj = require('generate-object-property')
-// const genfun = require('generate-function')
 const bufferFrom = require('buffer-from')
 const bufferAlloc = require('buffer-alloc')
 
