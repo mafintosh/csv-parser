@@ -135,7 +135,7 @@ csv(['Name', 'Age']);
 If you need to specify options _and_ headers, please use the the object notation
 with the `headers` property as shown below.
 
-##### escape
+#### escape
 
 Type: `String`<br>
 Default: `"`
@@ -143,7 +143,7 @@ Default: `"`
 A single-character string used to specify the character used to escape strings
 in a CSV row.
 
-##### headers
+#### headers
 
 Type: `Array[String] | Boolean`
 
@@ -162,12 +162,11 @@ Using `headers: false` with the same `data.csv` example from above would yield:
 ]
 ```
 
-##### mapHeaders
+#### mapHeaders
 
 Type: `Function`
 
-A function that can be used to modify the values of each header. Return `null`
-to remove the header, and it's column, from the results.
+A function that can be used to modify the values of each header. Return a `String` to modify the header. Return `null` to remove the header, and it's column, from the results. 
 
 ```js
 csv({
@@ -175,17 +174,28 @@ csv({
 })
 ```
 
-##### mapValues
+##### Parameters
+
+**header** _String_ The current column header.<br/>
+**index** _Number_ The current column index.
+
+#### mapValues
 
 Type: `Function`
 
-A function that can be used to modify the value of each column value.
+A function that can be used to modify the content of each column. The return value will replace the current column content.
 
 ```js
 csv({
   mapValues: ({ header, index, value }) => value.toLowerCase()
 })
 ```
+
+##### Parameters
+
+**header** _String_ The current column header.<br/>
+**index** _Number_ The current column index.<br/>
+**value** _String_ The current column value (or content).
 
 ##### newline
 
@@ -194,34 +204,34 @@ Default: `\n`
 
 Specifies a single-character string to denote the end of a line in a CSV file.
 
-##### quote
+#### quote
 
 Type: `String`<br>
 Default: `"`
 
 Specifies a single-character string to denote a quoted string.
 
-##### raw
+#### raw
 
 Type: `Boolean`<br>
 
 If `true`, instructs the parser not to decode UTF-8 strings.
 
-##### separator
+#### separator
 
 Type: `String`<br>
 Default: `,`
 
 Specifies a single-character string to use as the column separator for each row.
 
-##### skipComments
+#### skipComments
 
 Type: `Boolean | String`<br>
 Default: `false`
 
 Instructs the parser to ignore lines which represent comments in a CSV file. Since there is no specification that dictates what a CSV comment looks like, comments should be considered non-standard. The "most common" character used to signify a comment in a CSV file is `"#"`. If this option is set to `true`, lines which begin with `#` will be skipped. If a custom character is needed to denote a commented line, this option may be set to a string which represents the leading character(s) signifying a comment line.
 
-##### skipLines
+#### skipLines
 
 Type: `Number`<br>
 Default: `0`
@@ -229,14 +239,14 @@ Default: `0`
 Specifies the number of lines at the beginning of a data file that the parser should
 skip over, prior to parsing headers.
 
-##### maxRowBytes
+#### maxRowBytes
 
 Type: `Number`<br>
 Default: `Number.MAX_SAFE_INTEGER`
 
 Maximum number of bytes per row. An error is thrown if a line exeeds this value. The default value is on 8 peta byte.
 
-##### strict
+#### strict
 
 Type: `Boolean`<br>
 
