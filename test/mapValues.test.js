@@ -31,8 +31,8 @@ test.cb('map last empty value', (t) => {
   const verify = (err, lines) => {
     t.false(err, 'no err')
     t.is(lines.length, 2, '2 rows')
-    t.is(lines[0]['name'], null, 'name is mapped')
-    t.is(lines[0]['location'], null, 'last value mapped')
+    t.is(lines[0].name, null, 'name is mapped')
+    t.is(lines[0].location, null, 'last value mapped')
     t.end()
   }
 
