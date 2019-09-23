@@ -32,7 +32,7 @@
     "test": "ava && tsd"
   },
   "dependencies": {
-    "@hapi/joi": "^15.1.0",
+    "@hapi/joi": "^16.1.4",
     "buffer-alloc": "^1.1.0",
     "buffer-from": "^1.0.0",
     "generate-object-property": "^1.0.0",
