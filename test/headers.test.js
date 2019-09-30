@@ -24,3 +24,13 @@ test.cb('headers: false', (t) => {
 
   collect('no-headers', { headers: false }, verify)
 })
+
+test.cb('headers option', (t) => {
+  const verify = (err, lines) => {
+    t.false(err, 'no err')
+    t.snapshot(lines)
+    t.end()
+  }
+
+  collect('headers', { headers: ['a', 'b', 'c'] }, verify)
+})
