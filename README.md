@@ -162,6 +162,8 @@ Using `headers: false` with the same `data.csv` example from above would yield:
 ]
 ```
 
+_Note: If using the `headers` for an operation on a file which contains headers on the first line, specify `skipLines: 1` to skip over the row, or the headers row will appear as normal row data. Alternatively, use the `mapHeaders` option to manipulate existing headers in that scenario._
+
 #### mapHeaders
 
 Type: `Function`
