@@ -242,7 +242,7 @@ test.cb('process all rows', (t) => {
 
 test('binary stanity', async (t) => {
   const binPath = path.resolve(__dirname, '../bin/csv-parser')
-  const { stdout } = await execa(`echo "a\n1" | node ${binPath}`, { shell: true })
+  const { stdout } = await execa.node(binPath, { input: 'a\n1' })
 
   t.snapshot(stdout)
 })
