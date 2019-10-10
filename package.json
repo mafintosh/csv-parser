@@ -54,7 +54,7 @@
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-promise": "^4.1.1",
     "eslint-plugin-standard": "^4.0.0",
-    "execa": "^2.0.4",
+    "execa": "^2.1.0",
     "globby": "^10.0.1",
     "husky": "^3.0.0",
     "lint-staged": "^9.0.2",
