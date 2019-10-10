@@ -178,12 +178,10 @@ class CsvParser extends Transform {
   }
 
   writeRow (cells) {
-    if (this.headers === false || cells.length > this.headers.length) {
-      this.headers = cells.map((value, index) => index)
-    }
+    const headers = (this.headers === false || cells.length !== this.headers.length) ? cells.map((value, index) => index) : this.headers
 
     const row = cells.reduce((o, cell, index) => {
-      const header = this.headers[index]
+      const header = headers[index]
       if (header !== null) {
         o[header] = cell
       }
