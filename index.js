@@ -186,7 +186,7 @@ class CsvParser extends Transform {
       if (header !== undefined) {
         o[header] = cell
       } else {
-        o[index] = cell
+        o[`_${index}`] = cell
       }
       return o
     }, {})
