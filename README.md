@@ -336,7 +336,7 @@ const csv = require('csv-parser');
 const stripBom = require('strip-bom-stream');
 
 fs.createReadStream('data.csv')
-  .pipe(stripBomStream())
+  .pipe(stripBom())
   .pipe(csv())
   ...
 ```
