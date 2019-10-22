@@ -333,7 +333,7 @@ To use this module with a file containing a BOM, please use a module like [strip
 const fs = require('fs');
 
 const csv = require('csv-parser');
-const stripBom = require('strip-bom-stream');
+const stripBomStream = require('strip-bom-stream');
 
 fs.createReadStream('data.csv')
   .pipe(stripBomStream())
