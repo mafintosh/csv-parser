@@ -112,7 +112,7 @@ To specify options for `csv`, pass an object argument to the function. For
 example:
 
 ```js
-csv({ separator: '\t' });
+csv({ delimiter: '\t' });
 ```
 
 ## API
