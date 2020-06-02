@@ -35,7 +35,7 @@
     "buffer-alloc": "^1.1.0",
     "buffer-from": "^1.0.0",
     "minimist": "^1.2.0",
-    "ndjson": "^1.4.0"
+    "through2": "^3.0.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.2.0",
