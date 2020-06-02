@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
+const { EOL } = require('os')
 const minimist = require('minimist')
-const ndjson = require('ndjson')
+const through = require('through2')
 const fs = require('fs')
 const csv = require('../')
 const pkg = require('../package.json')
@@ -78,7 +79,13 @@ if (filename === '-' || !filename) {
   process.exit(2)
 }
 
+const serialize = () => {
+  return through.obj((obj, enc, cb) => {
+    cb(null, JSON.stringify(obj) + EOL)
+  })
+}
+
 input
   .pipe(csv(options))
-  .pipe(ndjson.serialize())
+  .pipe(serialize())
   .pipe(output)
