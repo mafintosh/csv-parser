@@ -32,8 +32,6 @@
     "test": "ava && tsd"
   },
   "dependencies": {
-    "buffer-alloc": "^1.1.0",
-    "buffer-from": "^1.0.0",
     "minimist": "^1.2.0",
     "through2": "^3.0.1"
   },

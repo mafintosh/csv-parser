@@ -1,9 +1,7 @@
 const { Transform } = require('stream')
-const bufferFrom = require('buffer-from')
-const bufferAlloc = require('buffer-alloc')
 
-const [cr] = bufferFrom('\r')
-const [nl] = bufferFrom('\n')
+const [cr] = Buffer.from('\r')
+const [nl] = Buffer.from('\n')
 const defaults = {
   escape: '"',
   headers: null,
@@ -31,15 +29,15 @@ class CsvParser extends Transform {
 
     for (const key of ['newline', 'quote', 'separator']) {
       if (typeof options[key] !== 'undefined') {
-        ([options[key]] = bufferFrom(options[key]))
+        ([options[key]] = Buffer.from(options[key]))
       }
     }
 
     // if escape is not defined on the passed options, use the end value of quote
-    options.escape = (opts || {}).escape ? bufferFrom(options.escape)[0] : options.quote
+    options.escape = (opts || {}).escape ? Buffer.from(options.escape)[0] : options.quote
 
     this.state = {
-      empty: options.raw ? bufferAlloc(0) : '',
+      empty: options.raw ? Buffer.alloc(0) : '',
       escaped: false,
       first: true,
       lineNumber: 0,
@@ -103,7 +101,7 @@ class CsvParser extends Transform {
 
     if (skipComments) {
       const char = typeof skipComments === 'string' ? skipComments : '#'
-      if (buffer[start] === bufferFrom(char)[0]) {
+      if (buffer[start] === Buffer.from(char)[0]) {
         return
       }
     }
@@ -201,7 +199,7 @@ class CsvParser extends Transform {
 
   _transform (data, enc, cb) {
     if (typeof data === 'string') {
-      data = bufferFrom(data)
+      data = Buffer.from(data)
     }
 
     const { escape, quote } = this.options
