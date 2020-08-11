@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "minimist": "^1.2.0",
-    "through2": "^3.0.1"
+    "through2": "^4.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.2.0",
