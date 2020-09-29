@@ -20,7 +20,7 @@
     "index.d.ts"
   ],
   "engines": {
-    "node": ">= 8.16.0"
+    "node": ">= 10"
   },
   "scripts": {
     "bench": "bin/bench",
@@ -32,8 +32,7 @@
     "test": "ava && tsd"
   },
   "dependencies": {
-    "minimist": "^1.2.0",
-    "through2": "^3.0.1"
+    "minimist": "^1.2.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.2.0",

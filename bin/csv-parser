@@ -2,7 +2,7 @@
 
 const { EOL } = require('os')
 const minimist = require('minimist')
-const through = require('through2')
+const { Transform } = require('stream');
 const fs = require('fs')
 const csv = require('../')
 const pkg = require('../package.json')
@@ -80,9 +80,12 @@ if (filename === '-' || !filename) {
 }
 
 const serialize = () => {
-  return through.obj((obj, enc, cb) => {
-    cb(null, JSON.stringify(obj) + EOL)
-  })
+  return new Transform({
+    objectMode: true,
+    transform(obj, enc, cb) {
+      cb(null, JSON.stringify(obj) + EOL)
+    }
+  });
 }
 
 input
