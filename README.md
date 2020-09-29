@@ -251,9 +251,13 @@ Maximum number of bytes per row. An error is thrown if a line exeeds this value.
 #### strict
 
 Type: `Boolean`<br>
+Default: `false`
 
 If `true`, instructs the parser that the number of columns in each row must match
-the number of `headers` specified.
+the number of `headers` specified or throws an exception.
+if `false`: the headers are mapped to the column index
+   less columns: any missing column in the middle will result in a wrong property mapping!
+   more columns: the aditional columns will create a "_"+index properties - eg. "_10":"value"
 
 ## Events
 
