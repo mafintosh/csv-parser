@@ -31,9 +31,6 @@
     "security": "npm audit",
     "test": "ava && tsd"
   },
-  "dependencies": {
-    "minimist": "^1.2.0"
-  },
   "devDependencies": {
     "@commitlint/cli": "^8.2.0",
     "@commitlint/config-conventional": "^8.0.0",

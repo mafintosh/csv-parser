@@ -1,32 +1,83 @@
 #!/usr/bin/env node
 
 const { EOL } = require('os')
-const minimist = require('minimist')
 const { Transform } = require('stream');
 const fs = require('fs')
 const csv = require('../')
 const pkg = require('../package.json')
 
-const argv = minimist(process.argv, {
-  alias: {
-    c: 'skipComments',
-    e: 'escape',
-    h: 'headers',
-    o: 'output',
-    q: 'quote',
-    l: 'skipLines',
-    s: 'separator',
-    v: 'version'
-  },
-  default: {
-    e: '"',
-    q: '"',
-    s: ','
-  },
-  boolean: ['version', 'help']
-})
+function parseArgs () {
+  let skipComments
+  let escape = '"'
+  let headers
+  let output
+  let quote = '"'
+  let skipLines
+  let separator = ','
+  let version
+  let help
+  const defaultArgs = []
 
-const [,, filename] = argv._
+  const args = process.argv.slice(2)
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i]
+    switch (arg) {
+      case '--skipComments':
+      case '-c':
+        skipComments = args[++i]
+        break
+      case '--escape':
+      case '-e':
+        escape = args[++i]
+        break
+      case '--headers':
+      case '-h':
+        headers = args[++i]
+        break
+      case '--output':
+      case '-o':
+        output = args[++i]
+        break
+      case '--quote':
+      case '-q':
+        quote = args[++i]
+        break
+      case '--skipLines':
+      case '-l':
+        skipLines = args[++i]
+        break
+      case '--separator':
+      case '-s':
+        separator = args[++i]
+        break
+      case '--version':
+      case '-v':
+        version = true
+        break
+      case '--help':
+        help = true
+        break
+      default:
+        defaultArgs.push(arg)
+        break
+    }
+  }
+  return {
+    skipComments,
+    escape,
+    headers,
+    output,
+    quote,
+    skipLines,
+    separator,
+    version,
+    help,
+    defaultArgs
+  }
+}
+
+const argv = parseArgs()
+const [filename] = argv.defaultArgs
 
 if (argv.version) {
   console.log(pkg.version)
