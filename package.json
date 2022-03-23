@@ -32,7 +32,7 @@
     "test": "ava && tsd"
   },
   "dependencies": {
-    "minimist": "^1.2.0"
+    "minimist": "^1.2.6"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.2.0",
