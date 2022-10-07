@@ -25,7 +25,7 @@ to benchmark your data.
 [neat-csv](https://github.com/sindresorhus/neat-csv) can be used if a `Promise`
 based interface to `csv-parser` is needed.
 
-_Note: This module requires Node v8.16.0 or higher._
+_Note: This module requires Node v8.16.0 or higher and follows the [RFC4180](https://www.ietf.org/rfc/rfc4180.txt)_
 
 ## Benchmarks
 
