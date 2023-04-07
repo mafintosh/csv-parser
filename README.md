@@ -241,6 +241,13 @@ Default: `0`
 Specifies the number of lines at the beginning of a data file that the parser should
 skip over, prior to parsing headers.
 
+#### skipEmptyLines
+
+Type: `Boolean`<br>
+Default: `false`
+
+If `true`, empty lines are skipped.
+
 #### maxRowBytes
 
 Type: `Number`<br>
@@ -305,6 +312,7 @@ Usage: csv-parser [filename?] [options]
   --separator,-s      Set the separator character ("," by default)
   --skipComments,-c   Skip CSV comments that begin with '#'. Set a value to change the comment character.
   --skipLines,-l      Set the number of lines to skip to before parsing headers
+  --skipEmptyLines    Skip empty lines
   --strict            Require column length match headers length
   --version,-v        Print out the installed version
 ```
