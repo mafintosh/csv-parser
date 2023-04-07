@@ -159,11 +159,21 @@ class CsvParser extends Transform {
       return
     }
 
-    if (!skip && this.options.strict && cells.length !== this.headers.length) {
-      const e = new RangeError('Row length does not match headers')
-      this.emit('error', e)
-    } else {
-      if (!skip) this.writeRow(cells)
+    if (!skip) {
+      if (start === end && this.options.skipEmptyLines) {
+        return
+      }
+      if (this.options.strict && cells.length !== this.headers.length) {
+        const e = new RangeError('Row length does not match headers')
+        if (this.options.extendedRangeError) {
+          e.lineNumber = this.state.lineNumber
+          e.cells = cells
+          e.line = buffer.toString('utf-8', start, end)
+        }
+        this.emit('error', e)
+      } else {
+        this.writeRow(cells)
+      }
     }
   }
 
