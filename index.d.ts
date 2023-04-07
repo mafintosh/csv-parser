@@ -114,6 +114,11 @@ Bugs Bunny,22
      * If `true`, instructs the parser that the number of columns in each row must match the number of `headers` specified.
      */
     readonly strict?: boolean;
+
+    /**
+     * If `true`, then `lineNumber`, `cells`, `line` are added to the error object.
+     */
+    readonly extendedRangeError?: boolean;
   }
 }
 

@@ -39,3 +39,4 @@ expectType<csvParser.CsvParser>(csvParser({ skipLines: 1 }));
 expectType<csvParser.CsvParser>(csvParser({ skipEmptyLines: false }));
 expectType<csvParser.CsvParser>(csvParser({ maxRowBytes: 1 }));
 expectType<csvParser.CsvParser>(csvParser({ strict: true }));
+expectType<csvParser.CsvParser>(csvParser({ extendedRangeError: false }));

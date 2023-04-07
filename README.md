@@ -266,6 +266,13 @@ if `false`: the headers are mapped to the column index
    less columns: any missing column in the middle will result in a wrong property mapping!
    more columns: the aditional columns will create a "_"+index properties - eg. "_10":"value"
 
+#### extendedRangeError
+
+Type: `Boolean`<br>
+Default: `false`
+
+If `true`, then `lineNumber`, `cells`, `line` are added to the error object.
+
 ## Events
 
 The following events are emitted during parsing:
