@@ -28,13 +28,13 @@ class CsvParser extends Transform {
     const options = Object.assign({}, defaults, opts)
 
     options.customNewline = options.newline !== defaults.newline
-
-    for (const key of ['newline', 'quote', 'separator']) {
+    // convert separator to buffer
+    options.separator = bufferFrom(options.separator)
+    for (const key of ['newline', 'quote']) {
       if (typeof options[key] !== 'undefined') {
         ([options[key]] = bufferFrom(options[key]))
       }
     }
-
     // if escape is not defined on the passed options, use the end value of quote
     options.escape = (opts || {}).escape ? bufferFrom(options.escape)[0] : options.quote
 
@@ -96,7 +96,7 @@ class CsvParser extends Transform {
       end--
     }
 
-    const comma = separator
+    const comma = separator.length === 1 ? separator[0] : separator
     const cells = []
     let isQuoted = false
     let offset = start
@@ -120,6 +120,32 @@ class CsvParser extends Transform {
     }
 
     for (let i = start; i < end; i++) {
+      //if the comma is multiple characters, check that the next comma.length characters are the same
+      //the quoted check is not supported for multi-character separators
+      if (typeof comma === 'object') {
+        let isSeparator = true
+        for (let j = 0; j < comma.length; j++) {
+          if (buffer[i + j] !== comma[j]) {
+            isSeparator = false
+            break
+          }
+        }
+
+        if (isSeparator) {
+          let value = this.parseCell(buffer, offset, i)
+          value = mapValue(value)
+          cells.push(value)
+          offset = i + comma.length
+          i = offset - 1
+           //if the separator is at the end of the line, add an empty cell
+           if (offset === end) {
+            cells.push(mapValue(this.state.empty))
+            break
+          }
+        }
+        continue
+      }
+
       const isStartingQuote = !isQuoted && buffer[i] === quote
       const isEndingQuote = isQuoted && buffer[i] === quote && i + 1 <= end && buffer[i + 1] === comma
       const isEscape = isQuoted && buffer[i] === escape && i + 1 < end && buffer[i + 1] === quote
