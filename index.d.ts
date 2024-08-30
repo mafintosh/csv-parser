@@ -76,11 +76,11 @@ Bugs Bunny,22
     readonly raw?: boolean;
 
     /**
-     * Specifies a single-character string to use as the column separator for each row.
+     * Specifies a single-character string to use as the column separator for each row. This separator needs to be a single byte character.
      *
      * @default ','
      */
-    readonly separator?: string;
+    readonly separator?: string | [number];
 
     /**
      * Instructs the parser to ignore lines which represent comments in a CSV file. Since there is no specification that dictates what a CSV comment looks like, comments should be considered non-standard. The "most common" character used to signify a comment in a CSV file is `"#"`. If this option is set to `true`, lines which begin with `#` will be skipped. If a custom character is needed to denote a commented line, this option may be set to a string which represents the leading character(s) signifying a comment line.
