@@ -36,5 +36,7 @@ expectType<csvParser.CsvParser>(csvParser({ separator: ',' }));
 expectType<csvParser.CsvParser>(csvParser({ skipComments: true }));
 expectType<csvParser.CsvParser>(csvParser({ skipComments: '#' }));
 expectType<csvParser.CsvParser>(csvParser({ skipLines: 1 }));
+expectType<csvParser.CsvParser>(csvParser({ skipEmptyLines: false }));
 expectType<csvParser.CsvParser>(csvParser({ maxRowBytes: 1 }));
 expectType<csvParser.CsvParser>(csvParser({ strict: true }));
+expectType<csvParser.CsvParser>(csvParser({ extendedRangeError: false }));

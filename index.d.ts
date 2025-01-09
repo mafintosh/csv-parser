@@ -97,6 +97,13 @@ Bugs Bunny,22
     readonly skipLines?: number;
 
     /**
+     * If true empty lines are skipped.
+     *
+     * @default false
+     */
+    readonly skipEmptyLines?: boolean;
+
+    /**
      * Maximum number of bytes per row. An error is thrown if a line exeeds this value. The default value is on 8 peta byte.
      *
      * @default Number.MAX_SAFE_INTEGER
@@ -107,6 +114,11 @@ Bugs Bunny,22
      * If `true`, instructs the parser that the number of columns in each row must match the number of `headers` specified.
      */
     readonly strict?: boolean;
+
+    /**
+     * If `true`, then `lineNumber`, `cells`, `line` are added to the error object.
+     */
+    readonly extendedRangeError?: boolean;
   }
 }
 

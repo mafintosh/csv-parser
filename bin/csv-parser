@@ -95,6 +95,7 @@ if (argv.help || (process.stdin.isTTY && !filename)) {
   --separator,-s      Set the separator character ("," by default)
   --skipComments,-c   Skip CSV comments that begin with '#'. Set a value to change the comment character.
   --skipLines,-l      Set the number of lines to skip to before parsing headers
+  --skipEmptyLines    Skip empty lines
   --strict            Require column length match headers length
   --version,-v        Print out the installed version
 `)
@@ -107,7 +108,8 @@ const options = {
   separator: argv.separator,
   strict: argv.strict,
   skipComments: argv.skipComments,
-  skipLines: argv.skipLines
+  skipLines: argv.skipLines,
+  skipEmptyLines: argv.skipEmptyLines
 }
 
 if (argv.headers) {
