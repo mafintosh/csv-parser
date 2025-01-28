@@ -259,6 +259,15 @@ if `false`: the headers are mapped to the column index
    less columns: any missing column in the middle will result in a wrong property mapping!
    more columns: the aditional columns will create a "_"+index properties - eg. "_10":"value"
 
+#### outputByteOffset
+
+Type: `Boolean`<br>
+Default: `false`
+
+If `true`, instructs the parser to emit each row with a `byteOffset` property.
+The byteOffset represents the offset in bytes of the beginning of the parsed row in the original stream.
+Will change the output format of stream to be `{ byteOffset, row }`.
+
 ## Events
 
 The following events are emitted during parsing:

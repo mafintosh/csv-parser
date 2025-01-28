@@ -14,7 +14,8 @@ const defaults = {
   skipComments: false,
   skipLines: null,
   maxRowBytes: Number.MAX_SAFE_INTEGER,
-  strict: false
+  strict: false,
+  outputByteOffset: false
 }
 
 class CsvParser extends Transform {
@@ -59,6 +60,7 @@ class CsvParser extends Transform {
 
     this.options = options
     this.headers = options.headers
+    this.bytesRead = 0
   }
 
   parseCell (buffer, start, end) {
@@ -163,7 +165,10 @@ class CsvParser extends Transform {
       const e = new RangeError('Row length does not match headers')
       this.emit('error', e)
     } else {
-      if (!skip) this.writeRow(cells)
+      if (!skip) {
+        const byteOffset = this.bytesRead - buffer.length + start
+        this.writeRow(cells, byteOffset)
+      }
     }
   }
 
@@ -175,7 +180,7 @@ class CsvParser extends Transform {
     return buffer.toString('utf-8', start, end)
   }
 
-  writeRow (cells) {
+  writeRow (cells, byteOffset) {
     const headers = (this.headers === false) ? cells.map((value, index) => index) : this.headers
 
     const row = cells.reduce((o, cell, index) => {
@@ -189,7 +194,11 @@ class CsvParser extends Transform {
       return o
     }, {})
 
-    this.push(row)
+    if (this.options.outputByteOffset) {
+      this.push({ row, byteOffset })
+    } else {
+      this.push(row)
+    }
   }
 
   _flush (cb) {
@@ -206,6 +215,7 @@ class CsvParser extends Transform {
     const { escape, quote } = this.options
     let start = 0
     let buffer = data
+    this.bytesRead += data.byteLength
 
     if (this._prev) {
       start = this._prev.length

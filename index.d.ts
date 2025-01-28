@@ -107,6 +107,13 @@ Bugs Bunny,22
      * If `true`, instructs the parser that the number of columns in each row must match the number of `headers` specified.
      */
     readonly strict?: boolean;
+
+    /**
+     * If `true`, instructs the parser to emit each row with a `byteOffset` property.
+     * The byteOffset represents the offset in bytes of the beginning of the parsed row in the original stream.
+     * Will change the output format of stream to be `{ byteOffset, row }`.
+     */
+    readonly outputByteOffset?: boolean;
   }
 }
 
