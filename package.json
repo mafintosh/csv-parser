@@ -1,6 +1,6 @@
 {
   "name": "csv-parser",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "Streaming CSV parser that aims for maximum speed as well as compatibility with the csv-spectrum test suite",
   "license": "MIT",
   "repository": "mafintosh/csv-parser",
