@@ -115,6 +115,76 @@ example:
 csv({ separator: '\t' });
 ```
 
+To process line by line with third party or database connections without
+loading everything into memory you can create a write stream.
+
+Simple
+
+```
+const csv = require('csv-parser');
+const stripBom = require('strip-bom-stream');
+const stream = require('stream')
+
+const mySimpleWritable = new stream.Writable({
+  objectMode: true, // Because input is object from csv-parser
+  write(chunk, encoding, done) { // Required
+    // chunk is object with data from a line in the csv
+    console.log('chunk', chunk)
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    done();
+  },
+  final(done) { // Optional
+    // last place to clean up when done
+    done();
+  }
+});
+fs.createReadStream(fileNameFull).pipe(stripBom()).pipe(csv()).pipe(mySimpleWritable)
+```
+
+Full Class
+
+```
+const csv = require('csv-parser');
+const stream = require('stream')
+
+// Create writable class
+class MyWritable extends stream.Writable {
+  // Used to set object mode because we get an object piped in from csv-parser
+  constructor(another_variable, options) {
+    // Calls the stream.Writable() constructor.
+    super({ ...options, objectMode: true });
+    // additional information if you want
+    this.another_variable = another_variable
+  }
+  // The write method
+  // Called over and over, for each line in the csv
+  async _write(chunk, encoding, done) {
+    // The chunk will be a line of your csv as an object
+    console.log('Chunk Data', this.another_variable, chunk)
+
+    // demonstrate await call
+    // This will pause the process until it is finished
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    // Very important to add.  Keeps the pipe buffers correct.  Will load the next line of data
+    done();
+  };
+  // Gets called when all lines have been read
+  async _final(done) {
+    // Can do more calls here with left over information in the class
+    console.log('clean up')
+    // lets pipe know its done and the .on('final') will be called
+    done()
+  }
+}
+
+// Instantiate the new writable class
+myWritable = new MyWritable(somevariable)
+// Pipe the read stream to csv-parser, then to your write class
+// stripBom is due to Excel saving csv files with UTF8 - BOM format
+fs.createReadStream(fileNameFull).pipe(csv()).pipe(myWritable)
+```
+
 ## API
 
 ### csv([options | headers])
