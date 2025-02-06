@@ -71,7 +71,8 @@
   "ava": {
     "files": [
       "!**/fixtures/**",
-      "!**/helpers/**"
+      "!**/helpers/**",
+      "test/*.test.js"
     ]
   },
   "husky": {
