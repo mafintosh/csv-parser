@@ -28,10 +28,14 @@ class CsvParser extends Transform {
 
     options.customNewline = options.newline !== defaults.newline
 
-    for (const key of ['newline', 'quote', 'separator']) {
+    for (const key of ['newline', 'quote']) {
       if (typeof options[key] !== 'undefined') {
         ([options[key]] = Buffer.from(options[key]))
       }
+    }
+
+    if (typeof options.separator !== 'string') {
+      throw new TypeError(`Separator must be a String. Received: ${typeof options.separator}`)
     }
 
     // if escape is not defined on the passed options, use the end value of quote
@@ -89,14 +93,22 @@ class CsvParser extends Transform {
   }
 
   parseLine (buffer, start, end) {
-    const { customNewline, escape, mapHeaders, mapValues, quote, separator, skipComments, skipLines } = this.options
+    const {
+      customNewline,
+      escape,
+      mapHeaders,
+      mapValues,
+      quote,
+      separator,
+      skipComments,
+      skipLines
+    } = this.options
 
-    end-- // trim newline
+    end-- // Trim newline
     if (!customNewline && buffer.length && buffer[end - 1] === cr) {
       end--
     }
 
-    const comma = separator
     const cells = []
     let isQuoted = false
     let offset = start
@@ -107,6 +119,9 @@ class CsvParser extends Transform {
         return
       }
     }
+
+    const separatorBuffer = Buffer.from(separator)
+    const separatorLength = separatorBuffer.length
 
     const mapValue = (value) => {
       if (this.state.first) {
@@ -121,8 +136,17 @@ class CsvParser extends Transform {
 
     for (let i = start; i < end; i++) {
       const isStartingQuote = !isQuoted && buffer[i] === quote
-      const isEndingQuote = isQuoted && buffer[i] === quote && i + 1 <= end && buffer[i + 1] === comma
-      const isEscape = isQuoted && buffer[i] === escape && i + 1 < end && buffer[i + 1] === quote
+      const isEndingQuote =
+        isQuoted &&
+        buffer[i] === quote &&
+        i + 1 <= end &&
+        buffer[i + 1] === separatorBuffer[0]
+
+      const isEscape =
+        isQuoted &&
+        buffer[i] === escape &&
+        i + 1 < end &&
+        buffer[i + 1] === quote
 
       if (isStartingQuote || isEndingQuote) {
         isQuoted = !isQuoted
@@ -132,11 +156,15 @@ class CsvParser extends Transform {
         continue
       }
 
-      if (buffer[i] === comma && !isQuoted) {
-        let value = this.parseCell(buffer, offset, i)
-        value = mapValue(value)
-        cells.push(value)
-        offset = i + 1
+      if (!isQuoted && i + separatorLength <= end) {
+        const segment = buffer.slice(i, i + separatorLength)
+        if (segment.equals(separatorBuffer)) {
+          let value = this.parseCell(buffer, offset, i)
+          value = mapValue(value)
+          cells.push(value)
+          offset = i + separatorLength
+          i += separatorLength - 1
+        }
       }
     }
 
@@ -146,7 +174,7 @@ class CsvParser extends Transform {
       cells.push(value)
     }
 
-    if (buffer[end - 1] === comma) {
+    if (buffer.slice(end - separatorLength, end).equals(separatorBuffer)) {
       cells.push(mapValue(this.state.empty))
     }
 
@@ -155,7 +183,9 @@ class CsvParser extends Transform {
 
     if (this.state.first && !skip) {
       this.state.first = false
-      this.headers = cells.map((header, index) => mapHeaders({ header, index }))
+      this.headers = cells.map((header, index) =>
+        mapHeaders({ header, index })
+      )
 
       this.emit('headers', this.headers)
       return
