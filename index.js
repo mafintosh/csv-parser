@@ -120,7 +120,7 @@ class CsvParser extends Transform {
     }
 
     for (let i = start; i < end; i++) {
-      const isStartingQuote = !isQuoted && buffer[i] === quote
+      const isStartingQuote = !isQuoted && buffer[i] === quote && (i === 1 || buffer[i - 1] === comma)
       const isEndingQuote = isQuoted && buffer[i] === quote && i + 1 <= end && buffer[i + 1] === comma
       const isEscape = isQuoted && buffer[i] === escape && i + 1 < end && buffer[i + 1] === quote
 
