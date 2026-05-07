@@ -18,6 +18,20 @@ const defaults = {
   outputByteOffset: false
 }
 
+const DANGEROUS_KEYS = new Set(['__proto__', 'constructor', 'prototype'])
+
+function sanitizeHeader(header) {
+  if (typeof header !== 'string') {
+    return null
+  }
+
+  if (DANGEROUS_KEYS.has(header)) {
+    return null
+  }
+
+  return header
+}
+
 class CsvParser extends Transform {
   constructor (opts = {}) {
     super({ objectMode: true, highWaterMark: 16 })
@@ -155,7 +169,15 @@ class CsvParser extends Transform {
 
     if (this.state.first && !skip) {
       this.state.first = false
-      this.headers = cells.map((header, index) => mapHeaders({ header, index }))
+      this.headers = cells.map((header, index) => {
+        const mapped = mapHeaders({ header, index })
+
+        if (mapped === null) {
+          return null
+        }
+
+        return sanitizeHeader(mapped)
+      })
 
       this.emit('headers', this.headers)
       return
