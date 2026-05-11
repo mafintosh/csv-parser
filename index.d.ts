@@ -35,7 +35,7 @@ Bugs Bunny,22
     readonly headers?: ReadonlyArray<string> | boolean;
 
     /**
-     * A function that can be used to modify the values of each header. Return `null` to remove the header, and it's column, from the results.
+     * A function that can be used to modify the values of each header. Return `null` to remove the header, and its column, from the results.
      *
      * @example
      *
