@@ -214,7 +214,7 @@ class CsvParser extends Transform {
         o[`_${index}`] = cell
       }
       return o
-    }, {})
+    }, Object.create(null))
 
     if (this.options.outputByteOffset) {
       this.push({ row, byteOffset })
