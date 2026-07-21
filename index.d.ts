@@ -43,7 +43,7 @@ Bugs Bunny,22
      *   mapHeaders: ({ header, index }) => header.toLowerCase()
      * });
      */
-    readonly mapHeaders?: (args: { header: string; index: number }) => string | null;
+    readonly mapHeaders?: (args: { header: string | Buffer; index: number }) => string | Buffer | null;
 
     /**
      * A function that can be used to modify the value of each column value.
