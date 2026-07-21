@@ -20,12 +20,16 @@ const defaults = {
 
 const DANGEROUS_KEYS = new Set(['__proto__', 'constructor', 'prototype'])
 
-function sanitizeHeader(header) {
-  if (typeof header !== 'string') {
+function sanitizeHeader (header) {
+  let key = header
+
+  if (Buffer.isBuffer(header)) {
+    key = header.toString('utf-8')
+  } else if (typeof header !== 'string') {
     return null
   }
 
-  if (DANGEROUS_KEYS.has(header)) {
+  if (DANGEROUS_KEYS.has(key)) {
     return null
   }
 

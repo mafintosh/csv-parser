@@ -178,7 +178,7 @@ csv({
 
 ##### Parameters
 
-**header** _String_ The current column header.<br/>
+**header** _String | Buffer_ The current column header (a `Buffer` when the `raw` option is `true`).<br/>
 **index** _Number_ The current column index.
 
 #### mapValues
@@ -217,7 +217,7 @@ Specifies a single-character string to denote a quoted string.
 
 Type: `Boolean`<br>
 
-If `true`, instructs the parser not to decode UTF-8 strings.
+If `true`, instructs the parser not to decode UTF-8 strings. This also affects headers: each header (and the `header` passed to `mapHeaders`) is a `Buffer` rather than a `String`. Row keys are still plain strings (JavaScript coerces object keys), but row values remain `Buffer`s.
 
 #### separator
 

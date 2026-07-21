@@ -10,13 +10,23 @@ expectType<csvParser.CsvParser>(csvParser({ headers: false }));
 expectType<csvParser.CsvParser>(
   csvParser({
     mapHeaders: ({ header, index }) => {
-      expectType<string>(header);
+      expectType<string | Buffer>(header);
       expectType<number>(index);
-      return header.toLowerCase();
+      return typeof header === 'string' ? header.toLowerCase() : header;
     },
   })
 );
 expectType<csvParser.CsvParser>(csvParser({ mapHeaders: ({ header, index }) => null }));
+expectType<csvParser.CsvParser>(
+  csvParser({
+    raw: true,
+    mapHeaders: ({ header, index }) => {
+      expectType<string | Buffer>(header);
+      expectType<number>(index);
+      return header;
+    },
+  })
+);
 expectType<csvParser.CsvParser>(
   csvParser({
     mapValues: ({ header, index, value }) => {
