@@ -20,7 +20,7 @@ const defaults = {
 
 const DANGEROUS_KEYS = new Set(['__proto__', 'constructor', 'prototype'])
 
-function sanitizeHeader(header) {
+function sanitizeHeader (header) {
   if (typeof header !== 'string') {
     return null
   }
@@ -56,6 +56,7 @@ class CsvParser extends Transform {
       escaped: false,
       first: true,
       lineNumber: 0,
+      pendingCr: false,
       previousEnd: 0,
       rowLength: 0,
       quoted: false
@@ -241,6 +242,12 @@ class CsvParser extends Transform {
 
     if (this._prev) {
       start = this._prev.length
+      if (this.state.pendingCr) {
+        // Revisit the CR now that its following byte may be available.
+        start--
+        this.state.rowLength--
+        this.state.pendingCr = false
+      }
       buffer = Buffer.concat([this._prev, data])
       this._prev = null
     }
@@ -274,6 +281,10 @@ class CsvParser extends Transform {
           if (chr === nl) {
             this.options.newline = nl
           } else if (chr === cr) {
+            if (nextChr === null) {
+              this.state.pendingCr = true
+              break
+            }
             if (nextChr !== nl) {
               this.options.newline = cr
             }
