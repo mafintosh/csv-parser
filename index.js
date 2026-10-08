@@ -20,7 +20,7 @@ const defaults = {
 
 const DANGEROUS_KEYS = new Set(['__proto__', 'constructor', 'prototype'])
 
-function sanitizeHeader(header) {
+function sanitizeHeader (header) {
   if (typeof header !== 'string') {
     return null
   }
@@ -122,6 +122,10 @@ class CsvParser extends Transform {
       }
     }
 
+    const skip = skipLines && skipLines > this.state.lineNumber
+    this.state.lineNumber++
+    if (skip) return
+
     const mapValue = (value) => {
       if (this.state.first) {
         return value
@@ -164,10 +168,7 @@ class CsvParser extends Transform {
       cells.push(mapValue(this.state.empty))
     }
 
-    const skip = skipLines && skipLines > this.state.lineNumber
-    this.state.lineNumber++
-
-    if (this.state.first && !skip) {
+    if (this.state.first) {
       this.state.first = false
       this.headers = cells.map((header, index) => {
         const mapped = mapHeaders({ header, index })
@@ -183,14 +184,12 @@ class CsvParser extends Transform {
       return
     }
 
-    if (!skip && this.options.strict && cells.length !== this.headers.length) {
+    if (this.options.strict && cells.length !== this.headers.length) {
       const e = new RangeError('Row length does not match headers')
       this.emit('error', e)
     } else {
-      if (!skip) {
-        const byteOffset = this.bytesRead - buffer.length + start
-        this.writeRow(cells, byteOffset)
-      }
+      const byteOffset = this.bytesRead - buffer.length + start
+      this.writeRow(cells, byteOffset)
     }
   }
 
