@@ -20,7 +20,7 @@ const defaults = {
 
 const DANGEROUS_KEYS = new Set(['__proto__', 'constructor', 'prototype'])
 
-function sanitizeHeader(header) {
+function sanitizeHeader (header) {
   if (typeof header !== 'string') {
     return null
   }
@@ -256,7 +256,12 @@ class CsvParser extends Transform {
         return cb(new Error('Row exceeds the maximum size'))
       }
 
-      if (!this.state.escaped && chr === escape && nextChr === quote && i !== start) {
+      // 2026-10-10: A custom escape may be the last byte of the previous chunk.
+      if (chr === quote && escape !== quote && i === start && start > 0 && buffer[i - 1] === escape) {
+        continue
+      }
+
+      if (!this.state.escaped && chr === escape && nextChr === quote && (escape !== quote || i !== start || this.state.quoted)) {
         this.state.escaped = true
         continue
       } else if (chr === quote) {
