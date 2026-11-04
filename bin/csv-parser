@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
 const { EOL } = require('os')
-const { Transform } = require('stream');
+const { Transform } = require('stream')
 const fs = require('fs')
 const csv = require('../')
 const pkg = require('../package.json')
 
 function parseArgs () {
   let skipComments
-  let escape = '"'
+  let escape
   let headers
   let output
   let quote = '"'
@@ -104,6 +104,8 @@ if (argv.help || (process.stdin.isTTY && !filename)) {
 let input
 const output = (argv.output && argv.output !== '-') ? fs.createWriteStream(argv.output) : process.stdout
 const options = {
+  escape: argv.escape,
+  quote: argv.quote,
   separator: argv.separator,
   strict: argv.strict,
   skipComments: argv.skipComments,
@@ -133,10 +135,10 @@ if (filename === '-' || !filename) {
 const serialize = () => {
   return new Transform({
     objectMode: true,
-    transform(obj, enc, cb) {
+    transform (obj, enc, cb) {
       cb(null, JSON.stringify(obj) + EOL)
     }
-  });
+  })
 }
 
 input
