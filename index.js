@@ -52,6 +52,7 @@ class CsvParser extends Transform {
     options.escape = (opts || {}).escape ? Buffer.from(options.escape)[0] : options.quote
 
     this.state = {
+      commented: false,
       empty: options.raw ? Buffer.alloc(0) : '',
       escaped: false,
       first: true,
@@ -234,7 +235,8 @@ class CsvParser extends Transform {
       data = Buffer.from(data)
     }
 
-    const { escape, quote } = this.options
+    const { escape, quote, skipComments } = this.options
+    const comment = skipComments && Buffer.from(typeof skipComments === 'string' ? skipComments : '#')[0]
     let start = 0
     let buffer = data
     this.bytesRead += data.byteLength
@@ -256,10 +258,14 @@ class CsvParser extends Transform {
         return cb(new Error('Row exceeds the maximum size'))
       }
 
-      if (!this.state.escaped && chr === escape && nextChr === quote && i !== start) {
+      if (this.state.rowLength === 1 && skipComments && chr === comment) {
+        this.state.commented = true
+      }
+
+      if (!this.state.commented && !this.state.escaped && chr === escape && nextChr === quote && i !== start) {
         this.state.escaped = true
         continue
-      } else if (chr === quote) {
+      } else if (!this.state.commented && chr === quote) {
         if (this.state.escaped) {
           this.state.escaped = false
           // non-escaped quote (quoting the cell)
@@ -284,6 +290,7 @@ class CsvParser extends Transform {
           this.parseLine(buffer, this.state.previousEnd, i + 1)
           this.state.previousEnd = i + 1
           this.state.rowLength = 0
+          this.state.commented = false
         }
       }
     }
